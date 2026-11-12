@@ -1,0 +1,6 @@
+1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
+2) BORRA estas dos carpetas antiguas:
+   web/app/equipo
+   web/app/clasificacion
+3) Ejecuta supabase/leagues.sql en Supabase (SQL Editor).
+4) Sube a GitHub; Vercel redespliega solo.

@@ -5,7 +5,7 @@ import { PHOTOS } from "@/lib/photos";
 
 export const ROLES = ["top", "jng", "mid", "adc", "sup"] as const;
 export type Role = (typeof ROLES)[number];
-export const BUDGET = 50_000_000; // presupuesto del equipo: ajústalo a tu escala de precios
+export const BUDGET = 700_000; // presupuesto del equipo (mismo valor que settings.budget en Supabase)
 export type Player = { id: number; name: string; role: Role; price: number; rookie: boolean; team: string; pts: number; photo: string };
 export const eur = (n: number) => Math.round(n).toLocaleString("es-ES") + " €";
 
@@ -28,16 +28,4 @@ export function usePlayers() {
     })();
   }, []);
   return { players, loading };
-}
-
-type Ids = Partial<Record<Role, number>>;
-export function useTeam() {
-  const [ids, setIds] = useState<Ids>({});
-  useEffect(() => { try { setIds(JSON.parse(localStorage.getItem("lec-team") ?? "{}")); } catch {} }, []);
-  const save = (n: Ids) => { setIds(n); try { localStorage.setItem("lec-team", JSON.stringify(n)); } catch {} };
-  return {
-    ids,
-    pick: (p: Player) => save({ ...ids, [p.role]: p.id }),
-    drop: (r: Role) => { const n = { ...ids }; delete n[r]; save(n); },
-  };
 }

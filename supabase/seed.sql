@@ -57,7 +57,7 @@ select seed_player('Jun',     'Team Heretics', 'sup');
 
 -- Fnatic
 -- select seed_player('NOMBRE', 'Fnatic', 'top');
--- select seed_player('NOMBRE', 'Fnatic', 'jng');
+select seed_player('Yike', 'Fnatic', 'jng');
 select seed_player('Vladi',  'Fnatic', 'mid');
 -- select seed_player('NOMBRE', 'Fnatic', 'adc');
 select seed_player('Labrov', 'Fnatic', 'sup');

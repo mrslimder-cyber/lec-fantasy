@@ -34,3 +34,21 @@ input{background:var(--card);border:1px solid var(--line);color:var(--tx);paddin
 .pos{width:28px;text-align:center;font-weight:800;color:var(--mut)}
 .rank li:nth-child(-n+3) .pos{color:var(--gold)}
 @media(max-width:520px){.grid{grid-template-columns:1fr}}
+
+/* --- Ligas, auth y mapa --- */
+.form{display:grid;gap:10px;max-width:360px;margin-top:20px}
+.err{color:#ff7b7b}
+.tile{flex-direction:column;align-items:flex-start;justify-content:center;min-height:96px;color:var(--tx);text-decoration:none;cursor:pointer;font:inherit;text-align:left}
+.tile small{color:var(--mut)}
+.tbl{width:100%;max-width:640px;border-collapse:collapse}
+.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.tbl th{color:var(--mut);font-size:12px}
+.tbl tr.click{cursor:pointer}.tbl tr.click:hover{background:var(--card)}
+.lolmap{position:relative;width:100%;max-width:560px;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.lolmap svg{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;font-size:12px;text-shadow:0 1px 3px #000}
+.node small{color:#cfd6ea;font-size:10px}
+.node .av{border:3px solid var(--c,var(--acc))}
+.node[data-role=top]{--c:#e5484d}.node[data-role=jng]{--c:#30a46c}.node[data-role=mid]{--c:#4f8cff}
+.node[data-role=adc]{--c:#f5a524}.node[data-role=sup]{--c:#a78bfa}
+.bench{display:flex;gap:24px}.bench .node{position:static;transform:none;text-shadow:none}
