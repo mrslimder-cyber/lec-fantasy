@@ -25,7 +25,7 @@ create table player_game_stats(
   csm numeric, cs_diff int, csd15 int, dpm numeric, kp numeric,   -- kp en 0-100
   doubles int default 0, triples int default 0, quadras int default 0, pentas int default 0,
   obj_stolen int default 0, shutdown_lost int default 0,
-  vspm numeric, heal_pm numeric, shield_pm numeric,               -- por definir
+  vspm numeric, heal_pm numeric, shield_pm numeric,               -- visión/min; curas y escudos a compañeros por min
   primary key (game_id, player_id));
 create table player_game_points(
   game_id bigint, player_id int, points numeric not null, breakdown jsonb,

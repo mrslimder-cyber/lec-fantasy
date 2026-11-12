@@ -1,5 +1,5 @@
 -- Puntuación v1 (pesos iguales para todos los roles; solo los umbrales de CSM dependen del rol).
--- Pendiente: vspm, heal_pm, shield_pm (0 por ahora). Supuestos de redondeo en README.
+-- Visión: round(vspm). Curas+escudos: round((heal_pm + shield_pm)/30). Supuestos de redondeo en README.
 create or replace function game_points(s player_game_stats, r text, t team_game_stats)
 returns jsonb language plpgsql immutable as $$
 declare b jsonb; th numeric[]; n int; gr int;
@@ -9,7 +9,7 @@ begin
                 else '{}' end)::numeric[];
   select count(*) into n from unnest(th) u where coalesce(s.csm,0) > u;
   b := jsonb_build_object(
-    'kills', s.kills, 'deaths', -2*s.deaths, 'assists', s.assists, 'csm', n,
+    'kills', s.kills, 'deaths', -1*s.deaths, 'assists', s.assists, 'csm', n,
     'cs_diff', case when coalesce(s.cs_diff,0) < 0 then -floor(-s.cs_diff/15.0) else 0 end,
     'csd15', coalesce(s.csd15,0)/10,                       -- división entera (trunca a 0)
     'dpm', ceil(floor(coalesce(s.dpm,0)/100)/2.0),
@@ -17,6 +17,8 @@ begin
     'multikills', s.doubles + 2*s.triples + 3*s.quadras + 5*s.pentas,
     'obj_stolen', 2*s.obj_stolen,
     'shutdown', -ceil(floor(coalesce(s.shutdown_lost,0)/100)/2.0),
+    'vspm', round(coalesce(s.vspm,0)),
+    'heal_shield', round((coalesce(s.heal_pm,0) + coalesce(s.shield_pm,0)) / 30.0),
     'first_tower', case when coalesce(t.first_tower,false) then 1 else 0 end);
   if r = 'jng' then
     gr := case when coalesce(t.grubs,0) >= 3 then 2 when t.grubs = 2 then 1 else 0 end;
