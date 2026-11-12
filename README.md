@@ -3,6 +3,7 @@ Fantasy de la LEC Winter 2027. Datos y login en Supabase, web Next.js en `web/`,
 
 ## Puesta en marcha
 1. Supabase: crea proyecto; en SQL Editor ejecuta, por este orden: `supabase/schema.sql`, `supabase/scoring.sql`, `supabase/seed.sql` y `supabase/leagues.sql`.
+   (`leagues.sql` se puede volver a ejecutar cuando cambie: no borra datos.)
 2. Supabase > Authentication > Providers > Email: para probar rápido, desactiva "Confirm email".
 3. `web/.env.example` -> `web/.env.local` con la URL y la anon key.
 4. `cd web && npm install && npm run dev`.
@@ -11,7 +12,13 @@ Fantasy de la LEC Winter 2027. Datos y login en Supabase, web Next.js en `web/`,
 
 ## Flujo de la app
 Registro/login -> crear liga o unirse con código (con nombre de equipo) -> el creador pulsa "Sortear jugadores"
-(7 por equipo: 5 titulares + 2 reservas, dentro de `settings.budget`) -> clasificación de equipos y mapa del equipo.
+(7 por equipo: 5 titulares + 2 reservas, dentro de `settings.budget` = 800.000 €; lo que sobra queda como dinero).
+
+Dentro de cada liga hay tres secciones (barra de pestañas en la propia liga):
+- **Clasificación**: equipos por puntos (solo puntúan los 5 titulares). Tocar un equipo muestra su alineación.
+- **Mi equipo**: mapa de la grieta. Toca un jugador y luego otro hueco para intercambiarlos (titular <-> reserva) o para venderlo.
+- **Mercado**: agentes libres (los que no tiene ningún equipo de la liga). Fichar cuesta el precio actual; vender lo ingresa.
+  Un fichaje va a su hueco de titular si está libre; si no, a una reserva libre. Si no hay hueco, hay que vender antes.
 
 ## Despliegue en Vercel
 1. Sube el repo a GitHub.

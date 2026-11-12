@@ -5,7 +5,7 @@ import { PHOTOS } from "@/lib/photos";
 
 export const ROLES = ["top", "jng", "mid", "adc", "sup"] as const;
 export type Role = (typeof ROLES)[number];
-export const BUDGET = 700_000; // presupuesto del equipo (mismo valor que settings.budget en Supabase)
+export const BUDGET = 800_000; // presupuesto inicial (mismo valor que settings.budget en Supabase)
 export type Player = { id: number; name: string; role: Role; price: number; rookie: boolean; team: string; pts: number; photo: string };
 export const eur = (n: number) => Math.round(n).toLocaleString("es-ES") + " €";
 
