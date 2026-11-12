@@ -3,3 +3,4 @@
    sube el presupuesto a 800.000, añade el dinero por equipo y las funciones del mercado.
    Las ligas ya sorteadas recibirán su dinero (800.000 - lo gastado en el sorteo).
 3) Sube a GitHub; Vercel redespliega solo.
+ 

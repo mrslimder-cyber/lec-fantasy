@@ -77,7 +77,7 @@ select seed_player('Feisty',  'GIANTX', 'mid');
 select seed_player('Piero',   'GIANTX', 'sup', true);
 
 -- SK Gaming
--- select seed_player('NOMBRE', 'SK', 'top');
+select seed_player('Kryze', 'SK', 'top', true);
 select seed_player('Zicssi', 'SK', 'jng', true);
 select seed_player('SlowQ',  'SK', 'mid');   -- verificar: solo lo vi en Rostermania
 select seed_player('3XA',    'SK', 'adc', true);
@@ -110,6 +110,45 @@ select seed_player('Lospa',  'SK', 'sup');
 -- select seed_player('NOMBRE', 'NAVI', 'mid');
 -- select seed_player('NOMBRE', 'NAVI', 'adc');
 -- select seed_player('NOMBRE', 'NAVI', 'sup');
+
+
+-- Actualización de precios de jugadores LEC 2027
+-- Precio base de la tabla + 100.000
+
+UPDATE players AS p
+SET price = v.price
+FROM (VALUES
+    ('BrokenBlade', 625000),
+    ('Elyoya',      745000),
+    ('Jojopyun',    690000),
+    ('Carzzy',      700000),
+    ('Alvaro',      750000),
+
+    ('Tracyn',      450000),
+    ('Razork',      590000),
+    ('Jackies',     640000),
+    ('Hype',        790000),
+    ('Jun',         720000),
+
+    ('Yike',        715000),
+    ('Vladi',       660000),
+    ('Labrov',      775000),
+
+    ('Lyncas',      650000),
+    ('Caps',        820000),
+    ('Mikyx',       680000),
+
+    ('Feisty',      450000),
+    ('Thayger',     450000),
+    ('Piero',       450000),
+
+    ('Kryze',       450000),
+    ('Zicssi',      450000),
+    ('SlowQ',       450000),
+    ('3XA',         450000),
+    ('Lospa',       685000)
+) AS v(name, price)
+WHERE p.name = v.name;
 
 -- 4) Limpieza ------------------------------------------------------------------------
 drop function seed_player(text, text, text, boolean);
