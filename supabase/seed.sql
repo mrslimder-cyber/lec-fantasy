@@ -106,10 +106,10 @@ select seed_player('Busio', 'Karmine Corp', 'sup');
 
 -- Natus Vincere
 -- select seed_player('NOMBRE', 'NAVI', 'top');
-select seed_player('Rilech', 'NAVI', 'jng');
+select seed_player('Rhilech', 'NAVI', 'jng');
 -- select seed_player('NOMBRE', 'NAVI', 'mid');
 select seed_player('Supa', 'NAVI', 'adc');
--- select seed_player('NOMBRE', 'NAVI', 'sup');
+select seed_player('Parus', 'NAVI', 'sup');
 
 
 -- Actualización de precios de jugadores LEC 2027
@@ -136,7 +136,7 @@ FROM (VALUES
 
     ('Lyncas',      650000),
     ('Caps',        820000),
-    ('Hans Sama',   850000),
+    ("Hans Sama",   850000),
     ('Mikyx',       680000),
 
     ('Myrwn',       600000),
@@ -155,8 +155,9 @@ FROM (VALUES
     ('3XA',         450000),
     ('Lospa',       685000),
 
-    ('Rilech',      725000),
-    ('Supa',        770000)
+    ('Rhilech',      725000),
+    ('Supa',        770000),
+    ('Parus',       600000)
 ) AS v(name, price)
 WHERE p.name = v.name;
 
