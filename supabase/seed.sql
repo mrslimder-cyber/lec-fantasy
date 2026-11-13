@@ -66,11 +66,11 @@ select seed_player('Labrov', 'Fnatic', 'sup');
 -- select seed_player('NOMBRE', 'G2', 'top');
 select seed_player('Lyncas', 'G2', 'jng');
 select seed_player('Caps',   'G2', 'mid');
--- select seed_player('NOMBRE', 'G2', 'adc');
+select seed_player('Hans Sama', 'G2', 'adc');
 select seed_player('Mikyx',  'G2', 'sup');
 
 -- GIANTX
--- select seed_player('NOMBRE', 'GIANTX', 'top');
+-select seed_player('Myrwn', 'GIANTX', 'top');
 select seed_player('Thayger', 'GIANTX', 'jng', true);
 select seed_player('Feisty',  'GIANTX', 'mid');
 -- select seed_player('NOMBRE', 'GIANTX', 'adc');
@@ -91,11 +91,11 @@ select seed_player('Lospa',  'SK', 'sup');
 -- select seed_player('NOMBRE', 'Team Vitality', 'sup');
 
 -- Karmine Corp
--- select seed_player('NOMBRE', 'Karmine Corp', 'top');
+select seed_player('Canna', 'Karmine Corp', 'top');
 -- select seed_player('NOMBRE', 'Karmine Corp', 'jng');
--- select seed_player('NOMBRE', 'Karmine Corp', 'mid');
--- select seed_player('NOMBRE', 'Karmine Corp', 'adc');
--- select seed_player('NOMBRE', 'Karmine Corp', 'sup');
+select seed_player('Kyeahoo', 'Karmine Corp', 'mid');
+select seed_player('Caliste', 'Karmine Corp', 'adc');
+select seed_player('Busio', 'Karmine Corp', 'sup');
 
 -- Shifters
 -- select seed_player('NOMBRE', 'Shifters', 'top');
@@ -106,9 +106,9 @@ select seed_player('Lospa',  'SK', 'sup');
 
 -- Natus Vincere
 -- select seed_player('NOMBRE', 'NAVI', 'top');
--- select seed_player('NOMBRE', 'NAVI', 'jng');
+select seed_player('Rilech', 'NAVI', 'jng');
 -- select seed_player('NOMBRE', 'NAVI', 'mid');
--- select seed_player('NOMBRE', 'NAVI', 'adc');
+select seed_player('Supa', 'NAVI', 'adc');
 -- select seed_player('NOMBRE', 'NAVI', 'sup');
 
 
@@ -136,17 +136,27 @@ FROM (VALUES
 
     ('Lyncas',      650000),
     ('Caps',        820000),
+    ("Hans Sama",   850000),
     ('Mikyx',       680000),
 
+    ("Myrwn",       600000),
     ('Feisty',      450000),
     ('Thayger',     450000),
     ('Piero',       450000),
 
-    ('Kryze',       450000),
+    ("Canna",       625000),
+    ("Kyeahoo",     665000),
+    ("Caliste",     820000),
+    ("Busio",       800000),
+
+    ('Kryze',       550000),
     ('Zicssi',      450000),
     ('SlowQ',       450000),
     ('3XA',         450000),
-    ('Lospa',       685000)
+    ('Lospa',       685000),
+
+    ("Rilech",      725000),
+    ("Supa",        770000)
 ) AS v(name, price)
 WHERE p.name = v.name;
 
