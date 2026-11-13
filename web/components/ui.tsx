@@ -22,9 +22,10 @@ export function Chips({ value, onChange }: { value: string; onChange: (v: string
   );
 }
 
-export function PlayerCard({ p, action }: { p: Player; action?: React.ReactNode }) {
+// onOpen: al pulsar en cualquier parte de la tarjeta (menos en los botones de `action`).
+export function PlayerCard({ p, action, onOpen }: { p: Player; action?: React.ReactNode; onOpen?: () => void }) {
   return (
-    <div className="card" data-role={p.role}>
+    <div className={"card" + (onOpen ? " clickable" : "")} data-role={p.role} onClick={onOpen}>
       <Avatar p={p} />
       <div className="info">
         <b>{p.name}{p.rookie && <span className="rk">ROOKIE</span>}</b>
@@ -32,7 +33,7 @@ export function PlayerCard({ p, action }: { p: Player; action?: React.ReactNode 
         <span className="role">{p.role.toUpperCase()}</span>
       </div>
       <div className="nums"><strong>{eur(p.price)}</strong><small>{p.pts} pts</small></div>
-      {action}
+      {action && <div style={{ display: "contents" }} onClick={(e) => e.stopPropagation()}>{action}</div>}
     </div>
   );
 }

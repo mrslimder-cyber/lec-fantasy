@@ -70,7 +70,7 @@ select seed_player('Hans Sama', 'G2', 'adc');
 select seed_player('Mikyx',  'G2', 'sup');
 
 -- GIANTX
--select seed_player('Myrwn', 'GIANTX', 'top');
+select seed_player('Myrwn', 'GIANTX', 'top');
 select seed_player('Thayger', 'GIANTX', 'jng', true);
 select seed_player('Feisty',  'GIANTX', 'mid');
 -- select seed_player('NOMBRE', 'GIANTX', 'adc');
@@ -139,15 +139,15 @@ FROM (VALUES
     ("Hans Sama",   850000),
     ('Mikyx',       680000),
 
-    ("Myrwn",       600000),
+    ('Myrwn',       600000),
     ('Feisty',      450000),
     ('Thayger',     450000),
     ('Piero',       450000),
 
-    ("Canna",       625000),
-    ("Kyeahoo",     665000),
-    ("Caliste",     820000),
-    ("Busio",       800000),
+    ('Canna',       625000),
+    ('Kyeahoo',     665000),
+    ('Caliste',     820000),
+    ('Busio',       800000),
 
     ('Kryze',       550000),
     ('Zicssi',      450000),
@@ -155,8 +155,8 @@ FROM (VALUES
     ('3XA',         450000),
     ('Lospa',       685000),
 
-    ("Rilech",      725000),
-    ("Supa",        770000)
+    ('Rilech',      725000),
+    ('Supa',        770000)
 ) AS v(name, price)
 WHERE p.name = v.name;
 

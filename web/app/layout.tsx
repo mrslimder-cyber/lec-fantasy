@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./globals.css";
+import "./extra.css";
 import { Nav } from "@/components/Nav";
 export const metadata = { title: "LEC Fantasy" };
 export default function Root({ children }: { children: React.ReactNode }) {

@@ -3,12 +3,15 @@ import { useState } from "react";
 import { eur, type Player } from "@/lib/game";
 import { SLOTS, useLeague } from "@/lib/league";
 import { Chips, PlayerCard } from "@/components/ui";
+import { PlayerHistory } from "@/components/PlayerHistory";
 
 export default function Mercado() {
-  const { id, lg, ros, players, byId, me, rpc } = useLeague();
+  const { id, lg, ros, players, byId, me, rpc, isOwner, bids, results, teams } = useLeague();
   const [role, setRole] = useState("all");
   const [q, setQ] = useState("");
   const [msg, setMsg] = useState<{ t: string; ok: boolean } | null>(null);
+  const [amt, setAmt] = useState<Record<number, string>>({});
+  const [open, setOpen] = useState<Player | null>(null);
 
   if (!lg.drawn) return <p className="sub">El mercado se abre cuando el creador haga el sorteo.</p>;
 
@@ -17,51 +20,110 @@ export default function Mercado() {
   const mine = ros
     .filter((r) => r.league_team_id === me?.id)
     .sort((a, b) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot));
+  const myBids = new Map(bids.filter((b) => b.league_team_id === me?.id).map((b) => [b.player_id, b.amount]));
   const free = players
     .filter((p) => !owned.has(p.id) && (role === "all" || p.role === role) && p.name.toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => b.pts - a.pts || b.price - a.price || a.name.localeCompare(b.name));
 
-  const buy = async (p: Player) => {
+  const say = (err: string | null, ok: string) => setMsg(err ? { t: err, ok: false } : { t: ok, ok: true });
+
+  const bid = async (p: Player) => {
     setMsg(null);
-    const err = await rpc("buy_player", { p_league: id, p_player: p.id });
-    setMsg(err ? { t: err, ok: false } : { t: `Has fichado a ${p.name} por ${eur(p.price)}.`, ok: true });
+    const n = Number(amt[p.id] ?? Math.ceil(p.price));
+    if (!n || n < p.price) return say(`La puja mínima por ${p.name} es ${eur(Math.ceil(p.price))}.`, "");
+    say(await rpc("place_bid", { p_league: id, p_player: p.id, p_amount: n }), `Puja de ${eur(n)} por ${p.name} registrada.`);
+  };
+  const cancel = async (p: Player) => {
+    setMsg(null);
+    say(await rpc("cancel_bid", { p_league: id, p_player: p.id }), `Puja por ${p.name} retirada.`);
   };
   const sell = async (slot: string, p: Player) => {
-    if (!confirm(`¿Vender a ${p.name} por ${eur(p.price)}?`)) return;
+    if (!confirm(`¿Seguro que quieres vender a ${p.name} por ${eur(p.price)}? Volverá a la pool del mercado.`)) return;
     setMsg(null);
-    const err = await rpc("sell_player", { p_league: id, p_slot: slot });
-    setMsg(err ? { t: err, ok: false } : { t: `Has vendido a ${p.name} por ${eur(p.price)}.`, ok: true });
+    say(await rpc("sell_player", { p_league: id, p_slot: slot }), `Has vendido a ${p.name} por ${eur(p.price)}.`);
   };
+  const resolve = async () => {
+    if (!confirm("¿Resolver las pujas? Gana la puja más alta de cada jugador y se descartan todas las demás.")) return;
+    setMsg(null);
+    say(await rpc("resolve_bids", { p_league: id }), "Pujas resueltas.");
+  };
+
+  const teamName = (tid: number) => teams.find((t) => t.id === tid)?.name ?? "—";
 
   return (
     <>
-      <p className="sub">Dinero disponible: <b>{eur(cash)}</b>. Compras y ventas al precio actual del jugador.</p>
+      <p className="sub">
+        Dinero disponible: <b>{eur(cash)}</b>. Vender es inmediato al precio actual; fichar se hace pujando (mínimo el precio actual, máximo tu dinero).
+      </p>
       {msg && <p className={msg.ok ? "ok" : "err"}>{msg.t}</p>}
+      {isOwner && (
+        <div className="bar">
+          <button className="btn" onClick={resolve}>Resolver pujas</button>
+          <span className="hint">Solo el creador. Gana la puja más alta de cada jugador (a igualdad, la más antigua) y paga lo que pujó.</span>
+        </div>
+      )}
 
       <h3>Mis jugadores</h3>
-      <div className="grid">
+      <div className="grid wide">
         {mine.map((r) => {
           const p = byId.get(r.player_id);
           if (!p) return null;
-          return <PlayerCard key={r.slot} p={p}
+          return <PlayerCard key={r.slot} p={p} onOpen={() => setOpen(p)}
             action={<button className="btn out" onClick={() => sell(r.slot, p)}>Vender</button>} />;
         })}
         {mine.length === 0 && <p className="sub">No tienes jugadores.</p>}
       </div>
+
+      {myBids.size > 0 && (
+        <>
+          <h3>Mis pujas</h3>
+          <div className="grid wide">
+            {[...myBids.entries()].map(([pid, a]) => {
+              const p = byId.get(pid);
+              if (!p) return null;
+              return <PlayerCard key={pid} p={p} onOpen={() => setOpen(p)}
+                action={<><small>Tu puja: <b>{eur(a)}</b></small><button className="btn out" onClick={() => cancel(p)}>Retirar</button></>} />;
+            })}
+          </div>
+        </>
+      )}
+
+      {results.length > 0 && (
+        <>
+          <h3>Últimos fichajes</h3>
+          <ul className="hint" style={{ paddingLeft: 18 }}>
+            {results.map((r) => (
+              <li key={r.id}>{teamName(r.league_team_id)} ficha a {byId.get(r.player_id)?.name ?? "—"} por {eur(r.amount)}</li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <h3>Agentes libres</h3>
       <div className="bar">
         <Chips value={role} onChange={setRole} />
         <input placeholder="Buscar jugador…" value={q} onChange={(e) => setQ(e.target.value)} />
       </div>
-      <div className="grid">
-        {free.map((p) => (
-          <PlayerCard key={p.id} p={p}
-            action={<button className="btn" disabled={p.price > cash} title={p.price > cash ? "No tienes dinero suficiente" : ""}
-              onClick={() => buy(p)}>Fichar</button>} />
-        ))}
+      <div className="grid wide">
+        {free.map((p) => {
+          const mineBid = myBids.get(p.id);
+          return (
+            <PlayerCard key={p.id} p={p} onOpen={() => setOpen(p)}
+              action={
+                <div className="bidbox">
+                  <input type="number" min={Math.ceil(p.price)} max={cash} step={1000}
+                    value={amt[p.id] ?? String(Math.ceil(p.price))}
+                    onChange={(e) => setAmt({ ...amt, [p.id]: e.target.value })} />
+                  <button className="btn" disabled={p.price > cash} onClick={() => bid(p)}
+                    title={p.price > cash ? "No tienes dinero suficiente" : ""}>{mineBid ? "Actualizar" : "Pujar"}</button>
+                  {mineBid && <small>Tu puja: {eur(mineBid)}</small>}
+                </div>
+              } />
+          );
+        })}
         {free.length === 0 && <p className="sub">No hay jugadores libres con ese filtro.</p>}
       </div>
+      {open && <PlayerHistory p={open} onClose={() => setOpen(null)} />}
     </>
   );
 }

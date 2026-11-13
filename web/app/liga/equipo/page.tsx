@@ -3,8 +3,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { eur, type Player } from "@/lib/game";
-import { useLeague } from "@/lib/league";
+import { SLOTS, STARTERS, useLeague } from "@/lib/league";
 import { PitchMap } from "@/components/PitchMap";
+import { Avatar } from "@/components/ui";
+import { PlayerHistory } from "@/components/PlayerHistory";
 
 export default function Equipo() {
   const { id, lg, teams, ros, byId, me, rpc, value, points } = useLeague();
@@ -13,6 +15,7 @@ export default function Equipo() {
   const mine = !!shown && shown.id === me?.id;
   const [sel, setSel] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
+  const [open, setOpen] = useState<Player | null>(null);
 
   if (!lg.drawn) return <p className="sub">Todavía no se ha hecho el sorteo.</p>;
 
@@ -22,22 +25,15 @@ export default function Equipo() {
       return [r.slot, { p, price: p?.price ?? r.draft_price }];
     }));
 
-  const pick = async (slot: string) => {
-    if (!mine) return;
+  const move = async (to: string) => {
+    if (!sel) return;
     setMsg("");
-    if (!sel) { if (slots[slot]?.p) setSel(slot); return; }
-    if (sel === slot) { setSel(null); return; }
-    const err = await rpc("move_player", { p_league: id, p_from: sel, p_to: slot });
+    const err = await rpc("move_player", { p_league: id, p_from: sel, p_to: to });
     setSel(null);
     if (err) setMsg(err);
   };
-  const sell = async () => {
-    const p = sel ? slots[sel]?.p : undefined;
-    if (!sel || !p || !confirm(`¿Vender a ${p.name} por ${eur(p.price)}?`)) return;
-    const err = await rpc("sell_player", { p_league: id, p_slot: sel });
-    setSel(null);
-    if (err) setMsg(err);
-  };
+  // El mapa solo sirve de destino: se elige el jugador con "Cambiar" y luego el hueco.
+  const target = (slot: string) => { if (sel === slot) setSel(null); else move(slot); };
 
   const sp = sel ? slots[sel]?.p : undefined;
   return (
@@ -56,15 +52,42 @@ export default function Equipo() {
       {mine && (
         <div className="bar">
           <span className="hint">
-            {sel ? `Seleccionado: ${sp?.name}. Toca otro hueco para cambiarlo de sitio.` : "Toca un jugador y luego otro hueco (titular o reserva) para intercambiarlos."}
+            {sel ? `Cambiando a ${sp?.name}: elige el hueco o el jugador con el que intercambiarlo.`
+              : "Pulsa «Cambiar» en un jugador y luego en el hueco o jugador de destino. Pulsa un jugador para ver sus partidos."}
           </span>
-          {sel && sp && <button className="btn" onClick={sell}>Vender por {eur(sp.price)}</button>}
           {sel && <button className="btn out" onClick={() => setSel(null)}>Cancelar</button>}
           <Link href={`/liga/mercado?id=${id}`} className="btn out" style={{ textDecoration: "none" }}>Ir al mercado</Link>
         </div>
       )}
       {msg && <p className="err">{msg}</p>}
-      <PitchMap slots={slots} selected={sel ?? undefined} onSelect={mine ? pick : undefined} />
+
+      <div className="teamgrid">
+        <div><PitchMap slots={slots} selected={sel ?? undefined} onSelect={mine && sel ? target : undefined} /></div>
+        <div className="squad">
+          {SLOTS.filter((s) => slots[s]?.p).map((s) => {
+            const p = slots[s].p!;
+            return (
+              <div key={s} className={"card prect clickable" + (sel === s ? " sel" : "")} data-role={p.role} onClick={() => setOpen(p)}>
+                <Avatar p={p} size={76} />
+                <div className="info">
+                  <b>{p.name}{p.rookie && <span className="rk">ROOKIE</span>}</b>
+                  <small>{p.team}</small>
+                  <span className="role">{p.role.toUpperCase()} · {STARTERS.includes(s) ? "TITULAR" : "BANQUILLO"}</span>
+                </div>
+                <div className="nums"><strong>{eur(slots[s].price)}</strong><small>{p.pts} pts temporada</small></div>
+                {mine && (
+                  <div style={{ display: "contents" }} onClick={(e) => e.stopPropagation()}>
+                    {!sel && <button className="btn" onClick={() => setSel(s)}>Cambiar</button>}
+                    {sel === s && <button className="btn out" onClick={() => setSel(null)}>Cancelar</button>}
+                    {sel && sel !== s && <button className="btn" onClick={() => move(s)}>Intercambiar aquí</button>}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      {open && <PlayerHistory p={open} onClose={() => setOpen(null)} />}
     </>
   );
 }
