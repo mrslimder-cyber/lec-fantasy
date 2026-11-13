@@ -136,7 +136,7 @@ FROM (VALUES
 
     ('Lyncas',      650000),
     ('Caps',        820000),
-    ("Hans Sama",   850000),
+    ('Hans Sama',   850000),
     ('Mikyx',       680000),
 
     ('Myrwn',       600000),
