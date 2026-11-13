@@ -1,0 +1,23 @@
+1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
+2) En Supabase (SQL Editor) ejecuta, por orden: v2.sql (si no lo hiciste), v3.sql y v4.sql. No borran datos.
+   Si vuelves a ejecutar leagues.sql, v2 o v3, ejecuta v4.sql otra vez al final.
+3) Sube a GitHub; Vercel redespliega solo.
+
+CALENDARIO (obligatorio para crear equipos por día)
+  insert into fixtures(matchday, kickoff, team_a, team_b, bo) values
+  (1, '2027-01-16 17:00+01', (select id from teams where name='G2'), (select id from teams where name='Fnatic'), 1);
+  Sábado = día 1, domingo = día 2, lunes = día 3 (por la fecha de kickoff, hora de Madrid).
+
+HORARIOS (hora de Madrid)
+- Mercado abierto de martes a viernes (00:00-23:59). Vender, pujar y clausulazos solo con el mercado abierto.
+- Viernes 23:59: pujas de todas las ligas resueltas solas (pg_cron, lo programa v4.sql).
+  Si pg_cron no se pudo activar: select resolve_all_bids(true);  a mano.
+- Sábado: creación de equipos (uno para sábado, otro domingo y otro lunes) hasta el primer partido de la jornada.
+- Al acabar la jornada (resultados cargados):  select close_matchday(<n>);
+  El mercado no abre hasta que se cierra la jornada anterior.
+
+AJUSTES (tabla settings)
+- clause_multiplier (1.5): el clausulazo cuesta precio actual x este valor, y se paga al dueño.
+- testing_open (0): ponlo a 1 para probar fuera de horario.
+
+MERCADO: cada liga solo ofrece una selección de libres (2 por posición, al azar); los vendidos entran al mercado.

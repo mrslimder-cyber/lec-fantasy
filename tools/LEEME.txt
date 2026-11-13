@@ -1,0 +1,23 @@
+HERRAMIENTAS (se ejecutan desde tu PC, no se despliegan)
+
+PREPARACIÓN (una vez), en el cmd de Windows, dentro de la carpeta tools:
+  python -m venv .venv
+  .venv\Scripts\activate
+  pip install -r requirements.txt
+  copy .env.example .env        (y rellena SUPABASE_URL y SUPABASE_SERVICE_KEY)
+  - En scrape.py cambia TOURNAMENT_URL por la lista de partidos de la temporada.
+  - Si algún nombre de gol.gg no coincide con tu tabla players, añádelo en aliases.py.
+  - .env NUNCA se sube a GitHub (ya está en tools/.gitignore).
+
+CADA DÍA DE PARTIDOS, al acabar y subir gol.gg las estadísticas:
+  1) python scrape.py --day 2027-01-16        (sube los games de ese día; los ya subidos se saltan)
+  2) python calcular.py                        (calcula SOLO los games scrapeados sin calcular)
+Antes de lanzar el 1) por primera vez usa  python scrape.py --day 2027-01-16 --dry-run  para ver qué lee.
+Si el scraper no entiende una página:  python scrape.py --inspect <id de un game>  y guarda tools/debug/.
+
+AL ACABAR LA JORNADA (después del lunes), tras revisar que todo está bien:
+  3) python cerrar_jornada.py --matchday 1
+     Reparte los puntos a las ligas (clasificación), recalcula precios (±15 %) y abre el mercado.
+     El viernes a las 23:59 se resuelven las pujas solas, se repone el mercado de la semana y se cierra.
+
+REPETIR UN GAME: python scrape.py --day ... --force  y luego  python calcular.py

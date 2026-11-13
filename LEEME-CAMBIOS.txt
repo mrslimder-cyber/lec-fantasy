@@ -1,6 +1,6 @@
 1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
-2) En Supabase (SQL Editor) ejecuta, por orden: v2.sql (si no lo hiciste), v3.sql y v4.sql. No borran datos.
-   Si vuelves a ejecutar leagues.sql, v2 o v3, ejecuta v4.sql otra vez al final.
+2) En Supabase (SQL Editor) ejecuta, por orden: v2.sql (si no lo hiciste), v3.sql, v4.sql y v5.sql. No borran datos.
+   Si vuelves a ejecutar leagues.sql, v2, v3 o v4, ejecuta v5.sql otra vez al final.
 3) Sube a GitHub; Vercel redespliega solo.
 
 CALENDARIO (obligatorio para crear equipos por día)
@@ -21,3 +21,13 @@ AJUSTES (tabla settings)
 - testing_open (0): ponlo a 1 para probar fuera de horario.
 
 MERCADO: cada liga solo ofrece una selección de libres (2 por posición, al azar); los vendidos entran al mercado.
+
+V5 (scripts y cierre de jornada)
+- Los datos se suben y calculan con los scripts de la carpeta tools (ver tools/LEEME.txt).
+- El mercado ya no abre por día de la semana: lo abre close_matchday (cerrar_jornada.py) y lo cierra el viernes 23:59.
+- Precios: precio teórico = media de puntos por serie x settings.point_value (lo fijas tú, no se calibra solo):
+    update settings set value = 50000 where key = 'point_value';
+  Tras cada jornada, solo los jugadores que han jugado se acercan a su precio teórico, máximo ±15 % respecto
+  a su precio anterior. Quien no juega mantiene su precio. En la jornada 1 todos parten de su precio inicial.
+  cerrar_jornada.py no deja cerrar si el valor del punto es 0.
+- Nueva pestaña JUGADORES y pestaña VALOR en la ficha de cada jugador.

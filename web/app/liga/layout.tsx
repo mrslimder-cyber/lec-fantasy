@@ -11,6 +11,7 @@ const TABS: [string, string][] = [
   ["/liga/equipo", "EQUIPO"],
   ["/liga/mercado", "MERCADO"],
   ["/liga", "CLASIFICACIÓN"],
+  ["/liga/jugadores", "JUGADORES"],
   ["/liga/movimientos", "MOVIMIENTOS"],
 ];
 

@@ -116,3 +116,7 @@ body{background:radial-gradient(1200px 600px at 50% -10%,#16264d 0%,transparent 
 
 /* ===== Movimientos: clausulazo ===== */
 .move.clause{--c:#f5c451}
+
+/* ===== Jugadores de la liga ===== */
+.who{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:12px;color:var(--mut);margin-left:auto}
+.who .mine{color:var(--gold);font-weight:800}
