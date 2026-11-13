@@ -7,7 +7,7 @@ import { usePlayers, type Player } from "@/lib/game";
 export type Team = { id: number; name: string; user_id: string; cash: number | null };
 export type Row = { league_team_id: number; slot: string; player_id: number; draft_price: number };
 export type Bid = { id: number; league_team_id: number; player_id: number; amount: number };
-export type BidResult = { id: number; league_team_id: number; player_id: number; amount: number };
+export type Move = { id: number; league_team_id: number; player_id: number; kind: string; amount: number; created_at: string };
 type MdRow = { league_team_id: number; matchday: number; points: number };
 export const STARTERS = ["top", "jng", "mid", "adc", "sup"];
 export const SLOTS = [...STARTERS, "res1", "res2"];
@@ -18,7 +18,7 @@ type Ctx = {
   teams: Team[];
   ros: Row[];
   bids: Bid[];
-  results: BidResult[];
+  moves: Move[];
   players: Player[];
   byId: Map<number, Player>;
   me?: Team;
@@ -41,7 +41,7 @@ export function LeagueProvider({ id, uid, children }: { id: number; uid: string;
   const [ros, setRos] = useState<Row[]>([]);
   const [md, setMd] = useState<MdRow[]>([]);
   const [bids, setBids] = useState<Bid[]>([]);
-  const [results, setResults] = useState<BidResult[]>([]);
+  const [moves, setMoves] = useState<Move[]>([]);
   const [error, setError] = useState("");
 
   const load = useCallback(async () => {
@@ -51,8 +51,8 @@ export function LeagueProvider({ id, uid, children }: { id: number; uid: string;
       supabase.from("league_rosters").select("league_team_id,slot,player_id,draft_price").eq("league_id", id),
       supabase.from("league_matchday_points").select("league_team_id,matchday,points").eq("league_id", id),
       supabase.from("league_bids").select("id,league_team_id,player_id,amount").eq("league_id", id),
-      supabase.from("league_bid_results").select("id,league_team_id,player_id,amount").eq("league_id", id)
-        .order("id", { ascending: false }).limit(10),
+      supabase.from("league_moves").select("id,league_team_id,player_id,kind,amount,created_at").eq("league_id", id)
+        .order("id", { ascending: false }).limit(300),
     ]);
     const err = t.error?.message ?? r.error?.message ?? m.error?.message ?? b.error?.message ?? br.error?.message ?? "";
     setError(err);
@@ -61,7 +61,7 @@ export function LeagueProvider({ id, uid, children }: { id: number; uid: string;
     setRos((r.data ?? []).map((x: any) => ({ ...x, draft_price: Number(x.draft_price) })));
     setMd((m.data ?? []).map((x: any) => ({ ...x, points: Number(x.points) })));
     setBids((b.data ?? []).map((x: any) => ({ ...x, amount: Number(x.amount) })));
-    setResults((br.data ?? []).map((x: any) => ({ ...x, amount: Number(x.amount) })));
+    setMoves((br.data ?? []).map((x: any) => ({ ...x, amount: Number(x.amount) })));
   }, [id]);
   useEffect(() => { load(); }, [load]);
 
@@ -75,7 +75,7 @@ export function LeagueProvider({ id, uid, children }: { id: number; uid: string;
 
   if (lg === undefined || loading) return <p className="sub">Cargando liga…</p>;
   if (lg === null) return <p className="sub">No se encuentra esta liga (o no eres miembro de ella).</p>;
-  if (error) return <p className="err">Error al cargar: {error}. ¿Has ejecutado la última versión de supabase/leagues.sql y supabase/v2.sql?</p>;
+  if (error) return <p className="err">Error al cargar: {error}. ¿Has ejecutado la última versión de supabase/leagues.sql, v2.sql y v3.sql?</p>;
 
   const roster = (tid: number) => ros.filter((r) => r.league_team_id === tid);
   const value = (tid: number) => roster(tid).reduce((a, r) => a + (byId.get(r.player_id)?.price ?? r.draft_price), 0);
@@ -85,7 +85,7 @@ export function LeagueProvider({ id, uid, children }: { id: number; uid: string;
 
   return (
     <C.Provider value={{
-      id, lg, teams, ros, bids, results, players, byId, me: teams.find((t) => t.user_id === uid),
+      id, lg, teams, ros, bids, moves, players, byId, me: teams.find((t) => t.user_id === uid),
       isOwner: lg.owner === uid, value, points, rpc,
     }}>
       {children}

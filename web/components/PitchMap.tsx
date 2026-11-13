@@ -34,10 +34,6 @@ export function PitchMap({ slots, selected, onSelect }: {
             style={{ left: `${x}%`, top: `${y}%` }} />
         ))}
       </div>
-      <h3>Reservas</h3>
-      <div className="bench">
-        {["res1", "res2"].map((r) => <Node key={r} role={r} s={slots[r]} selected={selected === r} onClick={click(r)} />)}
-      </div>
     </>
   );
 }

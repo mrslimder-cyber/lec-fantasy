@@ -1,14 +1,15 @@
 "use client";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/auth";
 
 export function Nav() {
   const { session } = useSession();
+  const router = useRouter();
+  const out = async () => { await supabase.auth.signOut(); router.push("/"); };
   return (
     <nav>
-      <Link href="/">Inicio</Link><Link href="/jugadores">Jugadores</Link>
-      {session && <a href="/" onClick={() => supabase.auth.signOut()}>Salir</a>}
+      {session && <button className="btn out" onClick={out}>Cerrar sesión</button>}
     </nav>
   );
 }

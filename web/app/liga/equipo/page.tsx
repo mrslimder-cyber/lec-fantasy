@@ -64,8 +64,17 @@ export default function Equipo() {
       <div className="teamgrid">
         <div><PitchMap slots={slots} selected={sel ?? undefined} onSelect={mine && sel ? target : undefined} /></div>
         <div className="squad">
-          {SLOTS.filter((s) => slots[s]?.p).map((s) => {
-            const p = slots[s].p!;
+          {SLOTS.map((s) => {
+            const p = slots[s]?.p;
+            if (!p) return (
+              <div key={s} className="card prect empty-slot">
+                <div className="info">
+                  <b>Hueco libre</b>
+                  <small>{s.startsWith("res") ? "RESERVA" : s.toUpperCase()}</small>
+                </div>
+                {mine && sel && <button className="btn" onClick={() => move(s)}>Mover aquí</button>}
+              </div>
+            );
             return (
               <div key={s} className={"card prect clickable" + (sel === s ? " sel" : "")} data-role={p.role} onClick={() => setOpen(p)}>
                 <Avatar p={p} size={76} />

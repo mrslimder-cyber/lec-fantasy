@@ -5,6 +5,16 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/auth";
 
+function Hero() {
+  return (
+    <div className="hero">
+      <div className="eyebrow">LEC · WINTER 2027</div>
+      <h1>LEC Fantasy</h1>
+      <p>Sortea tu plantilla, puja en el mercado y demuestra en tu liga de amigos quién sabe más de la Grieta.</p>
+    </div>
+  );
+}
+
 function AuthForm() {
   const [mode, setMode] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
@@ -19,17 +29,20 @@ function AuthForm() {
     else if (!data.session) setMsg("Revisa tu correo para confirmar la cuenta.");
   };
   return (
-    <div className="form">
-      <h1>{mode === "in" ? "Identifícate" : "Crea tu cuenta"}</h1>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Contraseña (mín. 6)" value={pw} onChange={(e) => setPw(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && go()} />
-      <button className="btn" onClick={go}>{mode === "in" ? "Entrar" : "Registrarme"}</button>
-      <button className="btn out" onClick={() => setMode(mode === "in" ? "up" : "in")}>
-        {mode === "in" ? "No tengo cuenta" : "Ya tengo cuenta"}
-      </button>
-      {msg && <p className="err">{msg}</p>}
-    </div>
+    <>
+      <Hero />
+      <div className="panel">
+        <h2>{mode === "in" ? "Identifícate" : "Crea tu cuenta"}</h2>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Contraseña (mín. 6)" value={pw} onChange={(e) => setPw(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && go()} />
+        <button className="btn" onClick={go}>{mode === "in" ? "Entrar" : "Registrarme"}</button>
+        <button className="btn out" onClick={() => setMode(mode === "in" ? "up" : "in")}>
+          {mode === "in" ? "No tengo cuenta" : "Ya tengo cuenta"}
+        </button>
+        {msg && <p className="err">{msg}</p>}
+      </div>
+    </>
   );
 }
 
@@ -39,7 +52,7 @@ function Menu({ uid }: { uid: string }) {
   const [a, setA] = useState("");
   const [b, setB] = useState("");
   const [err, setErr] = useState("");
-  const [mine, setMine] = useState<any[]>([]);
+  const [mine, setMine] = useState<any[] | null>(null);
   useEffect(() => {
     if (view === "ligas")
       supabase.from("league_teams").select("name,leagues(id,name,drawn)").eq("user_id", uid)
@@ -51,37 +64,51 @@ function Menu({ uid }: { uid: string }) {
     const { data, error } = view === "crear"
       ? await supabase.rpc("create_league", { p_name: a, p_team: b })
       : await supabase.rpc("join_league", { p_code: a, p_team: b });
-    if (error) setErr(error.message); else router.push(`/liga?id=${data}`);
+    if (error) setErr(error.message); else router.push(`/liga/equipo?id=${data}`);
   };
   const back = <button className="btn out" onClick={() => { setView("menu"); setErr(""); }}>← Volver</button>;
 
   if (view === "menu") return (
     <>
-      <h1>LEC Fantasy</h1>
-      <p className="sub">¿Qué quieres hacer?</p>
-      <div className="grid">
-        <button className="card tile" onClick={() => setView("crear")}><b>Crear liga</b><small>Invita a tus amigos con un código</small></button>
-        <button className="card tile" onClick={() => setView("unirse")}><b>Unirme a una liga</b><small>Con el código que te pasen</small></button>
-        <button className="card tile" onClick={() => setView("ligas")}><b>Mis ligas</b><small>Ligas en las que ya compites</small></button>
+      <Hero />
+      <div className="menu3">
+        <button className="mtile" data-k="crear" onClick={() => setView("crear")}>
+          <span className="ico">🏆</span><b>Crear liga</b>
+          <small>Monta tu propia liga e invita a tus amigos con un código.</small>
+          <span className="go">EMPEZAR →</span>
+        </button>
+        <button className="mtile" data-k="unirse" onClick={() => setView("unirse")}>
+          <span className="ico">🔑</span><b>Unirme a una liga</b>
+          <small>¿Te han pasado un código? Ponle nombre a tu equipo y entra.</small>
+          <span className="go">ENTRAR →</span>
+        </button>
+        <button className="mtile" data-k="ligas" onClick={() => setView("ligas")}>
+          <span className="ico">📋</span><b>Mis ligas</b>
+          <small>Vuelve a las ligas en las que ya compites.</small>
+          <span className="go">VER →</span>
+        </button>
       </div>
     </>
   );
   if (view === "ligas") return (
-    <>
-      <h1>Mis ligas</h1>{back}
-      <div className="grid" style={{ marginTop: 16 }}>
-        {mine.length === 0 && <p className="sub">Todavía no estás en ninguna liga.</p>}
-        {mine.map((m) => (
-          <Link key={m.leagues.id} href={`/liga?id=${m.leagues.id}`} className="card tile">
-            <b>{m.leagues.name}</b><small>Tu equipo: {m.name} · {m.leagues.drawn ? "sorteada" : "pendiente de sorteo"}</small>
+    <div className="lgwrap">
+      <h1 style={{ textAlign: "center" }}>Mis ligas</h1>
+      <div className="lglist">
+        {mine === null && <p className="sub" style={{ textAlign: "center" }}>Cargando…</p>}
+        {mine?.length === 0 && <p className="sub" style={{ textAlign: "center" }}>Todavía no estás en ninguna liga.</p>}
+        {mine?.map((m) => (
+          <Link key={m.leagues.id} href={`/liga/equipo?id=${m.leagues.id}`} className="mtile lgitem" data-k="ligas">
+            <div><b>{m.leagues.name}</b><small>Tu equipo: {m.name}</small></div>
+            <span className={m.leagues.drawn ? "badge live" : "badge"}>{m.leagues.drawn ? "EN JUEGO" : "PENDIENTE DE SORTEO"}</span>
           </Link>
         ))}
       </div>
-    </>
+      <div style={{ textAlign: "center", marginTop: 20 }}>{back}</div>
+    </div>
   );
   return (
-    <div className="form">
-      <h1>{view === "crear" ? "Crear liga" : "Unirme a una liga"}</h1>
+    <div className="panel">
+      <h2>{view === "crear" ? "Crear liga" : "Unirme a una liga"}</h2>
       <input placeholder={view === "crear" ? "Nombre de la liga" : "Código de la liga"} value={a} onChange={(e) => setA(e.target.value)} />
       <input placeholder="Nombre de tu equipo" value={b} onChange={(e) => setB(e.target.value)} />
       <button className="btn" onClick={submit}>{view === "crear" ? "Crear" : "Unirme"}</button>

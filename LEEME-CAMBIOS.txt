@@ -1,16 +1,15 @@
 1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
-2) En Supabase (SQL Editor) ejecuta supabase/v2.sql (después de leagues.sql). No borra datos.
-   Si algún día vuelves a ejecutar leagues.sql, ejecuta v2.sql otra vez después.
+2) En Supabase (SQL Editor) ejecuta, por orden, supabase/v2.sql (si no lo hiciste ya) y supabase/v3.sql.
+   No borran datos. Si algún día vuelves a ejecutar leagues.sql, ejecuta v2.sql y v3.sql otra vez después.
 3) Sube a GitHub; Vercel redespliega solo.
 
 PUNTOS
 - En `games`, pon el mismo series_id a todos los games de un mismo BO3 (vacío = BO1).
 - Al terminar cada jornada, y antes de tocar nada más:  select close_matchday(<n>);
-  Reparte los puntos solo a quien tenía a ese jugador de titular en ese momento.
-  (Los puntos de la clasificación salen de ahí; los fichajes nuevos ya no heredan puntos.)
 
 MERCADO
 - Vender: inmediato (con confirmación). Fichar: puja (mín. precio actual, máx. tu dinero).
 - El creador pulsa "Resolver pujas": gana la más alta de cada jugador y paga lo que pujó.
+- Todas las compras y ventas quedan en la pestaña MOVIMIENTOS (solo desde que ejecutes v3.sql).
 
 SORTEO: aleatorio; entre los 5 primeros de cada equipo no se repite rol; el 6.º (reserva) es libre.

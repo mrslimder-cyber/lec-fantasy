@@ -6,7 +6,7 @@ import { Chips, PlayerCard } from "@/components/ui";
 import { PlayerHistory } from "@/components/PlayerHistory";
 
 export default function Mercado() {
-  const { id, lg, ros, players, byId, me, rpc, isOwner, bids, results, teams } = useLeague();
+  const { id, lg, ros, players, byId, me, rpc, isOwner, bids } = useLeague();
   const [role, setRole] = useState("all");
   const [q, setQ] = useState("");
   const [msg, setMsg] = useState<{ t: string; ok: boolean } | null>(null);
@@ -48,8 +48,6 @@ export default function Mercado() {
     say(await rpc("resolve_bids", { p_league: id }), "Pujas resueltas.");
   };
 
-  const teamName = (tid: number) => teams.find((t) => t.id === tid)?.name ?? "—";
-
   return (
     <>
       <p className="sub">
@@ -85,17 +83,6 @@ export default function Mercado() {
                 action={<><small>Tu puja: <b>{eur(a)}</b></small><button className="btn out" onClick={() => cancel(p)}>Retirar</button></>} />;
             })}
           </div>
-        </>
-      )}
-
-      {results.length > 0 && (
-        <>
-          <h3>Últimos fichajes</h3>
-          <ul className="hint" style={{ paddingLeft: 18 }}>
-            {results.map((r) => (
-              <li key={r.id}>{teamName(r.league_team_id)} ficha a {byId.get(r.player_id)?.name ?? "—"} por {eur(r.amount)}</li>
-            ))}
-          </ul>
         </>
       )}
 

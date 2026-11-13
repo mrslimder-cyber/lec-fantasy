@@ -8,9 +8,10 @@ import { BUDGET, eur } from "@/lib/game";
 import { LeagueProvider, useLeague } from "@/lib/league";
 
 const TABS: [string, string][] = [
-  ["/liga", "CLASIFICACIÓN"],
-  ["/liga/equipo", "MI EQUIPO"],
+  ["/liga/equipo", "EQUIPO"],
   ["/liga/mercado", "MERCADO"],
+  ["/liga", "CLASIFICACIÓN"],
+  ["/liga/movimientos", "MOVIMIENTOS"],
 ];
 
 function Header() {
@@ -27,7 +28,8 @@ function Header() {
   };
   return (
     <>
-      <h1>{lg.name}</h1>
+      <Link href="/" className="back">← Mis ligas</Link>
+      <h1 style={{ marginTop: 8 }}>{lg.name}</h1>
       <p className="sub">
         Código para invitar: <b>{lg.code}</b> · {teams.length} equipos · Presupuesto inicial {eur(BUDGET)}
       </p>
@@ -45,10 +47,12 @@ function Header() {
           <div><small>Tus puntos</small><b>{points(me.id)}</b></div>
         </div>
       )}
-      <div className="chips" style={{ margin: "16px 0" }}>
-        {TABS.map(([href, label]) => (
-          <Link key={href} href={`${href}?id=${id}`} className={path === href ? "chip on" : "chip"}>{label}</Link>
-        ))}
+      <div className="tabsbar">
+        <div className="tabs">
+          {TABS.map(([href, label]) => (
+            <Link key={href} href={`${href}?id=${id}`} className={path === href ? "tab on" : "tab"}>{label}</Link>
+          ))}
+        </div>
       </div>
     </>
   );

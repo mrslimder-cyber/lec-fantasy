@@ -18,7 +18,7 @@ export const PHOTOS: Record<string, string> = {
   "Labrov": "/players/labrov.png",
   "Lyncas": "/players/lyncas.png",
   "Caps": "/players/caps.png",
-  "Hans Sama": "/player/hans.png",
+  "Hans Sama": "/players/hans.png",
   "Mikyx": "/players/mikyx.png",
   "Myrwn": "/players/myrwn.png",
   "Thayger": "/players/thayger.png",
