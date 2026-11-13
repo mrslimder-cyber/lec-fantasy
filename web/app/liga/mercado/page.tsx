@@ -51,7 +51,9 @@ export default function Mercado() {
         <b>{status.open ? "MERCADO ABIERTO" : "MERCADO CERRADO"}</b>
         <span>
           {status.open
-            ? "Abierto de martes a viernes. Las pujas se resuelven solas el viernes a las 23:59."
+            ? status.preseason
+              ? `Mercado de pretemporada: dos mercados por semana (martes–viernes y sábado–lunes). Las pujas se resuelven ${status.resolves}.`
+              : `Abierto de martes a viernes. Las pujas se resuelven solas ${status.resolves ?? "el viernes a las 23:59"}.`
             : status.reason}
         </span>
       </div>

@@ -13,7 +13,7 @@ export type Move = {
 };
 export type Fixture = { id: number; matchday: number; kickoff: string; bo: number; a: string; b: string };
 type LineupRow = { league_team_id: number; day: number; slot: string; player_id: number };
-export type Status = { open: boolean; reason: string; matchday: number | null; lineup_open: boolean; clause_multiplier: number };
+export type Status = { open: boolean; reason: string; matchday: number | null; lineup_open: boolean; clause_multiplier: number; preseason?: boolean; resolves?: string };
 type MdRow = { league_team_id: number; matchday: number; points: number };
 export const STARTERS = ["top", "jng", "mid", "adc", "sup"];
 export const SLOTS = [...STARTERS, "res1", "res2"];
