@@ -33,9 +33,10 @@ export default function Mercado() {
   const bid = async (p: Player) => {
     setMsg(null);
     const n = Number(amt[p.id] ?? Math.ceil(p.price));
-  const room = cash - (committed - (myBids.get(p.id) ?? 0));
-  if (!n || n < p.price) return say(`La puja mínima por ${p.name} es ${eur(Math.ceil(p.price))}.`, "");
-  if (n > room) return say(`Solo tienes ${eur(room)} libres para esta puja (el resto está en otras pujas).`, "");
+    const room = cash - (committed - (myBids.get(p.id) ?? 0));
+    if (!n || n < p.price) return say(`La puja mínima por ${p.name} es ${eur(Math.ceil(p.price))}.`, "");
+    if (n > room) return say(`Solo tienes ${eur(Math.max(0, room))} libres para esta puja (el resto está en otras pujas).`, "");
+    say(await rpc("place_bid", { p_league: id, p_player: p.id, p_amount: n }), `Puja de ${eur(n)} por ${p.name} registrada.`);
   };
   const cancel = async (p: Player) => {
     setMsg(null);

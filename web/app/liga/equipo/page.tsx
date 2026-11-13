@@ -37,11 +37,24 @@ export default function Equipo() {
   const add = (t: string, s: string) => playing.set(t, (playing.get(t) ? playing.get(t) + " · " : "") + s);
   dayFx.forEach((f) => { add(f.a, `${hhmm(f.kickoff)} vs ${f.b}`); add(f.b, `${hhmm(f.kickoff)} vs ${f.a}`); });
 
-  const canEdit = mine && status.lineup_open;
+  const pre = !!status.preseason;
+  const canEdit = mine && (status.lineup_open || pre);
   const say = (err: string | null, ok: string) => setMsg(err ? { t: err, ok: false } : { t: ok, ok: true });
 
+  const slotOf = (pid: number) => ros.find((r) => r.league_team_id === shown?.id && r.player_id === pid)?.slot;
   const start = async (pid: number) => {
     setMsg(null);
+    if (pre) {  // pretemporada: se mueven los huecos de la plantilla
+      const role = byId.get(pid)?.role;
+      const cur = role ? line[role] : undefined;
+      const from = slotOf(pid);
+      const to = cur ? slotOf(cur) : role;
+      setSel(null);
+      if (!from || !to || cur === pid) return;
+      const err = await rpc("move_player", { p_league: id, p_from: from, p_to: to });
+      if (err) say(err, "");
+      return;
+    }
     const err = await rpc("set_starter", { p_league: id, p_matchday: status.matchday, p_day: day, p_player: pid });
     setSel(null);
     if (err) say(err, "");
@@ -101,10 +114,12 @@ export default function Equipo() {
       </div>
 
       {mine && (
-        <p className={status.lineup_open ? "ok" : "hint"} style={{ margin: "4px 0 10px" }}>
-          {status.lineup_open
-            ? "Fase de creación abierta: arma tu equipo de cada día (sábado, domingo y lunes) antes del primer partido."
-            : "Los equipos se crean el sábado, antes del primer partido de la jornada. Hasta entonces puntúan los de la última vez que los guardaste."}
+        <p className={status.lineup_open || pre ? "ok" : "hint"} style={{ margin: "4px 0 10px" }}>
+          {pre
+            ? "Pretemporada: coloca a tus titulares como quieras. Cuando se cargue el calendario, los equipos se crearán cada sábado."
+            : status.lineup_open
+              ? "Fase de creación abierta: arma tu equipo de cada día (sábado, domingo y lunes) antes del primer partido."
+              : "Los equipos se crean el sábado, antes del primer partido de la jornada. Hasta entonces puntúan los de la última vez que los guardaste."}
         </p>
       )}
       {mine && (
@@ -114,7 +129,7 @@ export default function Equipo() {
               : canEdit ? "Pulsa «Cambiar» en un jugador y luego en su sustituto. Pulsa un jugador para ver sus partidos." : "Pulsa un jugador para ver sus partidos."}
           </span>
           {sel && <button className="btn out" onClick={() => setSel(null)}>Cancelar</button>}
-          {canEdit && <button className="btn out" onClick={copyAll}>Copiar este equipo a los otros días</button>}
+          {canEdit && !pre && <button className="btn out" onClick={copyAll}>Copiar este equipo a los otros días</button>}
           <Link href={`/liga/mercado?id=${id}`} className="btn out" style={{ textDecoration: "none" }}>Ir al mercado</Link>
         </div>
       )}
