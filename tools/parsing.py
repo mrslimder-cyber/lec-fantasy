@@ -108,15 +108,21 @@ def build_game(rows, players, aliases):
         raise ValueError(f"Faltan filas en la tabla de stats: {missing}")
     names = rows["Player"]
     unknown, plist = [], []
-    for n in names:
-        key = norm(n)
-        key = aliases.get(key, key)
-        p = players.get(key)
-        if p is None:
-            unknown.append(n)
-        plist.append(p)
-    if unknown:
-        raise ValueError(f"Jugadores que no están en tu tabla players (añádelos o ponlos en aliases.py): {unknown}")
+    if players is None:  # modo sin base de datos (--dry-run): jugadores inventados a partir de la página
+        rm = {"TOP": "top", "JUNGLE": "jng", "MID": "mid", "ADC": "adc", "SUPPORT": "sup"}
+        r0 = [r.strip().upper() for r in rows["Role"]]
+        plist = [{"id": i + 1, "name": n, "role": rm.get(r0[i], "mid"), "team_id": 1 if i < 5 else 2}
+                 for i, n in enumerate(names)]
+    else:
+        for n in names:
+            key = norm(n)
+            key = aliases.get(key, key)
+            p = players.get(key)
+            if p is None:
+                unknown.append(n)
+            plist.append(p)
+        if unknown:
+            raise ValueError(f"Jugadores que no están en tu tabla players (añádelos o ponlos en aliases.py): {unknown}")
 
     col = lambda label: rows[label]
     cs = [num(x) for x in col("CS")]

@@ -72,6 +72,14 @@ def process_game(sb, gid, matchday, series_id, date, players, aliases, args):
         raise RuntimeError("no encuentro la tabla de stats (prueba: python scrape.py --inspect %d)" % gid)
     g = build_game(rows, players, aliases)
     winner, obj = parse_game_page(fetch(GAME_URL.format(id=gid)))
+    if args.dry_run:  # sin base de datos ni preguntas: solo enseña lo que se ha entendido
+        print(f"  game {gid}: {g['minutes']:.1f} min · ganador: "
+              f"{'azul' if winner == 0 else 'roja' if winner == 1 else 'NO DETECTADO (se preguntaría)'}"
+              f" · objetivos detectados: {obj or 'ninguno (se preguntarían)'}")
+        for i, p in enumerate(g["players"]):
+            print(f"   {g['names'][i]:<14} {p['kills']}/{p['deaths']}/{p['assists']}  csd {p['cs_diff']:+d}  "
+                  f"kp {p['kp']}  vspm {p['vspm']}  curas/min {p['heal_pm']}  escudos/min {p['shield_pm']}")
+        return
     sides = [", ".join(g["names"][:5]), ", ".join(g["names"][5:])]
     if winner is None:
         winner = ask(f"  ¿Quién ganó el game {gid}? 1=azul ({sides[0]}) 2=roja ({sides[1]})", cast=int) - 1
@@ -123,14 +131,17 @@ def main():
     if args.inspect:
         return inspect(args.inspect, args.tournament)
 
-    from common import client
-    sb = client()
     day = args.day or datetime.now(MADRID).date().isoformat()
-    matchday = args.matchday or sb.rpc("current_matchday").execute().data
-    if not matchday:
-        sys.exit("No sé la jornada: pasa --matchday N o carga el calendario (tabla fixtures).")
-    players = load_players(sb)
     aliases = {norm(k): norm(v) for k, v in PLAYER_ALIASES.items()}
+    if args.dry_run:  # no necesita .env ni Supabase
+        sb, matchday, players = None, args.matchday or 0, None
+    else:
+        from common import client
+        sb = client()
+        matchday = args.matchday or sb.rpc("current_matchday").execute().data
+        if not matchday:
+            sys.exit("No sé la jornada: pasa --matchday N o carga el calendario (tabla fixtures).")
+        players = load_players(sb)
     series = parse_matchlist(fetch(args.tournament, cache=False), day)
     if not series:
         sys.exit(f"No hay series terminadas el {day} en la lista. Revisa --day o la URL del torneo.")
@@ -140,7 +151,7 @@ def main():
         print(f"\nSerie {s['text']}")
         try:
             ids = series_game_ids(s)
-            done = {r["id"] for r in sb.table("games").select("id,scraped_at").in_("id", ids).execute().data if r["scraped_at"]}
+            done = set() if sb is None else {r["id"] for r in sb.table("games").select("id,scraped_at").in_("id", ids).execute().data if r["scraped_at"]}
             todo = ids if args.force else [i for i in ids if i not in done]
             if not todo:
                 print("  ya scrapeada, la salto"); continue
