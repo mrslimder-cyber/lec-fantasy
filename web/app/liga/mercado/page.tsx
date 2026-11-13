@@ -6,7 +6,7 @@ import { Chips, PlayerCard } from "@/components/ui";
 import { PlayerHistory } from "@/components/PlayerHistory";
 
 export default function Mercado() {
-  const { id, lg, ros, players, byId, me, rpc, isOwner, bids } = useLeague();
+  const { id, lg, ros, players, byId, me, rpc, bids, market, status } = useLeague();
   const [role, setRole] = useState("all");
   const [q, setQ] = useState("");
   const [msg, setMsg] = useState<{ t: string; ok: boolean } | null>(null);
@@ -17,12 +17,13 @@ export default function Mercado() {
 
   const cash = me?.cash ?? 0;
   const owned = new Set(ros.map((r) => r.player_id));
+  const inMarket = new Set(market);
   const mine = ros
     .filter((r) => r.league_team_id === me?.id)
     .sort((a, b) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot));
   const myBids = new Map(bids.filter((b) => b.league_team_id === me?.id).map((b) => [b.player_id, b.amount]));
   const free = players
-    .filter((p) => !owned.has(p.id) && (role === "all" || p.role === role) && p.name.toLowerCase().includes(q.toLowerCase()))
+    .filter((p) => inMarket.has(p.id) && !owned.has(p.id) && (role === "all" || p.role === role) && p.name.toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => b.pts - a.pts || b.price - a.price || a.name.localeCompare(b.name));
 
   const say = (err: string | null, ok: string) => setMsg(err ? { t: err, ok: false } : { t: ok, ok: true });
@@ -38,28 +39,26 @@ export default function Mercado() {
     say(await rpc("cancel_bid", { p_league: id, p_player: p.id }), `Puja por ${p.name} retirada.`);
   };
   const sell = async (slot: string, p: Player) => {
-    if (!confirm(`¿Seguro que quieres vender a ${p.name} por ${eur(p.price)}? Volverá a la pool del mercado.`)) return;
+    if (!confirm(`¿Seguro que quieres vender a ${p.name} por ${eur(p.price)}? Volverá al mercado.`)) return;
     setMsg(null);
     say(await rpc("sell_player", { p_league: id, p_slot: slot }), `Has vendido a ${p.name} por ${eur(p.price)}.`);
   };
-  const resolve = async () => {
-    if (!confirm("¿Resolver las pujas? Gana la puja más alta de cada jugador y se descartan todas las demás.")) return;
-    setMsg(null);
-    say(await rpc("resolve_bids", { p_league: id }), "Pujas resueltas.");
-  };
 
+  const closedTip = status.open ? "" : status.reason;
   return (
     <>
+      <div className={"banner " + (status.open ? "open" : "closed")}>
+        <b>{status.open ? "MERCADO ABIERTO" : "MERCADO CERRADO"}</b>
+        <span>
+          {status.open
+            ? "Abierto de martes a viernes. Las pujas se resuelven solas el viernes a las 23:59."
+            : status.reason}
+        </span>
+      </div>
       <p className="sub">
         Dinero disponible: <b>{eur(cash)}</b>. Vender es inmediato al precio actual; fichar se hace pujando (mínimo el precio actual, máximo tu dinero).
       </p>
       {msg && <p className={msg.ok ? "ok" : "err"}>{msg.t}</p>}
-      {isOwner && (
-        <div className="bar">
-          <button className="btn" onClick={resolve}>Resolver pujas</button>
-          <span className="hint">Solo el creador. Gana la puja más alta de cada jugador (a igualdad, la más antigua) y paga lo que pujó.</span>
-        </div>
-      )}
 
       <h3>Mis jugadores</h3>
       <div className="grid wide">
@@ -67,7 +66,7 @@ export default function Mercado() {
           const p = byId.get(r.player_id);
           if (!p) return null;
           return <PlayerCard key={r.slot} p={p} onOpen={() => setOpen(p)}
-            action={<button className="btn out" onClick={() => sell(r.slot, p)}>Vender</button>} />;
+            action={<button className="btn out" disabled={!status.open} title={closedTip} onClick={() => sell(r.slot, p)}>Vender</button>} />;
         })}
         {mine.length === 0 && <p className="sub">No tienes jugadores.</p>}
       </div>
@@ -80,13 +79,17 @@ export default function Mercado() {
               const p = byId.get(pid);
               if (!p) return null;
               return <PlayerCard key={pid} p={p} onOpen={() => setOpen(p)}
-                action={<><small>Tu puja: <b>{eur(a)}</b></small><button className="btn out" onClick={() => cancel(p)}>Retirar</button></>} />;
+                action={<><small>Tu puja: <b>{eur(a)}</b></small>
+                  <button className="btn out" disabled={!status.open} title={closedTip} onClick={() => cancel(p)}>Retirar</button></>} />;
             })}
           </div>
         </>
       )}
 
-      <h3>Agentes libres</h3>
+      <h3>En el mercado</h3>
+      <p className="hint" style={{ marginTop: -6 }}>
+        Solo hay una selección de jugadores libres (como norma, 2 de cada posición). Para quitarle un jugador a otro equipo, haz un clausulazo desde su equipo en la Clasificación.
+      </p>
       <div className="bar">
         <Chips value={role} onChange={setRole} />
         <input placeholder="Buscar jugador…" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -94,6 +97,7 @@ export default function Mercado() {
       <div className="grid wide">
         {free.map((p) => {
           const mineBid = myBids.get(p.id);
+          const off = !status.open || p.price > cash;
           return (
             <PlayerCard key={p.id} p={p} onOpen={() => setOpen(p)}
               action={
@@ -101,14 +105,14 @@ export default function Mercado() {
                   <input type="number" min={Math.ceil(p.price)} max={cash} step={1000}
                     value={amt[p.id] ?? String(Math.ceil(p.price))}
                     onChange={(e) => setAmt({ ...amt, [p.id]: e.target.value })} />
-                  <button className="btn" disabled={p.price > cash} onClick={() => bid(p)}
-                    title={p.price > cash ? "No tienes dinero suficiente" : ""}>{mineBid ? "Actualizar" : "Pujar"}</button>
+                  <button className="btn" disabled={off} onClick={() => bid(p)}
+                    title={!status.open ? status.reason : p.price > cash ? "No tienes dinero suficiente" : ""}>{mineBid ? "Actualizar" : "Pujar"}</button>
                   {mineBid && <small>Tu puja: {eur(mineBid)}</small>}
                 </div>
               } />
           );
         })}
-        {free.length === 0 && <p className="sub">No hay jugadores libres con ese filtro.</p>}
+        {free.length === 0 && <p className="sub">No hay jugadores en el mercado con ese filtro.</p>}
       </div>
       {open && <PlayerHistory p={open} onClose={() => setOpen(null)} />}
     </>

@@ -30,3 +30,12 @@ export function usePlayers() {
   }, []);
   return { players, loading };
 }
+
+// Días de partido del fin de semana (el equipo se crea para cada uno).
+export const DAYS = [{ n: 1, label: "Sábado" }, { n: 2, label: "Domingo" }, { n: 3, label: "Lunes" }];
+export const dayOf = (iso: string) => {
+  const w = new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Madrid", weekday: "short" }).format(new Date(iso));
+  return w === "Sun" ? 2 : w === "Mon" ? 3 : 1;
+};
+export const hhmm = (iso: string) =>
+  new Date(iso).toLocaleTimeString("es-ES", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" });

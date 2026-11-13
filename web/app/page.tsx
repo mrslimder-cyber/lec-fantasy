@@ -33,9 +33,9 @@ function AuthForm() {
       <Hero />
       <div className="panel">
         <h2>{mode === "in" ? "Identifícate" : "Crea tu cuenta"}</h2>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Contraseña (mín. 6)" value={pw} onChange={(e) => setPw(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && go()} />
+        <label className="fld"><span>Email</span><input type="email" placeholder="tu@correo.com" value={email} onChange={(e) => setEmail(e.target.value)} /></label>
+        <label className="fld"><span>Contraseña</span><input type="password" placeholder="Mínimo 6 caracteres" value={pw} onChange={(e) => setPw(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && go()} /></label>
         <button className="btn" onClick={go}>{mode === "in" ? "Entrar" : "Registrarme"}</button>
         <button className="btn out" onClick={() => setMode(mode === "in" ? "up" : "in")}>
           {mode === "in" ? "No tengo cuenta" : "Ya tengo cuenta"}
@@ -109,8 +109,9 @@ function Menu({ uid }: { uid: string }) {
   return (
     <div className="panel">
       <h2>{view === "crear" ? "Crear liga" : "Unirme a una liga"}</h2>
-      <input placeholder={view === "crear" ? "Nombre de la liga" : "Código de la liga"} value={a} onChange={(e) => setA(e.target.value)} />
-      <input placeholder="Nombre de tu equipo" value={b} onChange={(e) => setB(e.target.value)} />
+      <label className="fld"><span>{view === "crear" ? "Nombre de la liga" : "Código de la liga"}</span><input placeholder={view === "crear" ? "Ej. Los de la Grieta" : "Ej. A1B2C3"} value={a} onChange={(e) => setA(e.target.value)} /></label>
+      <label className="fld"><span>Nombre de tu equipo</span><input placeholder="Ej. Pentakill FC" value={b} onChange={(e) => setB(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && submit()} /></label>
       <button className="btn" onClick={submit}>{view === "crear" ? "Crear" : "Unirme"}</button>
       {back}
       {err && <p className="err">{err}</p>}

@@ -23,7 +23,7 @@ export default function Clasificacion() {
           ))}
         </tbody>
       </table>
-      <p className="hint">Toca un equipo para ver su alineación. Solo puntúan los 5 titulares.</p>
+      <p className="hint">Toca un equipo para ver su plantilla y su equipo de cada día. Desde ahí puedes hacerle un clausulazo mientras el mercado esté abierto.</p>
     </>
   );
 }
