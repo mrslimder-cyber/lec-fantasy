@@ -75,3 +75,10 @@ v0.1.0 · Formato supermanager
 ↔️ Jugadores fuera de posición puntúan la mitad
 🗓️ Mercado abierto miércoles-viernes
 🧹 Eliminados sorteo, pujas y clausulazos; todo el SQL unificado en game.sql
+
+v0.1.1 · Fichajes desde Equipo
+🗺️ Titulares: se fichan pulsando el hueco del mapa
+🪑 Suplentes: huecos libres a la derecha
+🔒 Imports no disponibles en gris
+🛒 Mercado solo para consultar
+💸 Botón Vender y Cambiar (banquillo)

@@ -1,34 +1,12 @@
-v0.1.0 · FORMATO SUPERMANAGER
+v0.1.1 · FICHAJES DESDE EQUIPO
 
 1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
-2) BORRA del repo los archivos que ya no sirven (todo está ahora en supabase/game.sql):
-     supabase/leagues.sql  supabase/v2.sql  supabase/v3.sql  supabase/v4.sql
-     supabase/v5.sql  supabase/v6.sql  supabase/v7.sql  supabase/v8.sql
-     LEEME-CAMBIOS(11-13).txt  LEEME-CAMBIOS(11-13)v2.txt  LEEME-CAMBIOS(11-13)v3.txt
-3) En Supabase (SQL Editor) ejecuta, por este orden:
-     seed.sql   (añade la columna import y marca a los imports)
-     game.sql   (la PRIMERA vez migra el formato: borra plantillas, equipos por día y pujas, y devuelve a cada
-                 equipo el presupuesto completo. No toca ligas, equipos de liga, puntos repartidos ni movimientos)
-4) Sube a GitHub; Vercel redespliega solo.
+2) No hay SQL nuevo: no hace falta ejecutar nada en Supabase.
+3) Sube a GitHub; Vercel redespliega solo.
 
-REGLAS
-- Mercado: todos los jugadores, copias infinitas, fichar/vender al instante al precio actual.
-  Abierto miércoles-viernes (hora de Madrid); cerrado sábado-martes. Si falta cerrar la jornada anterior, sigue cerrado.
-  Antes del primer partido de la temporada (o sin calendario) está siempre abierto.
-- Plantilla: 8 jugadores, máx. 3 imports. Equipo de cada día (sáb/dom/lun): 5 jugadores, máx. 2 imports.
-- Fuera de posición: puntúa la mitad. «Fijar equipo» bloquea el día; al empezar su primer partido se fija solo.
-  Un día sin equipo guardado no puntúa.
-- Los equipos de los rivales se ven cuando ese día empieza.
-
-AJUSTES (tabla settings)
-- budget (5000000): dinero inicial. Subido de 3.500.000 porque los 8 jugadores más baratos ya suman ~3,65 M.
-    update settings set value = 6000000 where key = 'budget';   (solo afecta a equipos que se creen después)
-- testing_open (0): ponlo a 1 para probar fuera de horario (mercado abierto, equipos siempre editables).
-- point_value: sigue igual (cerrar_jornada.py no deja cerrar si es 0).
-
-IMPORTS
-- En seed.sql, último parámetro de seed_player: select seed_player('Canna','Karmine Corp','top', false, true);
-- Solo he marcado Jojopyun, Canna y Busio. REVISA el resto y vuelve a ejecutar seed.sql.
-  (seed.sql vuelve a poner los precios de su lista: si ya cerraste jornadas, quita ese bloque UPDATE antes.)
-
-CALENDARIO Y CIERRE: igual que antes (tabla fixtures, tools/scrape.py, calcular.py, cerrar_jornada.py).
+QUÉ CAMBIA
+- Mercado: solo consulta (ya no se ficha ni se vende desde ahí).
+- Equipo: pulsa un hueco vacío del mapa para fichar un titular (mercado solo de esa posición).
+- Equipo: huecos libres de banquillo a la derecha (borde discontinuo) para fichar suplentes (todas las posiciones).
+- Jugadores no seleccionables (imports de más, sin dinero...) salen con opacidad baja.
+- Al fichar se vuelve a Equipo. Columna derecha con TITULARES y BANQUILLO; «Cambiar» solo en banquillo; «Vender» en todos.
