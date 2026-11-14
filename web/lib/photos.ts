@@ -46,6 +46,18 @@ export const PHOTOS: Record<string, string> = {
   "Supa": "/players/supa.png",
   "Parus": "/players/parus.png",
 
-  "Jopa": "/players/jopa.png"
+  "Jopa": "/players/jopa.png",
+
+  // LIGA FLASH · final de Worlds 2026
+  "Kiin": "/players/kiin.png",
+  "Canyon": "/players/canyon.png",
+  "Chovy": "/players/chovy.png",
+  "Ruler": "/players/ruler.png",
+  "Duro": "/players/duro.png",
+  "Bin": "/players/bin.png",
+  "Xun": "/players/xun.png",
+  "Knight": "/players/knight.png",
+  "Viper": "/players/viper.png",
+  "ON": "/players/on.png"
   // "NuevoJugador": "/players/nuevojugador.png",
 };

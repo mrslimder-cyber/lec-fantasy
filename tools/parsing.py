@@ -26,6 +26,15 @@ def num(s):
     return float(s)
 
 
+def find_cc_row(rows):
+    """Fila del tiempo de CC infligido (puntúa solo a los SUP). Acepta variantes del nombre. -> (etiqueta, valores) o (None, None)."""
+    cands = [k for k in rows if "cc" in norm(k) and "time" in norm(k)]
+    if not cands:
+        return None, None
+    best = next((k for k in cands if "dealt" in norm(k)), cands[0])
+    return best, rows[best]
+
+
 def parse_fullstats(html):
     """Tabla 'all stats': una fila por estadística, 10 columnas (5 de cada lado). -> {etiqueta: [10 valores]}"""
     soup = BeautifulSoup(html, "html.parser")
@@ -130,6 +139,13 @@ def build_game(rows, players, aliases):
     minutes = statistics.median([g / m for g, m in zip(golds, gpm) if m > 0])
     roles = [r.strip().upper() for r in col("Role")]
 
+    cc_label, cc_vals = find_cc_row(rows)
+    if cc_vals is None:
+        print("  AVISO: no encuentro la fila del tiempo de CC; los SUP puntuarán 0 en CC (revisa con --dry-run / --inspect).")
+        cc_vals = ["0"] * 10
+    else:
+        print(f"  CC leído de la fila '{cc_label}' (se espera en segundos totales de la partida)")
+
     def opp(i):  # rival de la misma línea (mismo rol en el otro lado)
         j = (i + 5) % 10
         if roles[j] == roles[i]:
@@ -151,7 +167,12 @@ def build_game(rows, players, aliases):
             "shutdown_lost": int(num(col("Shutdown bounty lost")[i])), "vspm": num(col("VSPM")[i]),
             "heal_pm": round(num(col("Total Heals On Teammates")[i]) / minutes, 2),
             "shield_pm": round(num(col("Total Damage Shielded On Teammates")[i]) / minutes, 2),
+            "cc_pm": round(num(cc_vals[i]) / minutes, 2),
         })
+    for i, o in enumerate(out):
+        if o["obj_stolen"] > 0:
+            print(f"  ROBO sin identificar: {names[i]} ({o['obj_stolen']}). No suma hasta que lo indiques en el SQL Editor: "
+                  f"select set_steals(<id del game>, '{plist[i]['name']}', <dragones>, <barones/ancianos>);")
     team_ids = []
     for side in (0, 1):
         ids = [p["team_id"] for p in plist[side * 5:side * 5 + 5] if p["team_id"] is not None]

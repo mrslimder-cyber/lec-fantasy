@@ -1,29 +1,35 @@
--- Puntuación v1 (pesos iguales para todos los roles; solo los umbrales de CSM dependen del rol).
--- Visión: round(vspm). Curas+escudos: round((heal_pm + shield_pm)/30). Supuestos de redondeo en README.
+-- Puntuación v2 (la definitiva del juego). Se puede volver a ejecutar. Después ejecuta game.sql (trae la bonificación de serie).
+-- Por game, sin redondeos (los redondeos de la hoja eran orientativos):
+--   kill +1 · muerte -1 · asistencia +1 · CS/min x0,4 (ADC x0,3) · DPM x0,003 · VSPM x1 (SUP x0,7)
+--   CSD@15 x0,05 (negativo resta) · KP (0-100) x0,02 · multikills 1/2/3/5 (solo el máximo de cada secuencia)
+--   robo de dragón +2, de barón/anciano +4 (solo si están identificados: dragons_stolen / barons_stolen)
+--   SUP: (curas+escudos)/min x0,01 y tiempo de CC/min x0,25
+-- Serie (BO3/BO5): media de los mapas, y al ganador +10 % de esa media (está en game.sql, vista player_series_points).
+
+alter table player_game_stats add column if not exists cc_pm numeric;                      -- segundos de CC a rivales por minuto
+alter table player_game_stats add column if not exists dragons_stolen int not null default 0;
+alter table player_game_stats add column if not exists barons_stolen int not null default 0; -- barón o anciano
+
 create or replace function game_points(s player_game_stats, r text, t team_game_stats)
 returns jsonb language plpgsql immutable as $$
-declare b jsonb; th numeric[]; n int; gr int;
+declare b jsonb; d int; tr int; q int; p int; mk int;
 begin
-  th := (case r when 'top' then '{8,9,10,11}' when 'jng' then '{8,9,10,11}'
-                when 'mid' then '{9,10,11,12}' when 'adc' then '{10,11,12,13}'
-                else '{}' end)::numeric[];
-  select count(*) into n from unnest(th) u where coalesce(s.csm,0) > u;
+  d := coalesce(s.doubles, 0); tr := coalesce(s.triples, 0); q := coalesce(s.quadras, 0); p := coalesce(s.pentas, 0);
+  -- Si el contador de gol.gg es acumulativo (una penta cuenta también como doble, triple y quadra), solo vale el máximo.
+  mk := greatest(d - tr, 0) + 2 * greatest(tr - q, 0) + 3 * greatest(q - p, 0) + 5 * p;
   b := jsonb_build_object(
-    'kills', s.kills, 'deaths', -1*s.deaths, 'assists', s.assists, 'csm', n,
-    'cs_diff', case when coalesce(s.cs_diff,0) < 0 then -floor(-s.cs_diff/15.0) else 0 end,
-    'csd15', coalesce(s.csd15,0)/10,                       -- división entera (trunca a 0)
-    'dpm', ceil(floor(coalesce(s.dpm,0)/100)/2.0),
-    'kp', case when s.kp >= 100 then 4 when s.kp > 85 then 2 when s.kp > 75 then 1 else 0 end,
-    'multikills', s.doubles + 2*s.triples + 3*s.quadras + 5*s.pentas,
-    'obj_stolen', 2*s.obj_stolen,
-    'shutdown', -ceil(floor(coalesce(s.shutdown_lost,0)/100)/2.0),
-    'vspm', round(coalesce(s.vspm,0)),
-    'heal_shield', round((coalesce(s.heal_pm,0) + coalesce(s.shield_pm,0)) / 30.0),
-    'first_tower', case when coalesce(t.first_tower,false) then 1 else 0 end);
-  if r = 'jng' then
-    gr := case when coalesce(t.grubs,0) >= 3 then 2 when t.grubs = 2 then 1 else 0 end;
-    b := b || jsonb_build_object('objectives',
-      coalesce(t.dragons,0) + gr + coalesce(t.heralds,0) + 2*coalesce(t.barons,0) + 3*coalesce(t.elders,0));
+    'kills', coalesce(s.kills, 0), 'deaths', -1 * coalesce(s.deaths, 0), 'assists', coalesce(s.assists, 0),
+    'csm', coalesce(s.csm, 0) * case when r = 'adc' then 0.3 else 0.4 end,
+    'dpm', 0.003 * coalesce(s.dpm, 0),
+    'vspm', coalesce(s.vspm, 0) * case when r = 'sup' then 0.7 else 1.0 end,
+    'csd15', 0.05 * coalesce(s.csd15, 0),
+    'kp', 0.02 * coalesce(s.kp, 0),
+    'multikills', mk,
+    'obj_stolen', 2 * coalesce(s.dragons_stolen, 0) + 4 * coalesce(s.barons_stolen, 0));
+  if r = 'sup' then
+    b := b || jsonb_build_object(
+      'heal_shield', 0.01 * (coalesce(s.heal_pm, 0) + coalesce(s.shield_pm, 0)),
+      'Control (CC)', 0.25 * coalesce(s.cc_pm, 0));
   end if;
   return jsonb_build_object('total', (select sum(value::numeric) from jsonb_each_text(b)), 'breakdown', b);
 end $$;
@@ -40,22 +46,18 @@ language sql security definer as $$
   on conflict (game_id, player_id) do update set points = excluded.points, breakdown = excluded.breakdown;
 $$;
 
--- Precio tras cada jornada: va hacia valor_punto * media ajustada, con tope ±15% del precio actual.
-create or replace function update_prices(p_matchday int) returns void
+-- Identificar un robo de objetivo (el scraper avisa de los robos, pero gol.gg no dice cuál fue):
+--   select set_steals(<id del game>, 'Knight', <dragones robados>, <barones/ancianos robados>);
+create or replace function set_steals(p_game bigint, p_player text, p_dragons int, p_barons int) returns void
 language plpgsql security definer as $$
-declare pv numeric := (select value from settings where key='point_value');
-        m numeric := (select value from settings where key='prior_weight');
+declare pid int := (select id from players where name = p_player);
 begin
-  if pv is null or pv <= 0 then raise exception 'Fija settings.point_value antes de actualizar precios'; end if;
-  insert into player_prices(player_id, matchday, price)
-  select p.id, p_matchday,
-    p.price * (1 + greatest(-0.15, least(0.15, (pv * (a.sum_pts + m*p.prior_avg)/(a.n + m)) / p.price - 1)))
-  from players p
-  join (select pgp.player_id, sum(points) sum_pts, count(*) n
-        from player_game_points pgp group by pgp.player_id) a on a.player_id = p.id
-  where p.price > 0 and exists (select 1 from player_game_points x join games g on g.id = x.game_id
-                                where x.player_id = p.id and g.matchday = p_matchday)
-  on conflict (player_id, matchday) do update set price = excluded.price;
-  update players p set price = pp.price from player_prices pp
-  where pp.player_id = p.id and pp.matchday = p_matchday;
+  if pid is null then raise exception 'No existe el jugador %', p_player; end if;
+  update player_game_stats set dragons_stolen = p_dragons, barons_stolen = p_barons
+  where game_id = p_game and player_id = pid;
+  if not found then raise exception 'Ese jugador no tiene stats en el game %', p_game; end if;
+  perform recompute_game(p_game);
 end $$;
+revoke execute on function set_steals(bigint, text, int, int) from public, anon, authenticated;
+
+-- (update_prices vive en game.sql.)

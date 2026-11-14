@@ -1,0 +1,6 @@
+LIGA FLASH v2 (solo afecta a la liga flash; el juego normal no se toca)
+- Un jugador por posicion (5 en total) en vez de 5 cualquiera.
+- Puntos = TOTAL de los mapas (suma), no la media. Si el equipo gana la serie (mas de 1 mapa): +10 % de su media por mapa.
+1) Descomprime en la RAIZ del repo (sobrescribe web/app/flash/page.tsx y supabase/flash.sql) y sube a GitHub.
+2) Supabase > SQL Editor: ejecuta supabase/flash.sql otra vez (no borra equipos ya guardados).
+   Quien ya guardo 5 jugadores sin una posicion por hueco tendra que reelegir: no podra guardar hasta cumplir 1 por posicion.

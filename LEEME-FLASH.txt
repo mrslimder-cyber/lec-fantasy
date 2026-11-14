@@ -1,0 +1,21 @@
+LIGA FLASH + PUNTUACION NUEVA · final de Worlds 2026 (Gen.G vs BLG) · equipos cierran 14-nov 20:00 hora de Madrid
+
+1) Descomprime este zip en la RAIZ del repo, aceptando sobrescribir. Sube a GitHub (Vercel redespliega solo).
+2) Supabase > SQL Editor, por orden (ninguno borra datos):
+     supabase/scoring.sql   (puntuacion nueva + columnas cc_pm, dragons_stolen, barons_stolen + set_steals)
+     supabase/game.sql      (ahora con el +10 % al ganador de series de mas de 1 mapa)
+     supabase/flash.sql     (la liga flash)
+   Si ya habia games cargados:  select recompute_game(id) from games;
+3) FOTOS: descarga 10 imagenes a web/public/players/:
+   kiin.png canyon.png chovy.png ruler.png duro.png bin.png xun.png knight.png viper.png on.png
+
+ESTADISTICAS DE LA FINAL (cuando exista la pagina en gol.gg), desde tools/:
+   python scrape_flash.py URL_DE_UN_GAME_DE_LA_SERIE --dry-run
+   python scrape_flash.py URL_DE_UN_GAME_DE_LA_SERIE
+   python calcular.py
+   - Mira en el --dry-run la linea "CC leido de la fila ..." y que los multikills tengan sentido.
+   - Si sale "ROBO sin identificar", ejecuta el select set_steals(...) que te indica (hasta entonces no suma).
+   - Solo pregunta el ganador si no lo detecta solo (decide el +10 %).
+   - Si la serie estaba a medias al lanzarlo, anade --fresh.
+
+NOTA: scrape.py (temporada normal) sigue preguntando primera torre y objetivos, que ya no puntuan.

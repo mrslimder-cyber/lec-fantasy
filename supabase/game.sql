@@ -63,18 +63,23 @@ exception when others then null;
 end $$;
 
 -- 1) PUNTOS POR SERIE Y POR DÍA ----------------------------------------------------------
--- games.series_id: mismo valor en todos los games de un BO3 (vacío = BO1).
--- Puntos de una serie = suma de sus games / mapas. Día: 1 sábado, 2 domingo, 3 lunes (otros días cuentan como 1).
+-- games.series_id: mismo valor en todos los games de un BO3/BO5 (vacío = BO1).
+-- Puntos de una serie = media de sus games (suma / mapas). Si la serie tiene más de 1 mapa y el jugador es del equipo
+-- que la gana (más de la mitad de los mapas), +10 % sobre esa media. Día: 1 sábado, 2 domingo, 3 lunes (otros días cuentan como 1).
 create or replace view player_series_points as
 with s as (
   select matchday, coalesce(series_id, id) as sid, count(*) as maps, min(played_at) as first_at
   from games group by 1, 2)
 select pgp.player_id, g.matchday, s.sid as series_id, max(s.maps)::int as maps,
-       sum(pgp.points) / max(s.maps) as points,
+       sum(pgp.points) / max(s.maps)
+         * (1 + case when max(s.maps) > 1
+                      and 2 * count(*) filter (where g.winner_team_id = pgs.team_id) > max(s.maps)
+                     then 0.1 else 0 end) as points,
        max(case extract(dow from s.first_at at time zone 'Europe/Madrid')
              when 6 then 1 when 0 then 2 when 1 then 3 else 1 end)::int as day
 from player_game_points pgp
 join games g on g.id = pgp.game_id
+join player_game_stats pgs on pgs.game_id = pgp.game_id and pgs.player_id = pgp.player_id
 join s on s.matchday = g.matchday and s.sid = coalesce(g.series_id, g.id)
 group by pgp.player_id, g.matchday, s.sid;
 
