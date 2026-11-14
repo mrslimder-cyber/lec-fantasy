@@ -28,7 +28,7 @@ export function PlayerCard({ p, action, onOpen }: { p: Player; action?: React.Re
     <div className={"card" + (onOpen ? " clickable" : "")} data-role={p.role} onClick={onOpen}>
       <Avatar p={p} />
       <div className="info">
-        <b>{p.name}{p.rookie && <span className="rk">ROOKIE</span>}</b>
+        <b>{p.name}{p.rookie && <span className="rk">ROOKIE</span>}{p.imp && <span className="imp">IMPORT</span>}</b>
         <small>{p.team}</small>
         <span className="role">{p.role.toUpperCase()}</span>
       </div>

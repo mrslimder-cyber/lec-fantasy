@@ -1,33 +1,34 @@
+v0.1.0 · FORMATO SUPERMANAGER
+
 1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
-2) En Supabase (SQL Editor) ejecuta, por orden: v2.sql (si no lo hiciste), v3.sql, v4.sql y v5.sql. No borran datos.
-   Si vuelves a ejecutar leagues.sql, v2, v3 o v4, ejecuta v5.sql otra vez al final.
-3) Sube a GitHub; Vercel redespliega solo.
+2) BORRA del repo los archivos que ya no sirven (todo está ahora en supabase/game.sql):
+     supabase/leagues.sql  supabase/v2.sql  supabase/v3.sql  supabase/v4.sql
+     supabase/v5.sql  supabase/v6.sql  supabase/v7.sql  supabase/v8.sql
+     LEEME-CAMBIOS(11-13).txt  LEEME-CAMBIOS(11-13)v2.txt  LEEME-CAMBIOS(11-13)v3.txt
+3) En Supabase (SQL Editor) ejecuta, por este orden:
+     seed.sql   (añade la columna import y marca a los imports)
+     game.sql   (la PRIMERA vez migra el formato: borra plantillas, equipos por día y pujas, y devuelve a cada
+                 equipo el presupuesto completo. No toca ligas, equipos de liga, puntos repartidos ni movimientos)
+4) Sube a GitHub; Vercel redespliega solo.
 
-CALENDARIO (obligatorio para crear equipos por día)
-  insert into fixtures(matchday, kickoff, team_a, team_b, bo) values
-  (1, '2027-01-16 17:00+01', (select id from teams where name='G2'), (select id from teams where name='Fnatic'), 1);
-  Sábado = día 1, domingo = día 2, lunes = día 3 (por la fecha de kickoff, hora de Madrid).
-
-HORARIOS (hora de Madrid)
-- Mercado abierto de martes a viernes (00:00-23:59). Vender, pujar y clausulazos solo con el mercado abierto.
-- Viernes 23:59: pujas de todas las ligas resueltas solas (pg_cron, lo programa v4.sql).
-  Si pg_cron no se pudo activar: select resolve_all_bids(true);  a mano.
-- Sábado: creación de equipos (uno para sábado, otro domingo y otro lunes) hasta el primer partido de la jornada.
-- Al acabar la jornada (resultados cargados):  select close_matchday(<n>);
-  El mercado no abre hasta que se cierra la jornada anterior.
+REGLAS
+- Mercado: todos los jugadores, copias infinitas, fichar/vender al instante al precio actual.
+  Abierto miércoles-viernes (hora de Madrid); cerrado sábado-martes. Si falta cerrar la jornada anterior, sigue cerrado.
+  Antes del primer partido de la temporada (o sin calendario) está siempre abierto.
+- Plantilla: 8 jugadores, máx. 3 imports. Equipo de cada día (sáb/dom/lun): 5 jugadores, máx. 2 imports.
+- Fuera de posición: puntúa la mitad. «Fijar equipo» bloquea el día; al empezar su primer partido se fija solo.
+  Un día sin equipo guardado no puntúa.
+- Los equipos de los rivales se ven cuando ese día empieza.
 
 AJUSTES (tabla settings)
-- clause_multiplier (1.5): el clausulazo cuesta precio actual x este valor, y se paga al dueño.
-- testing_open (0): ponlo a 1 para probar fuera de horario.
+- budget (5000000): dinero inicial. Subido de 3.500.000 porque los 8 jugadores más baratos ya suman ~3,65 M.
+    update settings set value = 6000000 where key = 'budget';   (solo afecta a equipos que se creen después)
+- testing_open (0): ponlo a 1 para probar fuera de horario (mercado abierto, equipos siempre editables).
+- point_value: sigue igual (cerrar_jornada.py no deja cerrar si es 0).
 
-MERCADO: cada liga solo ofrece una selección de libres (2 por posición, al azar); los vendidos entran al mercado.
+IMPORTS
+- En seed.sql, último parámetro de seed_player: select seed_player('Canna','Karmine Corp','top', false, true);
+- Solo he marcado Jojopyun, Canna y Busio. REVISA el resto y vuelve a ejecutar seed.sql.
+  (seed.sql vuelve a poner los precios de su lista: si ya cerraste jornadas, quita ese bloque UPDATE antes.)
 
-V5 (scripts y cierre de jornada)
-- Los datos se suben y calculan con los scripts de la carpeta tools (ver tools/LEEME.txt).
-- El mercado ya no abre por día de la semana: lo abre close_matchday (cerrar_jornada.py) y lo cierra el viernes 23:59.
-- Precios: precio teórico = media de puntos por serie x settings.point_value (lo fijas tú, no se calibra solo):
-    update settings set value = 50000 where key = 'point_value';
-  Tras cada jornada, solo los jugadores que han jugado se acercan a su precio teórico, máximo ±15 % respecto
-  a su precio anterior. Quien no juega mantiene su precio. En la jornada 1 todos parten de su precio inicial.
-  cerrar_jornada.py no deja cerrar si el valor del punto es 0.
-- Nueva pestaña JUGADORES y pestaña VALOR en la ficha de cada jugador.
+CALENDARIO Y CIERRE: igual que antes (tabla fixtures, tools/scrape.py, calcular.py, cerrar_jornada.py).

@@ -5,9 +5,12 @@ import { PHOTOS } from "@/lib/photos";
 
 export const ROLES = ["top", "jng", "mid", "adc", "sup"] as const;
 export type Role = (typeof ROLES)[number];
-export const BUDGET = 3_500_000; // presupuesto inicial (mismo valor que settings.budget en Supabase)
+export const BUDGET = 5_000_000; // presupuesto inicial (mismo valor que settings.budget en Supabase)
+export const ROSTER_MAX = 8;     // plantilla: 5 posiciones + 3 reservas
+export const IMPORTS_ROSTER = 3; // máx. imports (no europeos) en la plantilla
+export const IMPORTS_LINEUP = 2; // máx. imports entre los 5 alineados
 export type Player = {
-  id: number; name: string; role: Role; price: number; rookie: boolean; team: string;
+  id: number; name: string; role: Role; price: number; rookie: boolean; imp: boolean; team: string;
   pts: number;      // puntos totales de la temporada (suma de series)
   series: number;   // series jugadas
   avg: number;      // media de puntos por serie
@@ -21,7 +24,7 @@ export function usePlayers() {
   useEffect(() => {
     (async () => {
       const [pl, pt] = await Promise.all([
-        supabase.from("players").select("id,name,role,price,rookie,teams(name)").eq("active", true),
+        supabase.from("players").select("id,name,role,price,rookie,is_import,teams(name)").eq("active", true),
         // puntos por serie (ya divididos entre los mapas jugados), agregados por jugador
         supabase.from("player_season_points").select("player_id,series,points"),
       ]);
@@ -30,7 +33,7 @@ export function usePlayers() {
       setPlayers((pl.data ?? []).map((p: any) => {
         const t = tot.get(p.id) ?? { s: 0, p: 0 };
         return {
-          id: p.id, name: p.name, role: p.role, price: Number(p.price), rookie: !!p.rookie,
+          id: p.id, name: p.name, role: p.role, price: Number(p.price), rookie: !!p.rookie, imp: !!p.is_import,
           team: p.teams?.name ?? "", pts: Math.round(t.p * 10) / 10, series: t.s,
           avg: t.s ? Math.round((t.p / t.s) * 10) / 10 : 0, photo: PHOTOS[p.name] ?? "",
         };
@@ -41,7 +44,7 @@ export function usePlayers() {
   return { players, loading };
 }
 
-// Días de partido del fin de semana (el equipo se crea para cada uno).
+// Días de partido del fin de semana (el equipo se fija para cada uno).
 export const DAYS = [{ n: 1, label: "Sábado" }, { n: 2, label: "Domingo" }, { n: 3, label: "Lunes" }];
 export const dayOf = (iso: string) => {
   const w = new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Madrid", weekday: "short" }).format(new Date(iso));

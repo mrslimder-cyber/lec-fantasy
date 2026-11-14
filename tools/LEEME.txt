@@ -15,9 +15,10 @@ CADA DÍA DE PARTIDOS, al acabar y subir gol.gg las estadísticas:
 Antes de lanzar el 1) por primera vez usa  python scrape.py --day 2027-01-16 --dry-run  para ver qué lee.
 Si el scraper no entiende una página:  python scrape.py --inspect <id de un game>  y guarda tools/debug/.
 
-AL ACABAR LA JORNADA (después del lunes), tras revisar que todo está bien:
+AL ACABAR LA JORNADA (después del lunes, antes del miércoles), tras revisar que todo está bien:
   3) python cerrar_jornada.py --matchday 1
-     Reparte los puntos a las ligas (clasificación), recalcula precios (±15 %) y abre el mercado.
-     El viernes a las 23:59 se resuelven las pujas solas, se repone el mercado de la semana y se cierra.
+     Reparte los puntos a las ligas (clasificación) con el equipo fijado de cada día (fuera de posición = la mitad)
+     y recalcula precios (±15 %). El mercado abre el miércoles a las 00:00 si la jornada está cerrada
+     (si no la cierras, el mercado sigue cerrado) y cierra el viernes a las 23:59.
 
 REPETIR UN GAME: python scrape.py --day ... --force  y luego  python calcular.py

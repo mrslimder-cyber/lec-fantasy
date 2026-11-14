@@ -1,10 +1,10 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "@/lib/auth";
-import { BUDGET, eur } from "@/lib/game";
+import { BUDGET, IMPORTS_ROSTER, ROSTER_MAX, eur } from "@/lib/game";
 import { LeagueProvider, useLeague } from "@/lib/league";
 
 const TABS: [string, string][] = [
@@ -16,17 +16,9 @@ const TABS: [string, string][] = [
 ];
 
 function Header() {
-  const { id, lg, teams, me, isOwner, value, points, rpc } = useLeague();
+  const { id, lg, teams, me, value, points, squad } = useLeague();
   const path = usePathname();
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState("");
-  const draw = async () => {
-    if (!confirm("¿Sortear los jugadores entre los equipos? No se puede deshacer.")) return;
-    setBusy(true); setMsg("");
-    const err = await rpc("draw_league", { p_league: id });
-    setBusy(false);
-    if (err) setMsg(err);
-  };
+  const mine = me ? squad(me.id) : [];
   return (
     <>
       <Link href="/" className="back">← Mis ligas</Link>
@@ -34,16 +26,10 @@ function Header() {
       <p className="sub">
         Código para invitar: <b>{lg.code}</b> · {teams.length} equipos · Presupuesto inicial {eur(BUDGET)}
       </p>
-      {isOwner && !lg.drawn && (
-        <div className="bar">
-          <button className="btn" disabled={busy} onClick={draw}>{busy ? "Sorteando…" : "Sortear jugadores"}</button>
-        </div>
-      )}
-      {!lg.drawn && !isOwner && <p className="sub">Esperando a que el creador haga el sorteo.</p>}
-      {msg && <p className="err">{msg}</p>}
-      {lg.drawn && me && (
+      {me && (
         <div className="stats">
           <div><small>Dinero disponible</small><b>{eur(me.cash ?? 0)}</b></div>
+          <div><small>Plantilla · imports</small><b>{mine.length}/{ROSTER_MAX} · {mine.filter((p) => p.imp).length}/{IMPORTS_ROSTER}</b></div>
           <div><small>Valor de tu plantilla</small><b>{eur(value(me.id))}</b></div>
           <div><small>Tus puntos</small><b>{points(me.id)}</b></div>
         </div>

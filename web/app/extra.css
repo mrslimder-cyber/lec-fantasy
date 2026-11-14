@@ -1,2 +1,5 @@
-/* Vacío a propósito: todo el estilo vive ahora en globals.css.
-   (Se mantiene el archivo porque layout.tsx lo importa.) */
+/* Estilos añadidos en el formato supermanager (globals.css y themes.css no se tocan). */
+.imp{margin-left:8px;font-size:10px;font-weight:600;letter-spacing:.06em;background:var(--teal);color:#fff6e8;padding:2px 7px;border-radius:999px;vertical-align:1px}
+.node .half{background:rgba(196,71,44,.92);color:#fff6e8;padding:0 8px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.04em}
+.node.target .av{box-shadow:0 0 0 4px var(--koi)}
+.node.target:hover .av{box-shadow:0 0 0 6px var(--koi)}
