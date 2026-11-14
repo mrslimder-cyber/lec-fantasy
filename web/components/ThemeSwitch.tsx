@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export const THEMES = [
   { id: "koi", label: "Koi" },
   { id: "clay", label: "Montecarlo" },
+  { id: "riviera", label: "Portofino" },
 ] as const;
 type ThemeId = (typeof THEMES)[number]["id"];
 
@@ -13,7 +14,8 @@ export function ThemeSwitch() {
   const [t, setT] = useState<ThemeId>("koi");
   useEffect(() => {
     const c = document.documentElement.dataset.theme;
-    if (c === "koi" || c === "clay") setT(c);
+    const found = THEMES.find((x) => x.id === c);
+    if (found) setT(found.id);
   }, []);
   const pick = (id: ThemeId) => {
     setT(id);

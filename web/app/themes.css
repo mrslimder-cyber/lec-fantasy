@@ -276,3 +276,128 @@ html[data-theme="clay"] .stat{background:rgba(0,0,0,.25);border-color:rgba(201,1
   .court-svg .swim{display:none}
   html[data-theme="clay"] .hero::before{animation:none}
 }
+
+/* ============================================================
+   TEMA RIVIERA · Portofino
+   Agua turquesa #2a86a6 · casas terracota #d9472f · ocre #e9b24a · mantel crema #f3ecdc · traje marino #1c2a44
+   Parte del tema koi (superficies claras con tinta oscura) y cambia paleta, tipografía y detalles.
+   ============================================================ */
+.harbor{display:none}
+html[data-theme="riviera"] .harbor{display:block}
+html[data-theme="riviera"] .pond{display:none}
+
+html[data-theme="riviera"]{
+  --navy:#12506f;--cobalt:#1f6f93;--tile:#bfe3ef;
+  --paper:#f3ecdc;--paper2:#e8dcc2;--paper3:#fbf7ec;
+  --ink:#1c2a44;--ink-mut:#65685f;
+  --koi:#d9472f;--koi-d:#b8351f;--coral:#d9472f;
+  --teal:#2f7d6b;--teal-d:#1f5f50;
+  --tx:#f6efde;--mut:#cfe6ee;--sand:#f6efde;--gold:#f6d08a;--acc:#d9472f;
+  --line:rgba(191,227,239,.3);--bd:rgba(246,239,222,.5);--deep:#0f3f5c;
+  --disp:var(--font-playfair),"Playfair Display",Georgia,serif;
+  --surface:repeating-linear-gradient(0deg,rgba(28,42,68,.03) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(28,42,68,.025) 0 1px,transparent 1px 3px),var(--grain),var(--paper);
+  --sw-on-bg:#f3ecdc;--sw-on-fg:#12506f;
+  background:#1d6f93;
+}
+html[data-theme="riviera"] ::selection{background:#d9472f;color:#fff}
+html[data-theme="riviera"] h1,
+html[data-theme="riviera"] h2,
+html[data-theme="riviera"] h3{font-weight:600;letter-spacing:-.01em}
+
+/* Cabecera y logo */
+html[data-theme="riviera"] header{background:rgba(14,66,96,.82);border-bottom:1px solid rgba(246,239,222,.3)}
+html[data-theme="riviera"] .logo::before{content:"\2693\FE0E";border-radius:50%;background:#2a86a6;color:#fff6e8;font-family:"Segoe UI Symbol","Apple Symbols","Noto Sans Symbols 2",serif;font-size:17px;font-weight:400}
+html[data-theme="riviera"] .logo span{font-style:italic;color:#f6d08a}
+
+/* Pestañas y chips sobre el agua */
+html[data-theme="riviera"] .tabs{background:rgba(10,58,86,.72);border-color:rgba(191,227,239,.35)}
+html[data-theme="riviera"] .chip{background:rgba(10,58,86,.5);border-color:rgba(191,227,239,.35)}
+html[data-theme="riviera"] .chip:hover{background:rgba(10,58,86,.75)}
+html[data-theme="riviera"] .modal .chip,
+html[data-theme="riviera"] .fxbox .chip{background:transparent;border-color:var(--line)}
+html[data-theme="riviera"] .chip.on,
+html[data-theme="riviera"] .modal .chip.on{background:var(--koi);border-color:var(--koi)}
+
+/* Colores de posición */
+html[data-theme="riviera"] .card[data-role=top],html[data-theme="riviera"] .node[data-role=top]{--c:#d9472f}
+html[data-theme="riviera"] .card[data-role=jng],html[data-theme="riviera"] .node[data-role=jng]{--c:#2f7d6b}
+html[data-theme="riviera"] .card[data-role=mid],html[data-theme="riviera"] .node[data-role=mid]{--c:#1f6f93}
+html[data-theme="riviera"] .card[data-role=adc],html[data-theme="riviera"] .node[data-role=adc]{--c:#e0a030}
+html[data-theme="riviera"] .card[data-role=sup],html[data-theme="riviera"] .node[data-role=sup]{--c:#8a5a9a}
+html[data-theme="riviera"] .move.clause{--c:#1f6f93}
+
+/* Inicio: cartel de bahía con sol, colinas y casas en el muelle */
+html[data-theme="riviera"] .hero{
+  --ink:#1c2a44;--ink-mut:#4d5560;
+  border-radius:10px;padding:62px 64px 160px;min-height:460px;
+  background:
+    radial-gradient(ellipse 420px 90px at 18% 100%,#7fae95 96%,transparent 100%) left bottom 120px/100% 90px no-repeat,
+    radial-gradient(ellipse 360px 80px at 74% 108%,#5f9a7a 96%,transparent 100%) left bottom 120px/100% 90px no-repeat,
+    linear-gradient(180deg,#86c3de 0%,#cfe6ea 58%,#f6ecd6 100%);
+  box-shadow:0 34px 64px -30px rgba(2,22,44,.95);
+}
+html[data-theme="riviera"] .hero::before{
+  content:"";position:absolute;left:auto;bottom:auto;right:78px;top:38px;width:96px;height:96px;border-radius:50%;
+  writing-mode:horizontal-tb;font-size:0;line-height:normal;letter-spacing:normal;color:inherit;
+  background:radial-gradient(circle,#fff6c8 0 34%,#f7d36b 36% 64%,rgba(247,211,107,0) 72%);
+  box-shadow:0 0 70px 26px rgba(255,226,140,.5);
+}
+html[data-theme="riviera"] .hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;top:auto;height:132px;
+  -webkit-mask-image:none;mask-image:none;
+  clip-path:polygon(0 18%,14% 18%,14% 4%,27% 4%,27% 26%,43% 26%,43% 0,55% 0,55% 14%,71% 14%,71% 30%,84% 30%,84% 8%,100% 8%,100% 100%,0 100%);
+  background:
+    repeating-linear-gradient(90deg,transparent 0 22px,#3f8f6b 22px 28px,transparent 28px 40px) 0 22px/100% 24px no-repeat,
+    repeating-linear-gradient(90deg,transparent 0 22px,#3f8f6b 22px 28px,transparent 28px 40px) 0 60px/100% 24px no-repeat,
+    repeating-linear-gradient(90deg,#f6efdc 0 20px,#e7d3a4 20px 40px) 0 92px/100% 8px no-repeat,
+    linear-gradient(90deg,#e0562a 0 14%,#e9b24a 14% 27%,#d63f2b 27% 43%,#f0d9a2 43% 55%,#e7733a 55% 71%,#e9b24a 71% 84%,#d63f2b 84% 100%) 0 0/100% 100px no-repeat,
+    linear-gradient(#2a86a6,#1f6f93) 0 100px/100% 32px no-repeat;
+}
+html[data-theme="riviera"] .hero .eyebrow{font-size:13px;font-weight:600;letter-spacing:.24em;color:#12506f}
+html[data-theme="riviera"] .hero h1{font-size:clamp(44px,7.4vw,96px);line-height:1;letter-spacing:-.02em;font-style:italic;font-weight:600;color:#d9472f;text-shadow:none}
+html[data-theme="riviera"] .hero p{font-size:20px;max-width:42ch}
+
+/* Menú principal: marcas de agua náuticas */
+html[data-theme="riviera"] .mtile::after{font-family:"Segoe UI Symbol","Apple Symbols","Noto Sans Symbols 2",serif;font-weight:400;font-size:150px;bottom:-26px;opacity:.09}
+html[data-theme="riviera"] .mtile[data-k=crear]::after{content:"\2693\FE0E"}
+html[data-theme="riviera"] .mtile[data-k=unirse]::after{content:"\26F5\FE0E"}
+html[data-theme="riviera"] .mtile[data-k=ligas]::after{content:"\2600\FE0E"}
+html[data-theme="riviera"] .mtile[data-k=crear]{--g:#d9472f}
+html[data-theme="riviera"] .mtile[data-k=unirse]{--g:#2f7d6b}
+html[data-theme="riviera"] .mtile[data-k=ligas]{--g:#1f6f93}
+html[data-theme="riviera"] .mtile[data-k=unirse] .go{color:var(--teal-d)}
+html[data-theme="riviera"] .mtile b{font-size:26px}
+
+/* Formularios: toldo a rayas */
+html[data-theme="riviera"] .panel::before{
+  height:20px;background-color:transparent;
+  background-image:repeating-linear-gradient(90deg,#d9472f 0 26px,#f6ecd6 26px 52px);background-size:auto;
+  box-shadow:0 3px 6px rgba(20,35,74,.25);
+}
+html[data-theme="riviera"] .panel{padding-top:54px}
+html[data-theme="riviera"] .panel h2{color:#12506f}
+
+/* Ficha de jugador */
+html[data-theme="riviera"] .modal-bg{background:rgba(8,40,64,.72)}
+
+/* Selector: puntos de color del estilo */
+.themesw .sw-riviera .dots i:nth-child(1){background:#2a86a6}
+.themesw .sw-riviera .dots i:nth-child(2){background:#d9472f}
+
+/* ===== Fondo: bahía de Portofino ===== */
+.harbor{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#1b5f86;pointer-events:none}
+.harbor-svg{position:absolute;inset:0;width:100%;height:100%}
+.harbor-bob{transform-box:fill-box;transform-origin:50% 100%;animation:hbob 6s ease-in-out infinite}
+@keyframes hbob{0%,100%{transform:translateY(0) rotate(-1.4deg)}50%{transform:translateY(3px) rotate(1.4deg)}}
+.harbor-vignette{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 50% 38%,transparent 38%,rgba(6,32,52,.5) 100%),
+  linear-gradient(rgba(255,190,100,.06),rgba(255,190,100,.06)),
+  var(--noise-w)}
+@media(prefers-reduced-motion:reduce){
+  .harbor-svg .swim{display:none}
+  .harbor-bob{animation:none}
+}
+@media(max-width:560px){
+  html[data-theme="riviera"] .hero{padding:40px 24px 150px}
+  html[data-theme="riviera"] .hero::before{right:20px;top:24px;width:64px;height:64px}
+}
