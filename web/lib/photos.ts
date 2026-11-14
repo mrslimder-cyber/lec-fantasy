@@ -33,7 +33,7 @@ export const PHOTOS: Record<string, string> = {
   "Kyeahoo": "/players/kyeahoo.png",
   "Caliste": "/players/caliste.png",
   "Busio": "/players/busio.png",
-  "Zest": "/players/zest.png"
+  "Zest": "/players/zest.png",
   "Rhilech": "/players/rhilech.png",
   "Supa": "/players/supa.png",
   "Parus": "/players/parus.png",
