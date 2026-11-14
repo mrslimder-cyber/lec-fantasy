@@ -113,14 +113,14 @@ export default function Flash() {
     const on = sel.includes(p.id);
     return (
       <div key={p.id} className={"card clickable fpick" + (on ? " sel" : "")} data-role={p.role} onClick={() => toggle(p.id)}>
-        <Avatar p={p} size={64} />
+        <Avatar p={p} size={44} />
         <div className="info">
           <b>{p.name}</b>
           <small>{p.team}</small>
           <span className="role">{p.role.toUpperCase()}</span>
         </div>
         <div className="nums">
-          {closed ? <strong>{p.pts} pts</strong> : <small>{on ? "✓ Elegido" : "Elegir"}</small>}
+          {closed ? <strong>{p.pts} pts</strong> : <small>{on ? "✓" : ""}</small>}
         </div>
       </div>
     );

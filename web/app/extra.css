@@ -18,6 +18,13 @@ html[data-theme="clay"] .fpick.sel{box-shadow:0 0 0 3px #c9a24d}
 html[data-theme="park"] .fpick.sel{box-shadow:inset 0 0 0 4px #c4472c}
 .flashbtn{white-space:nowrap}
 @media(max-width:620px){.flashbtn{padding:8px 12px}}
-.flashgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,480px);gap:26px;align-items:start}
-.flashmap{position:sticky;top:84px}
-@media(max-width:980px){.flashgrid{grid-template-columns:1fr}.flashmap{position:static;order:-1}}
+.flashgrid{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:26px;align-items:start}
+.flashmap{position:sticky;top:84px;max-width:780px;width:100%;justify-self:center}
+.flashgrid .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-bottom:6px}
+.flashgrid .card{padding:8px 10px;gap:8px;flex-wrap:nowrap}
+.flashgrid .info b{font-size:14px}
+.flashgrid .info small,.flashgrid .role{font-size:11px}
+.flashgrid .nums strong{font-size:13px}
+.flashgrid .grp{margin:10px 0 4px}
+html[data-theme="park"] .flashgrid .grid .card:nth-child(n){margin:0}
+@media(max-width:980px){.flashgrid{grid-template-columns:1fr}.flashmap{position:static;order:-1;max-width:560px}}
