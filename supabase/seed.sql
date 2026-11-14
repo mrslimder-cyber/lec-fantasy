@@ -87,7 +87,7 @@ select seed_player('Lospa',  'SK', 'sup');
 -- select seed_player('NOMBRE', 'Team Vitality', 'top');
 -- select seed_player('NOMBRE', 'Team Vitality', 'jng');
 -- select seed_player('NOMBRE', 'Team Vitality', 'mid');
--- select seed_player('NOMBRE', 'Team Vitality', 'adc');
+select seed_player('Jopa', 'Team Vitality', 'adc');
 -- select seed_player('NOMBRE', 'Team Vitality', 'sup');
 
 -- Karmine Corp
@@ -105,7 +105,7 @@ select seed_player('Busio', 'Karmine Corp', 'sup');
 -- select seed_player('NOMBRE', 'Shifters', 'sup');
 
 -- Natus Vincere
--- select seed_player('NOMBRE', 'NAVI', 'top');
+select seed_player('Zest', 'NAVI', 'top');
 select seed_player('Rhilech', 'NAVI', 'jng');
 -- select seed_player('NOMBRE', 'NAVI', 'mid');
 select seed_player('Supa', 'NAVI', 'adc');
@@ -155,9 +155,12 @@ FROM (VALUES
     ('3XA',         450000),
     ('Lospa',       685000),
 
-    ('Rhilech',      725000),
+    ('Zest',        550000),
+    ('Rhilech',     725000),
     ('Supa',        770000),
-    ('Parus',       600000)
+    ('Parus',       600000),
+
+    ('Jopa',        500000)
 ) AS v(name, price)
 WHERE p.name = v.name;
 

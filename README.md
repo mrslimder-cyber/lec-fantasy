@@ -20,7 +20,7 @@ Dentro de cada liga hay tres secciones (barra de pestañas en la propia liga):
 - Curas y escudos: una sola estadística, round((heal_pm + shield_pm) / 30).
 - En la clasificación de equipos puntúan solo los 5 titulares; las reservas no suman.
 
-🚀 LEC FANTASY · VERSIONES
+## 🚀 LEC FANTASY · VERSIONES
 
 v0.0.1 · Movimientos y menú
 📜 Pestaña MOVIMIENTOS · 🎨 Menú rediseñado
