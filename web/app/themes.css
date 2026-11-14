@@ -1,0 +1,278 @@
+/* ============================================================
+   themes.css
+   - Selector de estilo (vale para los dos temas)
+   - Tema "clay" (Montecarlo): tierra batida, traje de raya diplomática, latón y ajedrez
+   El tema "koi" es el de globals.css y no se toca.
+   ============================================================ */
+
+:root{
+  --sw-on-bg:#f4ead3;--sw-on-fg:#14234a;
+  --noise-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .95 0 0 0 0 .85 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --clay-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .22 0 0 0 0 .07 0 0 0 0 .02 0 0 0 1.1 -.42'/%3E%3C/filter%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .96 0 0 0 0 .68 0 0 0 0 .45 0 0 0 1 -.56'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  --clay-streak:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .03' numOctaves='2' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .1 0 0 0 0 .03 0 0 0 .6 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+}
+
+/* ===== Selector de estilo ===== */
+nav{align-items:center}
+.themesw{display:inline-flex;gap:2px;padding:3px;margin-right:12px;border-radius:999px;border:1px solid var(--bd);background:rgba(0,0,0,.18)}
+.themesw button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--tx);font:inherit;font-size:12px;font-weight:500;letter-spacing:.04em;padding:6px 13px 6px 9px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+.themesw button:hover{background:rgba(255,255,255,.1)}
+.themesw button[aria-pressed="true"]{background:var(--sw-on-bg);color:var(--sw-on-fg)}
+.themesw .dots{display:inline-flex}
+.themesw .dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);margin-left:-4px}
+.themesw .dots i:first-child{margin-left:0}
+.themesw .sw-koi .dots i:nth-child(1){background:#1f4ea6}
+.themesw .sw-koi .dots i:nth-child(2){background:#ee5524}
+.themesw .sw-clay .dots i:nth-child(1){background:#cf5a22}
+.themesw .sw-clay .dots i:nth-child(2){background:#173f31}
+@media(max-width:620px){.themesw .lbl{display:none}.themesw button{padding:6px 9px}}
+
+/* Cada tema muestra solo su fondo */
+.court{display:none}
+html[data-theme="clay"] .court{display:block}
+html[data-theme="clay"] .pond{display:none}
+
+/* ============================================================
+   TEMA CLAY · Montecarlo
+   Tierra batida #cf5a22 · verde de valla #173f31 · traje #2b2e37 · latón #c9a24d · chaleco #d9c9a5
+   ============================================================ */
+html[data-theme="clay"]{
+  --navy:#173f31;--cobalt:#2a6aa8;--tile:#e3c677;
+  --paper:#d9c9a5;--paper2:#cbb98f;--paper3:#ebe0c4;
+  --ink:#f1e7d0;--ink-mut:#bfb299;
+  --koi:#cf5a22;--koi-d:#e6a15f;--coral:#cf5a22;
+  --teal:#3f8f6b;--teal-d:#7fcfa8;
+  --tx:#f1e7d0;--mut:#bfb299;--sand:#f1e7d0;--gold:#e3c677;--acc:#cf5a22;
+  --line:rgba(201,162,77,.28);--bd:rgba(227,198,119,.5);--deep:#24150f;
+  --disp:var(--font-cormorant),"Cormorant Garamond",Georgia,serif;
+  --sans:var(--font-jost),"Jost",system-ui,sans-serif;
+  --surface:repeating-linear-gradient(90deg,rgba(236,224,196,.085) 0 1px,transparent 1px 10px),var(--noise-w),linear-gradient(165deg,#2b2e37,#1c1e25);
+  --sw-on-bg:#c9a24d;--sw-on-fg:#2a1c10;
+  --brass-grad:linear-gradient(180deg,#e3c677,#b8923f);
+  background:#6a2a10;
+}
+html[data-theme="clay"] body{font-size:16px;font-variant-numeric:lining-nums tabular-nums}
+html[data-theme="clay"] ::selection{background:#c9a24d;color:#2a1c10}
+html[data-theme="clay"] h1,
+html[data-theme="clay"] h2,
+html[data-theme="clay"] h3{font-weight:600;letter-spacing:-.005em}
+html[data-theme="clay"] h1{font-size:clamp(34px,4.2vw,52px);line-height:1.05;text-shadow:0 2px 16px rgba(25,10,4,.7)}
+html[data-theme="clay"] h3{font-size:26px;text-shadow:0 2px 12px rgba(25,10,4,.7)}
+html[data-theme="clay"] .sub,
+html[data-theme="clay"] .hint{text-shadow:0 1px 10px rgba(25,10,4,.75)}
+
+/* Superficies: traje de raya diplomática con luz de latón */
+html[data-theme="clay"] .mtile,
+html[data-theme="clay"] .card,
+html[data-theme="clay"] .stats,
+html[data-theme="clay"] .tbl,
+html[data-theme="clay"] .fxbox,
+html[data-theme="clay"] .banner,
+html[data-theme="clay"] .modal,
+html[data-theme="clay"] .move,
+html[data-theme="clay"] .series,
+html[data-theme="clay"] .stat{
+  --tx:#f1e7d0;--mut:#bfb299;--sand:#f1e7d0;--gold:#e3c677;
+  --line:rgba(201,162,77,.25);--bd:rgba(227,198,119,.45);
+}
+html[data-theme="clay"] .card .sub,html[data-theme="clay"] .modal .sub{text-shadow:none}
+
+/* Cabecera */
+html[data-theme="clay"] header{background:rgba(36,21,15,.88);border-bottom:1px solid rgba(201,162,77,.45)}
+html[data-theme="clay"] .logo{font-size:26px;font-weight:600;letter-spacing:.01em}
+html[data-theme="clay"] .logo::before{content:"♞";width:32px;height:32px;margin-right:11px;border-radius:50%;background:transparent;border:1.5px solid #c9a24d;color:#e3c677;font-family:"Segoe UI Symbol","Apple Symbols","Noto Sans Symbols 2",serif;font-size:19px;font-weight:400}
+html[data-theme="clay"] .logo span{font-weight:500;font-style:italic;color:#e3c677}
+html[data-theme="clay"] .back:hover{color:#fff}
+
+/* Botones y campos */
+html[data-theme="clay"] .btn{background:var(--brass-grad);color:#2a1c10;font-weight:600;letter-spacing:.02em;border-radius:6px}
+html[data-theme="clay"] .btn:hover{background:linear-gradient(180deg,#efd488,#c5a04c)}
+html[data-theme="clay"] .btn.out{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+html[data-theme="clay"] .btn.out:hover,
+html[data-theme="clay"] .card .btn.out:hover,
+html[data-theme="clay"] .modal .btn.out:hover,
+html[data-theme="clay"] .fxbox .btn.out:hover{background:rgba(227,198,119,.12)}
+html[data-theme="clay"] input{color:#2a1c14;background:#ebe0c4;border-radius:6px}
+html[data-theme="clay"] input::placeholder{color:#8a7c60}
+html[data-theme="clay"] input:focus{border-color:#cf5a22}
+html[data-theme="clay"] .chip{background:rgba(36,21,15,.65);border-color:rgba(201,162,77,.4);color:#e3c677;border-radius:6px}
+html[data-theme="clay"] .chip:hover{background:rgba(36,21,15,.85);color:#fff}
+html[data-theme="clay"] .chip.on,
+html[data-theme="clay"] .modal .chip.on{background:var(--brass-grad);border-color:#c9a24d;color:#2a1c10}
+html[data-theme="clay"] .modal .chip,
+html[data-theme="clay"] .fxbox .chip{background:transparent;border-color:var(--line);color:var(--mut)}
+html[data-theme="clay"] .modal .chip:hover{color:var(--tx);background:rgba(255,255,255,.06)}
+
+/* Pestañas */
+html[data-theme="clay"] .tabs{background:rgba(36,21,15,.8);border:1px solid rgba(201,162,77,.45);border-radius:8px;box-shadow:0 14px 34px -18px rgba(12,5,2,.95)}
+html[data-theme="clay"] .tab{border-radius:5px;font-weight:500;letter-spacing:.1em}
+html[data-theme="clay"] .tab:hover{background:rgba(227,198,119,.12);color:#fff}
+html[data-theme="clay"] .tab.on{background:var(--brass-grad);color:#2a1c10;font-weight:600}
+
+/* Datos de la liga */
+html[data-theme="clay"] .stats{background:rgba(201,162,77,.22);border-radius:6px;box-shadow:0 22px 44px -28px rgba(12,5,2,.95),0 0 0 1px rgba(201,162,77,.3)}
+html[data-theme="clay"] .stats b{font-size:34px;font-weight:600;color:#e3c677}
+
+/* Tarjetas de jugador */
+html[data-theme="clay"] .card{border-radius:6px;box-shadow:0 18px 34px -22px rgba(12,5,2,.95),inset 0 0 0 1px rgba(201,162,77,.18)}
+html[data-theme="clay"] .card[data-role=top],html[data-theme="clay"] .node[data-role=top]{--c:#e07a3d}
+html[data-theme="clay"] .card[data-role=jng],html[data-theme="clay"] .node[data-role=jng]{--c:#4faa82}
+html[data-theme="clay"] .card[data-role=mid],html[data-theme="clay"] .node[data-role=mid]{--c:#5aa3e0}
+html[data-theme="clay"] .card[data-role=adc],html[data-theme="clay"] .node[data-role=adc]{--c:#e3c677}
+html[data-theme="clay"] .card[data-role=sup],html[data-theme="clay"] .node[data-role=sup]{--c:#c26a82}
+html[data-theme="clay"] .clickable:hover{background:var(--surface);box-shadow:0 18px 34px -20px rgba(12,5,2,1),inset 0 0 0 1px rgba(227,198,119,.6)}
+html[data-theme="clay"] .av{background:#3a241a;border-color:var(--c,#c9a24d)}
+html[data-theme="clay"] .ph{color:#e3c677}
+html[data-theme="clay"] .info b{font-size:18px;font-weight:600}
+html[data-theme="clay"] .rk{background:#e3c677;color:#2a1c10;border-radius:4px}
+html[data-theme="clay"] .nums strong{color:#e3c677;font-size:17px}
+
+/* Clasificación */
+html[data-theme="clay"] .tbl{border-radius:6px;box-shadow:0 22px 44px -28px rgba(12,5,2,.95),0 0 0 1px rgba(201,162,77,.3)}
+html[data-theme="clay"] .tbl th{background:#173f31;color:#e3c677;font-weight:600;letter-spacing:.08em}
+html[data-theme="clay"] .tbl th,
+html[data-theme="clay"] .tbl td{border-bottom-color:rgba(201,162,77,.16)}
+html[data-theme="clay"] .tbl tr.click:hover td{background:rgba(227,198,119,.1)}
+
+/* Equipo */
+html[data-theme="clay"] .lolmap{border:8px solid #3a241a;border-radius:6px;box-shadow:0 0 0 2px #c9a24d,0 26px 50px -26px rgba(12,5,2,1)}
+html[data-theme="clay"] .node b{background:rgba(36,21,15,.75)}
+html[data-theme="clay"] .node.sel .av{box-shadow:0 0 0 4px #c9a24d}
+html[data-theme="clay"] .prect.sel{box-shadow:0 0 0 3px #c9a24d}
+html[data-theme="clay"] .fxbox{border-radius:6px;box-shadow:0 16px 32px -22px rgba(12,5,2,.95),inset 0 0 0 1px rgba(201,162,77,.18)}
+html[data-theme="clay"] .fx .t{color:#e3c677}
+
+/* Mercado y movimientos */
+html[data-theme="clay"] .banner{border-radius:6px;box-shadow:0 16px 32px -22px rgba(12,5,2,.95),inset 0 0 0 1px rgba(201,162,77,.18)}
+html[data-theme="clay"] .banner b{font-size:20px}
+html[data-theme="clay"] .move{border-radius:6px;box-shadow:0 14px 28px -22px rgba(12,5,2,.95),inset 0 0 0 1px rgba(201,162,77,.16)}
+html[data-theme="clay"] .move.clause{--c:#5aa3e0}
+
+/* ===== Inicio: el cartel de Montecarlo ===== */
+html[data-theme="clay"] .hero{
+  --tx:#2a1c14;--mut:#3a4a3f;--sand:#2a1c14;--gold:#8d4a1f;
+  --ink:#1c2a22;--ink-mut:#3a4a3f;
+  color:#1c2a22;border-radius:6px;padding:64px 64px 200px;min-height:470px;
+  background:
+    radial-gradient(ellipse 220px 60px at 14% 100%,#50794a 96%,transparent 100%) left bottom 188px/100% 70px no-repeat,
+    radial-gradient(ellipse 300px 80px at 30% 112%,#3f6a45 96%,transparent 100%) left bottom 188px/100% 70px no-repeat,
+    radial-gradient(ellipse 210px 54px at 86% 100%,#50794a 96%,transparent 100%) left bottom 188px/100% 70px no-repeat,
+    linear-gradient(#3aa0a6,#3aa0a6) left bottom 150px/100% 38px no-repeat,
+    linear-gradient(180deg,#3f86c8 0%,#7db4e0 55%,#b9d9ee 100%);
+  box-shadow:0 34px 64px -30px rgba(12,5,2,.95),0 0 0 1px rgba(201,162,77,.55);
+}
+html[data-theme="clay"] .hero::before{
+  content:"";position:absolute;left:0;right:0;top:0;bottom:auto;height:62%;
+  writing-mode:horizontal-tb;font-size:0;line-height:normal;letter-spacing:normal;color:inherit;
+  background-image:
+    radial-gradient(ellipse 70px 26px at 150px 96px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 52px 22px at 112px 104px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 56px 24px at 192px 106px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 40px 26px at 150px 84px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 96px 30px at 560px 58px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 70px 24px at 500px 66px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 74px 26px at 628px 68px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 50px 28px at 560px 42px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 54px 18px at 800px 128px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 40px 16px at 770px 134px,#f7f0e1 70%,transparent 72%),
+    radial-gradient(ellipse 40px 18px at 834px 134px,#f7f0e1 70%,transparent 72%);
+  background-size:900px 190px;background-repeat:repeat-x;background-position:0 14px;
+  animation:cloudslide 140s linear infinite;
+}
+@keyframes cloudslide{to{background-position:-900px 14px}}
+html[data-theme="clay"] .hero::after{
+  content:"LEC FANTASY  ·  WINTER 2027  ·  LEC FANTASY  ·  WINTER 2027  ·  LEC FANTASY  ·  WINTER 2027";
+  position:absolute;left:0;right:0;bottom:0;top:auto;height:150px;
+  display:block;white-space:nowrap;overflow:hidden;text-align:center;
+  font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.38em;line-height:30px;color:#f1e7d0;
+  -webkit-mask-image:none;mask-image:none;
+  background:
+    linear-gradient(#173f31,#173f31) 0 0/100% 30px no-repeat,
+    linear-gradient(#c9a24d,#c9a24d) 0 30px/100% 3px no-repeat,
+    linear-gradient(#f1e7d0,#f1e7d0) 0 62px/100% 4px no-repeat,
+    linear-gradient(#f1e7d0,#f1e7d0) 8% 62px/4px 100% no-repeat,
+    linear-gradient(#f1e7d0,#f1e7d0) 92% 62px/4px 100% no-repeat,
+    linear-gradient(#f1e7d0,#f1e7d0) 50% 62px/4px 56px no-repeat,
+    linear-gradient(#f1e7d0,#f1e7d0) 0 118px/100% 4px no-repeat,
+    var(--clay-streak),var(--clay-grain),#b8501c;
+}
+html[data-theme="clay"] .hero .eyebrow{font-size:13px;font-weight:600;letter-spacing:.24em;color:#173f31}
+html[data-theme="clay"] .hero h1{font-size:clamp(56px,9.4vw,124px);line-height:.88;letter-spacing:-.02em;font-weight:700;color:#173f31;text-shadow:none;margin:14px 0 22px}
+html[data-theme="clay"] .hero p{font-size:20px;color:#1c2a22;max-width:42ch}
+
+/* Menú principal: piezas de ajedrez de marca de agua */
+html[data-theme="clay"] .mtile{border-radius:6px;border-top-width:4px;box-shadow:0 22px 44px -26px rgba(12,5,2,.95),inset 0 0 0 1px rgba(201,162,77,.2)}
+html[data-theme="clay"] .mtile:hover{box-shadow:0 30px 52px -24px rgba(12,5,2,1),inset 0 0 0 1px rgba(227,198,119,.55)}
+html[data-theme="clay"] .mtile::after{font-family:"Segoe UI Symbol","Apple Symbols","Noto Sans Symbols 2",serif;font-weight:400;font-size:150px;bottom:-26px;opacity:.09}
+html[data-theme="clay"] .mtile[data-k=crear]::after{content:"♚"}
+html[data-theme="clay"] .mtile[data-k=unirse]::after{content:"♞"}
+html[data-theme="clay"] .mtile[data-k=ligas]::after{content:"♜"}
+html[data-theme="clay"] .mtile[data-k=crear]{--g:#cf5a22}
+html[data-theme="clay"] .mtile[data-k=unirse]{--g:#4faa82}
+html[data-theme="clay"] .mtile[data-k=ligas]{--g:#c9a24d}
+html[data-theme="clay"] .mtile b{font-size:28px}
+html[data-theme="clay"] .mtile .go{letter-spacing:.1em}
+html[data-theme="clay"] .lgitem b{font-size:24px}
+html[data-theme="clay"] .badge{background:rgba(201,162,77,.16);color:var(--mut)}
+html[data-theme="clay"] .badge.live{background:rgba(79,170,130,.2);color:#7fcfa8}
+
+/* Formularios: chaleco beige con botones de latón y cinta de tablero de ajedrez */
+html[data-theme="clay"] .panel{
+  --tx:#2a1c14;--mut:#5e4e38;--sand:#2a1c14;--gold:#8d4a1f;
+  --ink:#2a1c14;--ink-mut:#5e4e38;--line:rgba(42,28,20,.22);--bd:rgba(42,28,20,.4);
+  border-radius:6px;padding:46px 38px 34px 52px;
+  background:repeating-linear-gradient(0deg,rgba(120,95,50,.05) 0 2px,transparent 2px 4px),linear-gradient(160deg,#e3d6b5,#cdbb92);
+  box-shadow:0 30px 60px -28px rgba(12,5,2,1),0 0 0 1px rgba(201,162,77,.5);
+}
+html[data-theme="clay"] .panel::before{height:10px;background-color:transparent;background-image:repeating-conic-gradient(#ebe0c4 0 25%,#2a1c14 0 50%);background-size:20px 20px}
+html[data-theme="clay"] .panel::after{content:"";position:absolute;left:16px;top:44px;bottom:30px;width:10px;background:radial-gradient(circle,#b8923f 4px,rgba(120,90,30,.5) 5px,transparent 5.5px) 0 0/10px 46px repeat-y;opacity:.7}
+html[data-theme="clay"] .panel h2{font-size:38px;color:#173f31}
+html[data-theme="clay"] .panel .ok{color:#1f6b4e}
+html[data-theme="clay"] .panel .err{color:#a63a14}
+html[data-theme="clay"] .panel .btn{background:#173f31;color:#f1e7d0}
+html[data-theme="clay"] .panel .btn:hover{background:#1f5440}
+html[data-theme="clay"] .panel .btn.out{background:transparent;color:#2a1c14;border-color:rgba(42,28,20,.4)}
+html[data-theme="clay"] .panel .btn.out:hover{background:rgba(42,28,20,.07)}
+html[data-theme="clay"] .fld span{font-weight:500;letter-spacing:.04em}
+html[data-theme="clay"] .panel input{background:#f2e9d1;border-color:rgba(42,28,20,.22)}
+
+/* Ficha de jugador */
+html[data-theme="clay"] .modal-bg{background:rgba(20,10,5,.78)}
+html[data-theme="clay"] .modal{border-radius:8px;box-shadow:0 40px 80px -30px rgba(0,0,0,.95),0 0 0 1px rgba(201,162,77,.4)}
+html[data-theme="clay"] .series{background:rgba(255,255,255,.04);border-color:var(--line)}
+html[data-theme="clay"] .shead{border-bottom-color:var(--line)}
+html[data-theme="clay"] .stat{background:rgba(0,0,0,.25);border-color:rgba(201,162,77,.15)}
+
+@media(max-width:560px){
+  html[data-theme="clay"] .hero{padding:40px 22px 190px}
+  html[data-theme="clay"] .hero::before{right:0;top:0;font-size:0}
+  html[data-theme="clay"] .panel{padding:44px 20px 26px 38px}
+  html[data-theme="clay"] .panel::after{left:10px}
+}
+
+/* ===== Fondo: pista de tierra batida ===== */
+.court{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#8a3612;pointer-events:none}
+.court-clay{position:absolute;inset:0;background:var(--clay-streak),var(--clay-grain),radial-gradient(ellipse at 50% 45%,#c25a22 0,#a24418 70%,#8a3612 100%)}
+.court-svg{position:absolute;inset:0;width:100%;height:100%}
+.court-cloudshadow{position:absolute;inset:-20%;will-change:transform}
+.court-cloudshadow.a{background:
+  radial-gradient(ellipse 22% 16% at 30% 40%,rgba(20,8,3,.30),transparent 70%),
+  radial-gradient(ellipse 14% 10% at 72% 66%,rgba(20,8,3,.24),transparent 70%);
+  animation:cloudshift 85s linear infinite alternate}
+.court-cloudshadow.b{background:
+  radial-gradient(ellipse 18% 12% at 55% 25%,rgba(20,8,3,.24),transparent 70%),
+  radial-gradient(ellipse 12% 9% at 20% 75%,rgba(20,8,3,.2),transparent 70%);
+  animation:cloudshift2 120s linear infinite alternate}
+@keyframes cloudshift{from{transform:translate3d(-14%,2%,0)}to{transform:translate3d(16%,-3%,0)}}
+@keyframes cloudshift2{from{transform:translate3d(12%,-2%,0)}to{transform:translate3d(-15%,3%,0)}}
+.court-crowd{position:absolute;left:0;right:0;bottom:0;width:100%;height:clamp(80px,14vh,150px)}
+.court-crowd .bob{animation:bob 5s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.court-vignette{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(20,8,3,.62) 100%),
+  linear-gradient(rgba(28,12,5,.30),rgba(28,12,5,.30))}
+@media(prefers-reduced-motion:reduce){
+  .court-cloudshadow,.court-crowd .bob{animation:none}
+  .court-svg .swim{display:none}
+  html[data-theme="clay"] .hero::before{animation:none}
+}
