@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* LEC Fantasy · estanque koi
    Azulejos cobalto · naranja koi · papel crema · verde azulado de las piedras
    Todo el estilo vive aquí (extra.css queda vacío a propósito). */
@@ -250,15 +251,212 @@ input:focus{outline:none;border-color:var(--koi)}
 .statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:6px}
 .stat{display:flex;justify-content:space-between;gap:6px;background:var(--paper3);border:1px solid rgba(20,35,74,.1);border-radius:8px;padding:6px 9px;font-size:12px;color:var(--ink)}
 .stat small{color:var(--mut)}.stat.zero{opacity:.5}
+=======
+/* LEC Fantasy · paleta Dust, Steel & Terracotta
+   pino #2A4343 · mar #416B66 · musgo #646756 · arena #F1D49A · terracota #D35E36 · salvia #C0C29D */
+:root{
+  --deep:#1d3030;--bg:#2A4343;--card:#335250;--card2:#3b5f5b;
+  --line:rgba(192,194,157,.22);
+  --tx:#f3e6c4;--sand:#F1D49A;--mut:#C0C29D;--moss:#646756;--teal:#416B66;
+  --acc:#D35E36;--acc-d:#bd4f29;--gold:#F1D49A;
+  --disp:var(--font-display),Georgia,serif;
+  --sans:var(--font-body),system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:80px}
+body{margin:0;color:var(--tx);font-family:var(--sans);line-height:1.5;font-variant-numeric:tabular-nums;
+  background:radial-gradient(900px 420px at 88% -120px,rgba(65,107,102,.6),transparent 70%) no-repeat,var(--bg)}
+a{color:var(--sand)}
+h1,h2,h3{font-family:var(--disp);font-weight:700;color:var(--sand);letter-spacing:-.01em}
+h1{font-size:clamp(28px,3.4vw,40px);margin:24px 0 4px;line-height:1.15}
+h3{font-size:22px;margin:32px 0 12px}
+:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
+.wrap{max-width:1400px;margin:0 auto;padding:0 28px}
+main.wrap{padding-bottom:56px}
+.sub{color:var(--mut);margin:0 0 16px;max-width:78ch}
+.hint{color:var(--mut);font-size:13px;max-width:78ch}
+.ok{color:#a9cf85}.err{color:#ff9d7a}
+
+/* Cabecera */
+header{background:var(--deep);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:var(--disp);font-weight:700;font-size:22px;color:var(--sand);text-decoration:none;display:flex;align-items:center}
+.logo::before{content:"";width:15px;height:15px;border-radius:50%;background:var(--acc);margin-right:10px}
+.logo span{color:var(--mut);font-weight:600}
+nav{display:flex;gap:6px}
+.back{color:var(--mut);text-decoration:none;font-size:14px;display:inline-block;margin-top:20px}
+.back:hover{color:var(--sand)}
+
+/* Botones y campos */
+.btn{background:var(--acc);color:#fff6e0;border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--acc-d)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.out{background:transparent;border:1px solid var(--line);color:var(--tx)}
+.btn.out:hover{background:var(--card2);border-color:var(--mut)}
+input{background:var(--deep);border:1.5px solid var(--line);color:var(--tx);font:inherit;padding:10px 13px;border-radius:10px;min-width:220px}
+input::placeholder{color:#8f977a}
+input:focus{outline:none;border-color:var(--sand)}
+.bar{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;align-items:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:transparent;border:1px solid var(--line);color:var(--mut);padding:7px 14px;border-radius:999px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:background .15s,color .15s}
+.chip:hover{color:var(--tx);background:var(--card)}
+.chip.on{background:var(--sand);border-color:var(--sand);color:var(--bg)}
+
+/* Pestañas de liga */
+.tabsbar{margin:20px 0 26px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:4px;overflow-x:auto}
+.tab{color:var(--mut);text-decoration:none;font-weight:700;font-size:14px;padding:12px 18px;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .15s}
+.tab:hover{color:var(--tx)}
+.tab.on{color:var(--sand);border-bottom-color:var(--acc)}
+
+/* Datos de la liga */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:18px 0 6px}
+.stats div{background:var(--card);padding:14px 20px;display:flex;flex-direction:column}
+.stats small{color:var(--mut)}
+.stats b{font-family:var(--disp);font-size:26px;color:var(--sand)}
+
+/* Tarjetas de jugador */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;padding-bottom:32px}
+.grid.wide{grid-template-columns:repeat(auto-fill,minmax(460px,1fr))}
+.grid.wide .card{flex-wrap:wrap}
+.card{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c,var(--acc));border-radius:14px;padding:12px 14px}
+.card[data-role=top]{--c:#D35E36}.card[data-role=jng]{--c:#8FAE6A}.card[data-role=mid]{--c:#5FA39A}
+.card[data-role=adc]{--c:#E0A83E}.card[data-role=sup]{--c:#B79AC9}
+.clickable{cursor:pointer;transition:border-color .15s,background .15s}
+.clickable:hover{background:var(--card2);border-color:var(--mut);border-left-color:var(--c,var(--acc))}
+.av{border-radius:50%;object-fit:cover;background:var(--teal);flex:none}
+.ph{display:grid;place-items:center;font-weight:800;color:var(--sand)}
+.info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.info b{font-size:16px}
+.info small,.nums small{color:var(--mut)}
+.role{font-size:12px;font-weight:800;color:var(--c)}
+.rk{margin-left:8px;font-size:10px;background:var(--sand);color:var(--bg);padding:2px 6px;border-radius:4px;vertical-align:1px}
+.nums{display:flex;flex-direction:column;align-items:flex-end}
+.nums strong{color:var(--sand)}
+.who{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:12px;color:var(--mut);margin-left:auto}
+.who .mine{color:var(--sand);font-weight:800}
+.bidbox{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.bidbox input{min-width:0;width:120px}
+.bidbox small{color:var(--mut)}
+
+/* Clasificación */
+.tbl{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tbl th,.tbl td{padding:13px 18px;text-align:left;border-bottom:1px solid var(--line)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl th{color:var(--mut);font-size:13px;font-weight:700;background:var(--deep)}
+.tbl tr.click{cursor:pointer}.tbl tr.click:hover{background:var(--card2)}
+.tbl tbody tr:first-child td:first-child{color:var(--sand);font-weight:800}
+
+/* Equipo: mapa + plantilla */
+.teamgrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(360px,1fr);gap:28px;align-items:start}
+.lolmap{position:relative;width:100%;aspect-ratio:1;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#0d1a1a url(/map.png) center/cover no-repeat}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;font-size:12px;text-shadow:0 1px 3px #000;color:#fff6e0}
+.node .av{border:3px solid var(--c,var(--acc))}
+.node.click{cursor:pointer}
+.node.sel .av{box-shadow:0 0 0 4px var(--sand)}
+.node[data-role=top]{--c:#D35E36}.node[data-role=jng]{--c:#8FAE6A}.node[data-role=mid]{--c:#5FA39A}
+.node[data-role=adc]{--c:#E0A83E}.node[data-role=sup]{--c:#B79AC9}
+.squad{display:grid;gap:10px}
+.prect{flex-wrap:wrap}
+.prect.sel{box-shadow:0 0 0 3px var(--sand)}
+.daybox{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin:6px 0 12px}
+.fxbox{flex:1;min-width:260px;display:grid;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.fxbox small{color:var(--mut)}
+.fx{display:flex;gap:12px;align-items:center;font-size:14px}
+.fx .t{font-weight:800;color:var(--sand);min-width:48px}
+.fx i{color:var(--mut);font-style:normal}
+.fx .bo{margin-left:auto;font-size:12px;font-weight:700;color:var(--mut)}
+.plays{font-size:12px;font-weight:700;color:#a9cf85}.plays.no{color:var(--mut);font-weight:600}
+
+/* Mercado */
+.banner{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:14px 18px;border-radius:14px;margin:0 0 14px;border:1px solid var(--line)}
+.banner b{font-family:var(--disp);font-size:18px}
+.banner.open{background:rgba(143,174,106,.14);border-color:rgba(143,174,106,.5)}.banner.open b{color:#a9cf85}
+.banner.closed{background:rgba(211,94,54,.14);border-color:rgba(211,94,54,.55)}.banner.closed b{color:#ff9d7a}
+
+/* Movimientos */
+.moves{display:grid;gap:10px;max-width:820px}
+.move{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:14px;padding:10px 16px}
+.move.buy{--c:#8FAE6A}.move.sell{--c:var(--acc)}.move.clause{--c:var(--sand)}
+.move .mk{font-size:12px;font-weight:800;color:var(--c);width:84px}
+.move .info small{color:var(--mut)}.move .info small b{color:var(--tx);font-size:inherit}
+.move .when{color:var(--mut);white-space:nowrap}
+
+/* Inicio: cartel con sol y arboleda */
+.hero{position:relative;overflow:hidden;border-radius:26px;margin:28px 0 0;padding:64px 52px 150px;min-height:380px;color:var(--bg);
+  background:
+    radial-gradient(ellipse 170px 130px at 5% 104%,#2A4343 97%,transparent 100%),
+    radial-gradient(ellipse 240px 170px at 19% 108%,#416B66 97%,transparent 100%),
+    radial-gradient(ellipse 190px 150px at 33% 106%,#2A4343 97%,transparent 100%),
+    radial-gradient(ellipse 300px 140px at 58% 112%,#416B66 97%,transparent 100%),
+    radial-gradient(ellipse 220px 160px at 80% 106%,#2A4343 97%,transparent 100%),
+    radial-gradient(ellipse 200px 120px at 98% 108%,#416B66 97%,transparent 100%),
+    linear-gradient(180deg,#B7BD97 0%,#C6C8A2 60%,#DAD0A3 100%)}
+.hero::before{content:"";position:absolute;width:270px;height:270px;border-radius:50%;background:var(--acc);right:10%;top:-80px}
+.hero>*{position:relative}
+.hero .eyebrow{font-weight:700;font-size:14px;color:#3a5550}
+.hero h1{font-size:clamp(46px,7.5vw,92px);line-height:1;margin:10px 0 16px;color:var(--bg)}
+.hero p{max-width:46ch;font-size:18px;color:#2A4343;margin:0}
+.hero+.menu3{margin-top:-64px}
+.hero+.panel{margin-top:-70px}
+.menu3{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:0 28px 60px}
+.mtile{display:flex;flex-direction:column;gap:8px;text-align:left;font:inherit;color:var(--tx);cursor:pointer;text-decoration:none;
+  padding:26px 26px 22px;min-height:190px;border-radius:18px;border:1px solid var(--line);border-top:5px solid var(--g);background:var(--card);
+  box-shadow:0 18px 40px -22px #000;transition:background .15s}
+.mtile:hover{background:var(--card2)}
+.mtile .ico{display:none}
+.mtile b{font-family:var(--disp);font-size:24px;color:var(--sand)}
+.mtile small{color:var(--mut);font-size:15px;line-height:1.45}
+.mtile .go{margin-top:auto;color:var(--g);font-weight:800;font-size:14px}
+.mtile[data-k=crear]{--g:#D35E36}.mtile[data-k=unirse]{--g:#5FA39A}.mtile[data-k=ligas]{--g:#F1D49A}
+.lgwrap{max-width:860px;margin:30px auto 60px}
+.lglist{display:grid;gap:12px;margin-top:20px}
+.lgitem{flex-direction:row;align-items:center;justify-content:space-between;min-height:0;padding:22px 28px}
+.lgitem div{display:flex;flex-direction:column;gap:4px}
+.lgitem b{font-size:22px}
+.badge{font-size:12px;font-weight:800;padding:4px 11px;border-radius:999px;background:var(--deep);color:var(--mut);white-space:nowrap}
+.badge.live{background:rgba(143,174,106,.2);color:#a9cf85}
+
+/* Formularios */
+.panel{position:relative;max-width:520px;margin:32px auto 60px;padding:34px 34px 30px;border:1px solid var(--line);border-radius:22px;background:var(--card);display:grid;gap:16px;box-shadow:0 24px 50px -26px #000}
+.panel h2{margin:0;font-size:28px}
+.panel input{width:100%}
+.panel .btn{padding:14px;font-size:16px;border-radius:12px}
+.fld{display:grid;gap:7px}
+.fld span{font-size:14px;font-weight:700;color:var(--mut)}
+.fld input{padding:15px 16px;font-size:17px;border-radius:12px}
+
+/* Ficha de jugador (ventana) */
+.modal-bg{position:fixed;inset:0;background:rgba(10,20,20,.72);z-index:20;display:grid;place-items:center;padding:16px}
+.modal{background:var(--bg);border:1px solid var(--line);border-radius:20px;max-width:840px;width:100%;max-height:88vh;overflow:auto;padding:22px}
+.mhead{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.mhead .info small{color:var(--mut)}
+.series{border:1px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);padding:10px 14px}
+.shead,.ghead{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.shead{padding-bottom:6px;border-bottom:1px solid var(--line)}
+.game{margin-top:10px}
+.ghead{color:var(--mut);font-size:13px;margin-bottom:6px}.ghead b{color:var(--tx)}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:6px}
+.stat{display:flex;justify-content:space-between;gap:6px;background:var(--deep);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px}
+.stat small{color:var(--mut)}.stat.zero{opacity:.45}
+>>>>>>> e4279050ab829965d0c4bbde0abd903e1f267742
 
 @media(max-width:980px){.teamgrid{grid-template-columns:1fr}}
 @media(max-width:560px){
   .wrap{padding:0 16px}
   .grid,.grid.wide{grid-template-columns:1fr}
+<<<<<<< HEAD
   .hero{padding:40px 24px 120px;border-radius:10px}
   .hero::before{font-size:22px;right:20px;top:24px}
   .panel{padding:46px 20px 26px}
   .move{flex-wrap:wrap}
   .tab{padding:10px 14px}
   .lgitem{padding:20px}
+=======
+  .hero{padding:40px 24px 130px;border-radius:20px}
+  .menu3{margin:0 12px 48px}
+  .panel{padding:26px 20px}
+  .move{flex-wrap:wrap}
+  .tab{padding:12px 14px}
+>>>>>>> e4279050ab829965d0c4bbde0abd903e1f267742
 }
