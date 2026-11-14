@@ -401,3 +401,165 @@ html[data-theme="riviera"] .modal-bg{background:rgba(8,40,64,.72)}
   html[data-theme="riviera"] .hero{padding:40px 24px 150px}
   html[data-theme="riviera"] .hero::before{right:20px;top:24px;width:64px;height:64px}
 }
+
+/* ============================================================
+   TEMA OTOÑO · Parque
+   Sin fondo animado: el suelo es una pintura estática (public/park/ground.jpg) y las hojas
+   proyectan su sombra sobre toda la página (public/park/dapple.webp). Los paneles son recortes
+   de papel gouache de bordes irregulares, de distinto tamaño y ligeramente desplazados.
+   En la portada la pintura original (public/park/chess.jpg) se funde con el suelo.
+   ============================================================ */
+.park-ground,.park-dapple{display:none;position:fixed;inset:0;pointer-events:none}
+html[data-theme="park"] .park-ground{display:block;z-index:-1;background:#d3cda6 url(/park/ground.jpg) center/cover no-repeat}
+html[data-theme="park"] .park-dapple{display:block;z-index:40;background:url(/park/dapple.webp) center/cover no-repeat}
+html[data-theme="park"] .pond{display:none}
+
+html[data-theme="park"]{
+  --navy:#3e5a46;--cobalt:#3b5a8c;--tile:#efe7c4;
+  --paper:#f4eed4;--paper2:#e6dcb4;--paper3:#fbf7e2;
+  --ink:#25322e;--ink-mut:#5b6558;
+  --koi:#c4472c;--koi-d:#a63a22;--coral:#c4472c;
+  --teal:#3f7a4a;--teal-d:#2f6239;
+  --tx:#25322e;--mut:#4f5c52;--sand:#25322e;--gold:#a8421f;--acc:#c4472c;
+  --line:rgba(37,50,46,.22);--bd:rgba(37,50,46,.45);--deep:#2b3a32;
+  --disp:var(--font-fraunces),"Fraunces",Georgia,serif;
+  --sans:var(--font-jost),"Jost",system-ui,sans-serif;
+  --surface:var(--grain),linear-gradient(165deg,#f8f3dc,#ede5c6);
+  --cpA:polygon(0% 2.0px,6% 2.5px,13% 4.2px,21% 2.1px,29% 2.3px,38% 2.6px,47% 0.8px,56% 2.3px,65% 2.8px,74% 3.6px,83% 0.4px,91% 1.4px,100% 0.4px,calc(100% - 3.2px) 12%,calc(100% - 2.8px) 30%,calc(100% - 0.2px) 50%,calc(100% - 3.9px) 70%,calc(100% - 3.9px) 88%,100% calc(100% - 2.9px),91% calc(100% - 2.8px),83% calc(100% - 0.7px),74% calc(100% - 0.1px),65% calc(100% - 2.4px),56% calc(100% - 0.3px),47% calc(100% - 0.9px),38% calc(100% - 1.1px),29% calc(100% - 0.1px),21% calc(100% - 2.1px),13% calc(100% - 2.0px),6% calc(100% - 3.8px),0% calc(100% - 2.3px),2.6px 88%,2.0px 70%,2.6px 50%,1.8px 30%,1.1px 12%);
+  --cpB:polygon(0% 4.2px,6% 4.3px,13% 4.0px,21% 0.4px,29% 2.7px,38% 1.9px,47% 2.4px,56% 0.6px,65% 0.9px,74% 2.0px,83% 1.0px,91% 2.0px,100% 0.1px,calc(100% - 0.3px) 12%,calc(100% - 2.8px) 30%,calc(100% - 1.7px) 50%,calc(100% - 2.1px) 70%,calc(100% - 2.9px) 88%,100% calc(100% - 1.6px),91% calc(100% - 0.3px),83% calc(100% - 3.5px),74% calc(100% - 2.7px),65% calc(100% - 3.0px),56% calc(100% - 2.8px),47% calc(100% - 4.4px),38% calc(100% - 1.6px),29% calc(100% - 3.4px),21% calc(100% - 1.7px),13% calc(100% - 2.6px),6% calc(100% - 3.0px),0% calc(100% - 1.4px),0.3px 88%,1.9px 70%,2.9px 50%,2.4px 30%,1.8px 12%);
+  --cpC:polygon(0% 3.1px,6% 0.4px,13% 2.8px,21% 3.8px,29% 3.8px,38% 2.3px,47% 2.8px,56% 1.7px,65% 2.4px,74% 0.5px,83% 3.1px,91% 2.7px,100% 1.3px,calc(100% - 1.5px) 12%,calc(100% - 2.9px) 30%,calc(100% - 1.8px) 50%,calc(100% - 3.8px) 70%,calc(100% - 3.9px) 88%,100% calc(100% - 3.8px),91% calc(100% - 0.4px),83% calc(100% - 0.3px),74% calc(100% - 1.3px),65% calc(100% - 1.6px),56% calc(100% - 3.2px),47% calc(100% - 3.7px),38% calc(100% - 2.5px),29% calc(100% - 2.9px),21% calc(100% - 2.6px),13% calc(100% - 0.2px),6% calc(100% - 2.4px),0% calc(100% - 1.0px),1.7px 88%,0.0px 70%,2.6px 50%,3.6px 30%,0.3px 12%);
+  --sw-on-bg:#c4472c;--sw-on-fg:#fff7e6;
+  background:#d3cda6;
+}
+html[data-theme="park"] ::selection{background:#c4472c;color:#fff}
+html[data-theme="park"] body{font-size:16px}
+
+/* Texto directamente sobre el suelo: tinta oscura con un halo crema para que no lo estorben las sombras */
+html[data-theme="park"] h1,html[data-theme="park"] h2,html[data-theme="park"] h3{font-weight:600;letter-spacing:-.015em;text-shadow:0 0 14px rgba(246,241,214,.95),0 0 4px rgba(246,241,214,.9)}
+html[data-theme="park"] .sub,html[data-theme="park"] .hint{color:var(--mut);text-shadow:0 0 12px rgba(246,241,214,.95),0 0 3px rgba(246,241,214,.9)}
+html[data-theme="park"] .ok{color:#2f6b3a;font-weight:600;text-shadow:0 0 10px rgba(246,241,214,.95)}
+html[data-theme="park"] .err{color:#b23a1e;font-weight:600;text-shadow:0 0 10px rgba(246,241,214,.95)}
+html[data-theme="park"] .card .sub,html[data-theme="park"] .panel .sub,html[data-theme="park"] .modal .sub,html[data-theme="park"] .stats .sub,html[data-theme="park"] .fxbox .sub,html[data-theme="park"] .banner .sub{text-shadow:none}
+html[data-theme="park"] .back{color:var(--mut);text-shadow:0 0 10px rgba(246,241,214,.95)}
+html[data-theme="park"] .back:hover{color:#a8421f}
+
+/* Cabecera */
+html[data-theme="park"] header{background:rgba(238,231,201,.88);border-bottom:2px solid rgba(37,50,46,.22)}
+html[data-theme="park"] .logo{font-family:var(--disp);font-size:27px;font-weight:600;letter-spacing:-.02em}
+html[data-theme="park"] .logo::before{content:none}
+html[data-theme="park"] .logo span{font-style:italic;font-weight:500;color:#c4472c}
+html[data-theme="park"] .themesw{background:rgba(244,238,212,.75);border-color:rgba(37,50,46,.3)}
+html[data-theme="park"] .themesw button{color:#25322e}
+html[data-theme="park"] .themesw button:hover{background:rgba(37,50,46,.09)}
+html[data-theme="park"] .themesw button[aria-pressed="true"]{background:#c4472c;color:#fff7e6}
+.themesw .sw-park .dots i:nth-child(1){background:#b9c6bb}
+.themesw .sw-park .dots i:nth-child(2){background:#e2702d}
+
+/* Pestañas: palabras sueltas, la activa subrayada con trazo ondulado */
+html[data-theme="park"] .tabsbar{justify-content:flex-start;margin:18px 0 30px}
+html[data-theme="park"] .tabs{background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0;gap:4px}
+html[data-theme="park"] .tab{font-family:var(--disp);font-size:19px;font-weight:500;letter-spacing:0;color:var(--ink);padding:6px 14px;border-radius:0;text-shadow:0 0 10px rgba(246,241,214,.95)}
+html[data-theme="park"] .tab:hover{background:none;color:#a8421f}
+html[data-theme="park"] .tab.on{background:none;color:#c4472c;font-weight:600;text-decoration:underline wavy #c4472c 2px;text-underline-offset:8px}
+
+/* Superficies: recortes de papel gouache */
+html[data-theme="park"] .mtile,html[data-theme="park"] .card,html[data-theme="park"] .fxbox,html[data-theme="park"] .banner,html[data-theme="park"] .move,html[data-theme="park"] .stats div,html[data-theme="park"] .panel,html[data-theme="park"] .tbl{
+  background:var(--surface);border-radius:0;
+  clip-path:var(--cpA);
+  box-shadow:inset 0 0 0 2px rgba(150,125,70,.26),inset 0 -12px 16px -14px rgba(120,95,40,.38);
+}
+html[data-theme="park"] .mtile:nth-child(3n+2),html[data-theme="park"] .card:nth-child(3n+2),html[data-theme="park"] .fxbox:nth-child(3n+2),html[data-theme="park"] .banner:nth-child(3n+2),html[data-theme="park"] .move:nth-child(3n+2),html[data-theme="park"] .stats div:nth-child(3n+2),html[data-theme="park"] .panel:nth-child(3n+2),html[data-theme="park"] .tbl:nth-child(3n+2){clip-path:var(--cpB)}
+html[data-theme="park"] .mtile:nth-child(3n),html[data-theme="park"] .card:nth-child(3n),html[data-theme="park"] .fxbox:nth-child(3n),html[data-theme="park"] .banner:nth-child(3n),html[data-theme="park"] .move:nth-child(3n),html[data-theme="park"] .stats div:nth-child(3n),html[data-theme="park"] .panel:nth-child(3n),html[data-theme="park"] .tbl:nth-child(3n){clip-path:var(--cpC)}
+html[data-theme="park"] .clickable:hover{background:#fffbe6;box-shadow:inset 0 0 0 2px rgba(196,71,44,.6)}
+html[data-theme="park"] .prect.sel{box-shadow:inset 0 0 0 4px #c4472c}
+html[data-theme="park"] .tbl th{background:var(--navy);color:var(--tile)}
+html[data-theme="park"] .tbl tr.click:hover td{background:rgba(196,71,44,.1)}
+
+/* Botones, chips y campos */
+html[data-theme="park"] .btn{border-radius:0;clip-path:var(--cpC);padding:10px 22px;font-weight:600;letter-spacing:.02em;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+html[data-theme="park"] .btn.out{background:#f4eed4;color:var(--ink);border:0}
+html[data-theme="park"] .btn.out:hover{background:#fffbe6}
+html[data-theme="park"] .chip{background:#f4eed4;color:var(--ink);border:0;border-radius:0;clip-path:var(--cpB);padding:8px 16px}
+html[data-theme="park"] .chip:hover{background:#fffbe6;color:var(--ink)}
+html[data-theme="park"] .chip.on{background:#c4472c;color:#fff7e6}
+html[data-theme="park"] input{background:#fbf7e2;border:0;border-bottom:2px solid rgba(37,50,46,.5);border-radius:0;color:var(--ink)}
+html[data-theme="park"] input:focus{border-bottom-color:#c4472c}
+
+/* Colores de posición */
+html[data-theme="park"] .card[data-role=top],html[data-theme="park"] .node[data-role=top]{--c:#c4472c}
+html[data-theme="park"] .card[data-role=jng],html[data-theme="park"] .node[data-role=jng]{--c:#4f7a3c}
+html[data-theme="park"] .card[data-role=mid],html[data-theme="park"] .node[data-role=mid]{--c:#3b5a8c}
+html[data-theme="park"] .card[data-role=adc],html[data-theme="park"] .node[data-role=adc]{--c:#d19a2b}
+html[data-theme="park"] .card[data-role=sup],html[data-theme="park"] .node[data-role=sup]{--c:#7c5a8a}
+html[data-theme="park"] .move.clause{--c:#3b5a8c}
+html[data-theme="park"] .badge{background:#e6dcb4;color:var(--ink-mut)}
+html[data-theme="park"] .badge.live{background:rgba(63,122,74,.2);color:#2f6239}
+
+/* Datos de la liga: recortes sueltos, cada uno a su altura */
+html[data-theme="park"] .stats{background:transparent;box-shadow:none;border-radius:0;overflow:visible;gap:16px;margin:22px 0 6px;align-items:start}
+html[data-theme="park"] .stats div{padding:14px 24px}
+html[data-theme="park"] .stats div:nth-child(2){margin-top:16px}
+html[data-theme="park"] .stats div:nth-child(3){margin-top:-4px}
+html[data-theme="park"] .stats b{font-family:var(--disp);font-size:30px;color:var(--ink)}
+
+/* Plantillas y listas: cartas desplazadas y algunas más anchas */
+html[data-theme="park"] .grid.wide{grid-auto-flow:dense}
+html[data-theme="park"] .grid .card:nth-child(4n+3){margin-top:14px}
+html[data-theme="park"] .grid .card:nth-child(4n+2){margin-left:18px}
+@media(min-width:1100px){html[data-theme="park"] .grid.wide .card:nth-child(7n+1){grid-column:span 2}}
+
+/* Movimientos: zigzag, como pasos sobre el suelo */
+html[data-theme="park"] .moves{max-width:960px}
+html[data-theme="park"] .move:nth-child(even){margin-left:72px}
+html[data-theme="park"] .move:nth-child(odd){margin-right:72px}
+
+/* Equipo: la plantilla a la izquierda y el campo a la derecha, fijo al hacer scroll */
+html[data-theme="park"] .teamgrid{grid-template-columns:minmax(0,1fr) minmax(380px,1.15fr)}
+html[data-theme="park"] .teamgrid>div:first-child{order:2;position:sticky;top:84px}
+html[data-theme="park"] .lolmap{border:9px solid #f6f1d9;border-radius:2px;transform:rotate(-.7deg);box-shadow:0 22px 30px -18px rgba(38,48,52,.6)}
+html[data-theme="park"] .node b{background:rgba(37,50,46,.78)}
+
+/* Inicio: la pintura emerge del suelo */
+html[data-theme="park"] .hero{background:none;box-shadow:none;border-radius:0;overflow:visible;padding:46px 0 70px;min-height:580px}
+html[data-theme="park"] .hero::after{content:none;display:none}
+html[data-theme="park"] .hero .eyebrow{font-weight:600;letter-spacing:.22em;font-size:13px;color:var(--ink);text-shadow:0 0 12px rgba(246,241,214,.95)}
+html[data-theme="park"] .hero h1{font-size:clamp(56px,9.6vw,140px);line-height:.9;letter-spacing:-.035em;font-style:italic;font-weight:600;color:#c4472c;margin:14px 0 24px}
+html[data-theme="park"] .hero p{font-size:20px;max-width:34ch;color:var(--ink);text-shadow:0 0 14px rgba(246,241,214,.95),0 0 4px rgba(246,241,214,.9)}
+
+/* Menú: tres recortes de distinto tamaño y altura */
+html[data-theme="park"] .menu3{grid-template-columns:1.25fr 1fr 1.15fr;align-items:start;gap:26px}
+html[data-theme="park"] .mtile::after{content:none}
+html[data-theme="park"] .mtile:nth-child(1){min-height:250px}
+html[data-theme="park"] .mtile:nth-child(2){min-height:200px;margin-top:46px}
+html[data-theme="park"] .mtile:nth-child(3){min-height:280px;margin-top:14px}
+html[data-theme="park"] .mtile b{font-size:27px}
+html[data-theme="park"] .mtile[data-k=crear]{--g:#c4472c}
+html[data-theme="park"] .mtile[data-k=unirse]{--g:#4f7a3c}
+html[data-theme="park"] .mtile[data-k=ligas]{--g:#3b5a8c}
+html[data-theme="park"] .mtile[data-k=unirse] .go{color:var(--teal-d)}
+html[data-theme="park"] .lgitem{min-height:0}
+html[data-theme="park"] .lgitem:nth-child(even){margin-left:56px}
+
+/* Formularios */
+html[data-theme="park"] .panel::before{display:none}
+html[data-theme="park"] .panel{padding:40px 38px 34px}
+html[data-theme="park"] .panel h2{text-shadow:none}
+
+/* Ficha de jugador */
+html[data-theme="park"] .modal-bg{background:rgba(38,52,44,.55)}
+html[data-theme="park"] .modal{border-radius:4px;box-shadow:0 40px 70px -30px rgba(20,28,22,.7)}
+html[data-theme="park"] .modal h3{text-shadow:none}
+
+@media(max-width:980px){
+  html[data-theme="park"] .teamgrid{grid-template-columns:1fr}
+  html[data-theme="park"] .teamgrid>div:first-child{order:0;position:static}
+}
+@media(max-width:860px){
+  html[data-theme="park"] .menu3{grid-template-columns:1fr}
+  html[data-theme="park"] .mtile:nth-child(n){margin-top:0;min-height:0}
+  html[data-theme="park"] .hero::before{width:100%;right:0;opacity:.4}
+}
+@media(max-width:560px){
+  html[data-theme="park"] .move:nth-child(n),html[data-theme="park"] .lgitem:nth-child(n),html[data-theme="park"] .grid .card:nth-child(n){margin-left:0;margin-right:0}
+  html[data-theme="park"] .tab{padding:6px 9px;font-size:17px}
+}
