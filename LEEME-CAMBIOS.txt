@@ -1,11 +1,9 @@
-v0.1.2 · ARREGLO DE TITULARES Y VENTA
+v0.1.3 · ANALYTICS
 
 1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
-2) En Supabase (SQL Editor) ejecuta supabase/fix_matchday.sql  (OBLIGATORIO: sin esto los titulares no se pueden colocar
-   mientras no haya calendario cargado). No borra datos.
+2) En Vercel: tu proyecto > pestaña Analytics > Enable (una sola vez).
 3) Sube a GitHub; Vercel redespliega solo.
+   Si tienes web/package-lock.json, ejecuta antes "npm install" dentro de web/ y sube también el lock actualizado.
+4) Las visitas empiezan a contarse tras el despliegue (abre la web un par de veces y mira Analytics).
 
-QUÉ CAMBIA
-- Sin partidos en la tabla fixtures, la jornada en curso pasa a ser la 1: se pueden fichar titulares desde el mapa,
-  usar «Cambiar» y «Poner aquí».
-- Vender ya no pide confirmación.
+Cambios: web/package.json (+@vercel/analytics) y web/app/layout.tsx (<Analytics />).

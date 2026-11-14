@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./themes.css";
 import "./extra.css";
@@ -41,6 +42,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
           <Nav />
         </div></header>
         <main className="wrap">{children}</main>
+        <Analytics />
       </body>
     </html>
   );

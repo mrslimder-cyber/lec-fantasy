@@ -48,7 +48,10 @@ v0.1.1 · Fichajes desde Equipo
 🛒 Mercado solo para consultar
 💸 Botón Vender y Cambiar (banquillo)
 
-v0.1.1 · Titulares y venta
+v0.1.2 · Titulares y venta
 🗺️ Fichar desde el mapa ya coloca al titular
 🔁 Cambiar / Poner aquí funcionan sin calendario
 💸 Vender sin confirmación
+
+v0.1.3 · Analytics
+📊 Contador de visitas con Vercel Analytics
