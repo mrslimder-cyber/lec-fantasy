@@ -18,3 +18,6 @@ html[data-theme="clay"] .fpick.sel{box-shadow:0 0 0 3px #c9a24d}
 html[data-theme="park"] .fpick.sel{box-shadow:inset 0 0 0 4px #c4472c}
 .flashbtn{white-space:nowrap}
 @media(max-width:620px){.flashbtn{padding:8px 12px}}
+.flashgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,480px);gap:26px;align-items:start}
+.flashmap{position:sticky;top:84px}
+@media(max-width:980px){.flashgrid{grid-template-columns:1fr}.flashmap{position:static;order:-1}}

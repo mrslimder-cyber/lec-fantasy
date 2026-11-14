@@ -4,6 +4,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/auth";
 import { Avatar } from "@/components/ui";
+import { PitchMap } from "@/components/PitchMap";
 import { PHOTOS } from "@/lib/photos";
 import { ROLES, type Player, type Role } from "@/lib/game";
 
@@ -79,6 +80,10 @@ export default function Flash() {
   if (err) return <p className="err">Error al cargar: {err}. ¿Has ejecutado flash.sql en Supabase?</p>;
 
   const byId = new Map(players.map((p) => [p.id, p]));
+  const slots = Object.fromEntries(ROLES.map((r) => {
+    const p = players.find((x) => sel.includes(x.id) && x.role === r);
+    return [r, p ? { p, price: 0 } : undefined];
+  }));
   const mineRow = rows.find((x) => x.user_id === uid);
   const closeTxt = new Date(closes).toLocaleTimeString("es-ES", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" });
 
@@ -153,14 +158,19 @@ export default function Flash() {
       )}
       {msg && <p className={msg.ok ? "ok" : "err"}>{msg.t}</p>}
 
-      {ROLES.map((r) => (
-        <div key={r}>
-          <h4 className="grp">{r.toUpperCase()}</h4>
-          <div className="grid">
-            {players.filter((p) => p.role === r).sort((a, b) => a.team.localeCompare(b.team)).map(card)}
+      <div className="flashgrid">
+        <div>
+        {ROLES.map((r) => (
+          <div key={r}>
+            <h4 className="grp">{r.toUpperCase()}</h4>
+            <div className="grid">
+              {players.filter((p) => p.role === r).sort((a, b) => a.team.localeCompare(b.team)).map(card)}
+            </div>
           </div>
+        ))}
         </div>
-      ))}
+        <div className="flashmap"><PitchMap slots={slots} /></div>
+      </div>
 
       <h3>Clasificación</h3>
       {!closed && (
