@@ -1,12 +1,11 @@
-v0.1.1 · FICHAJES DESDE EQUIPO
+v0.1.2 · ARREGLO DE TITULARES Y VENTA
 
 1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
-2) No hay SQL nuevo: no hace falta ejecutar nada en Supabase.
+2) En Supabase (SQL Editor) ejecuta supabase/fix_matchday.sql  (OBLIGATORIO: sin esto los titulares no se pueden colocar
+   mientras no haya calendario cargado). No borra datos.
 3) Sube a GitHub; Vercel redespliega solo.
 
 QUÉ CAMBIA
-- Mercado: solo consulta (ya no se ficha ni se vende desde ahí).
-- Equipo: pulsa un hueco vacío del mapa para fichar un titular (mercado solo de esa posición).
-- Equipo: huecos libres de banquillo a la derecha (borde discontinuo) para fichar suplentes (todas las posiciones).
-- Jugadores no seleccionables (imports de más, sin dinero...) salen con opacidad baja.
-- Al fichar se vuelve a Equipo. Columna derecha con TITULARES y BANQUILLO; «Cambiar» solo en banquillo; «Vender» en todos.
+- Sin partidos en la tabla fixtures, la jornada en curso pasa a ser la 1: se pueden fichar titulares desde el mapa,
+  usar «Cambiar» y «Poner aquí».
+- Vender ya no pide confirmación.

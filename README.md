@@ -33,41 +33,6 @@ Si vuelves a ejecutar `scoring.sql`, ejecuta `game.sql` otra vez después.
 
 ## 🚀 LEC FANTASY · VERSIONES
 
-v0.0.1 · Movimientos y menú
-📜 Pestaña MOVIMIENTOS · 🎨 Menú rediseñado
-
-v0.0.2 · Calendario y clausulazos
-📅 Calendario de partidos
-👥 Equipo distinto para sáb/dom/lun
-💥 Clausulazos (precio × 1,5)
-🛒 Mercado de 2 jugadores por posición
-⏰ Pujas resueltas solas el viernes 23:59
-
-v0.0.3 · Datos y precios
-🤖 Scripts para subir partidos de gol.gg
-📈 Precios dinámicos (±15 %)
-🧑‍🎮 Pestaña JUGADORES y gráfico de VALOR
-
-v0.0.4 · 🔧 Arreglos del scraper
-
-v0.0.5 · 📸 Fotos nuevas (6 jugadores)
-
-v0.0.6 · Mercado de pretemporada
-🛒 Dos mercados por semana sin calendario
-🔨 Pujas resueltas viernes y lunes
-
-v0.0.7 · Pujas con dinero reservado
-💶 Lo pujado queda reservado
-🚫 Clausulazo solo con dinero libre
-
-v0.0.8 · ✏️ Retoque del mercado
-
-v0.0.9 · Botón de pujar
-🐞 Botón de pujar arreglado
-🔄 En pretemporada, titulares cambiables
-
-v0.0.10 · 🚑 Arreglo del deploy en Vercel
-
 v0.1.0 · Formato supermanager
 🛒 Mercado con todos los jugadores y copias infinitas; fichar y vender al instante
 👥 Plantilla de 8 (5 + 3 reservas), máx. 3 imports (2 en el equipo)
@@ -82,3 +47,8 @@ v0.1.1 · Fichajes desde Equipo
 🔒 Imports no disponibles en gris
 🛒 Mercado solo para consultar
 💸 Botón Vender y Cambiar (banquillo)
+
+v0.1.1 · Titulares y venta
+🗺️ Fichar desde el mapa ya coloca al titular
+🔁 Cambiar / Poner aquí funcionan sin calendario
+💸 Vender sin confirmación

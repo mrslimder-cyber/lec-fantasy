@@ -109,8 +109,11 @@ create policy "read closed_matchdays" on closed_matchdays for select using (true
 
 -- Jornada en curso = la primera con partidos de hoy en adelante.
 create or replace function current_matchday() returns int language sql stable as $$
-  select min(matchday) from fixtures
-  where (kickoff at time zone 'Europe/Madrid')::date >= (now() at time zone 'Europe/Madrid')::date
+  select case
+    when not exists (select 1 from fixtures) then 1
+    else (select min(matchday) from fixtures
+          where (kickoff at time zone 'Europe/Madrid')::date >= (now() at time zone 'Europe/Madrid')::date)
+  end
 $$;
 -- Jornada ya jugada que todavía no se ha cerrado (close_matchday).
 create or replace function unclosed_matchday() returns int language sql stable as $$

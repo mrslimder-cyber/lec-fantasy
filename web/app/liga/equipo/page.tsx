@@ -86,7 +86,6 @@ export default function Equipo() {
       "Equipo copiado a los otros días que no estén fijados.");
   };
   const sell = async (q: Player) => {
-    if (!confirm(`¿Vender a ${q.name} por ${eur(q.price)}? Si está alineado, saldrá de los equipos que aún no se hayan jugado.`)) return;
     setMsg(null); setSel(null);
     say(await rpc("sell_player", { p_league: id, p_player: q.id }), `Has vendido a ${q.name} por ${eur(q.price)}.`);
   };
