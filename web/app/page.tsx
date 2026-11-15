@@ -11,7 +11,6 @@ function Hero() {
     <div className="hero">
       <div className="eyebrow">LEC · WINTER 2027</div>
       <h1>LEC Fantasy</h1>
-      <p>Sortea tu plantilla, puja en el mercado y demuestra en tu liga de amigos quién sabe más de la Grieta.</p>
     </div>
   );
 }
