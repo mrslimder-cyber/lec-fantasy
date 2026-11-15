@@ -8,6 +8,14 @@ import { PitchMap } from "@/components/PitchMap";
 import { PHOTOS } from "@/lib/photos";
 import { ROLES, type Player, type Role } from "@/lib/game";
 
+type GameInfo = { id: number; winner: string };
+type PP = { points: number; breakdown: Record<string, number>; k: number; d: number; a: number };
+const KEYS = ["kills", "deaths", "assists", "csm", "dpm", "vspm", "csd15", "kp", "multikills", "obj_stolen", "heal_shield", "Control (CC)"];
+const LBL: Record<string, string> = {
+  kills: "Kills", deaths: "Muertes", assists: "Asistencias", csm: "CS/min", dpm: "Daño/min", vspm: "Visión",
+  csd15: "CSD@15", kp: "Participación", multikills: "Multikills", obj_stolen: "Robos de obj.",
+  heal_shield: "Curas/escudos", "Control (CC)": "Control (CC)", bonus: "Victoria de serie (+10 %)",
+};
 type Row = { user_id: string; name: string; points: number; picks: number[] };
 const pad = (n: number) => String(n).padStart(2, "0");
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -32,11 +40,14 @@ export default function Flash() {
   const [busy, setBusy] = useState(false);
   const [now, setNow] = useState(Date.now());
   const init = useRef(false);
+  const [games, setGames] = useState<GameInfo[]>([]);
+  const [gpts, setGpts] = useState<Map<string, PP>>(new Map());
+  const [view, setView] = useState<number | "total">("total");
 
   const load = useCallback(async () => {
     const [pl, cf, pt, st, cnt] = await Promise.all([
       supabase.from("players").select("id,name,role,teams(name)").eq("flash", true),
-      supabase.from("flash_config").select("name,closes_at").eq("id", 1).single(),
+      supabase.from("flash_config").select("name,closes_at,matchday").eq("id", 1).single(),
       supabase.from("flash_player_points").select("player_id,points,maps"),
       supabase.rpc("flash_standings"),
       supabase.from("flash_entries").select("*", { count: "exact", head: true }),
@@ -61,6 +72,28 @@ export default function Flash() {
     }));
     setRows(rs);
     setTotal(cnt.count ?? rs.length);
+    // Puntos de cada game de la final (y de dónde vienen)
+    const gm = await supabase.from("games").select("id,winner_team_id").eq("matchday", (cf.data as any).matchday)
+      .order("played_at").order("id");
+    const gids = (gm.data ?? []).map((x: any) => Number(x.id));
+    if (gids.length === 0) { setGames([]); setGpts(new Map()); }
+    else {
+      const [gp, gs, tm] = await Promise.all([
+        supabase.from("player_game_points").select("game_id,player_id,points,breakdown").in("game_id", gids),
+        supabase.from("player_game_stats").select("game_id,player_id,kills,deaths,assists").in("game_id", gids),
+        supabase.from("teams").select("id,name"),
+      ]);
+      const tn = new Map<number, string>((tm.data ?? []).map((x: any) => [x.id, x.name]));
+      setGames((gm.data ?? []).map((x: any) => ({ id: Number(x.id), winner: tn.get(x.winner_team_id) ?? "" })));
+      const m = new Map<string, PP>();
+      (gp.data ?? []).forEach((x: any) => m.set(`${x.game_id}-${x.player_id}`,
+        { points: Number(x.points), breakdown: x.breakdown ?? {}, k: 0, d: 0, a: 0 }));
+      (gs.data ?? []).forEach((x: any) => {
+        const e = m.get(`${x.game_id}-${x.player_id}`);
+        if (e) { e.k = x.kills; e.d = x.deaths; e.a = x.assists; }
+      });
+      setGpts(m);
+    }
     const mine = rs.find((x) => x.user_id === uid);
     if (mine && !init.current) { init.current = true; setSel(mine.picks); setName(mine.name); }
     setLoaded(true);
@@ -84,6 +117,25 @@ export default function Flash() {
     const p = players.find((x) => sel.includes(x.id) && x.role === r);
     return [r, p ? { p, price: 0 } : undefined];
   }));
+  const TEAMS = ["Gen.G", "BLG"];
+  const detail = (p: Player) => {
+    const list = view === "total" ? games : games.filter((g) => g.id === view);
+    const sum: Record<string, number> = {};
+    let tot = 0, k = 0, d = 0, a = 0, n = 0;
+    list.forEach((g) => {
+      const x = gpts.get(`${g.id}-${p.id}`);
+      if (!x) return;
+      n++; tot += x.points; k += x.k; d += x.d; a += x.a;
+      Object.entries(x.breakdown).forEach(([key, v]) => { sum[key] = (sum[key] ?? 0) + Number(v); });
+    });
+    const parts: [string, number][] = KEYS.filter((key) => key in sum).map((key) => [key, sum[key]]);
+    let total = tot;
+    if (view === "total" && n > 0) {
+      total = p.pts;
+      if (p.pts - tot > 0.06) parts.push(["bonus", p.pts - tot]);
+    }
+    return { n, total, parts, kda: `${k}/${d}/${a}` };
+  };
   const mineRow = rows.find((x) => x.user_id === uid);
   const closeTxt = new Date(closes).toLocaleTimeString("es-ES", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" });
 
@@ -171,6 +223,49 @@ export default function Flash() {
         </div>
         <div className="flashmap"><PitchMap slots={slots} /></div>
       </div>
+
+      <h3>Puntos por game</h3>
+      {games.length === 0 ? <p className="sub">Todavía no hay games cargados.</p> : (
+        <>
+          <div className="chips" style={{ margin: "6px 0 12px" }}>
+            {games.map((g, i) => (
+              <button key={g.id} className={view === g.id ? "chip on" : "chip"} onClick={() => setView(g.id)}>GAME {i + 1}</button>
+            ))}
+            <button className={view === "total" ? "chip on" : "chip"} onClick={() => setView("total")}>TOTAL</button>
+          </div>
+          <div className="flashpts">
+            {TEAMS.map((t) => {
+              const ps = players.filter((p) => p.team === t).sort((a, b) => ROLES.indexOf(a.role) - ROLES.indexOf(b.role));
+              const ds = ps.map((p) => ({ p, ...detail(p) }));
+              const sum = ds.reduce((acc, x) => acc + x.total, 0);
+              const won = view !== "total" && games.find((g) => g.id === view)?.winner === t;
+              return (
+                <div key={t}>
+                  <h4 className="grp">{t.toUpperCase()}{won ? " · VICTORIA" : ""} · {r1(sum)} pts</h4>
+                  {ds.map(({ p, n, total, parts, kda }) => (
+                    <div key={p.id} className="series">
+                      <div className="shead">
+                        <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <Avatar p={p} size={36} /><b>{p.name}</b>
+                          <small>{p.role.toUpperCase()}{n > 0 ? ` · ${kda}` : ""}</small>
+                        </span>
+                        <strong>{r1(total)} pts</strong>
+                      </div>
+                      <div className="statgrid" style={{ marginTop: 6 }}>
+                        {parts.map(([key, v]) => (
+                          <div key={key} className={v === 0 ? "stat zero" : "stat"}>
+                            <small>{LBL[key] ?? key}</small><b>{v > 0 ? "+" : ""}{r1(v)}</b>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <h3>Clasificación</h3>
       {!closed && (
