@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/auth";
+import { HomeScene } from "@/components/HomeScene";
 
 function Hero() {
   return (
@@ -122,5 +123,11 @@ function Menu({ uid }: { uid: string }) {
 export default function Home() {
   const { session, ready } = useSession();
   if (!ready) return <p className="sub">Cargando…</p>;
-  return session ? <Menu uid={session.user.id} /> : <AuthForm />;
+  return (
+    <>
+      {/* Fondo animado de la portada: solo se ve en los temas Ventana, Río y Bahía */}
+      <HomeScene />
+      {session ? <Menu uid={session.user.id} /> : <AuthForm />}
+    </>
+  );
 }
