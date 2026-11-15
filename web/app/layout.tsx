@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./themes.css";
 import "./extra.css";
+import "./pintados.css";
 import { Nav } from "@/components/Nav";
 import { Pond } from "@/components/Pond";
 import { Court } from "@/components/Court";
@@ -23,7 +24,7 @@ const fraunces = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], var
 export const metadata = { title: "LEC Fantasy" };
 
 // Pone el estilo guardado antes de pintar (evita el parpadeo). Añade aquí los ids de estilos nuevos.
-const THEME_SCRIPT = `try{var t=localStorage.getItem("lec-theme");if(["koi","clay","riviera","park"].indexOf(t)>-1)document.documentElement.dataset.theme=t}catch(e){}`;
+const THEME_SCRIPT = `try{var t=localStorage.getItem("lec-theme");if(["koi","clay","riviera","park","ventana","rio","bahia"].indexOf(t)>-1)document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function Root({ children }: { children: React.ReactNode }) {
   return (

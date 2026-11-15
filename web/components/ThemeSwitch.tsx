@@ -8,6 +8,9 @@ export const THEMES = [
   { id: "clay", label: "Montecarlo" },
   { id: "riviera", label: "Portofino" },
   { id: "park", label: "Otoño" },
+  { id: "ventana", label: "Ventana" },
+  { id: "rio", label: "Río" },
+  { id: "bahia", label: "Bahía" },
 ] as const;
 type ThemeId = (typeof THEMES)[number]["id"];
 

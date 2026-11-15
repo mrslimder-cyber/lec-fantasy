@@ -1,0 +1,72 @@
+/* Tres paisajes pintados para el selector de estilos. */
+html[data-theme="ventana"],
+html[data-theme="rio"],
+html[data-theme="bahia"] {
+  --ink: #273d38;
+  --ink-mut: #53665e;
+  --paper: #f7efdd;
+  --paper2: #e8ddc5;
+  --paper3: #fff9ed;
+  --tx: #fff8e9;
+  --mut: #f4ead2;
+  --sand: #fff8e9;
+  --gold: #ffe0a0;
+  --acc: #175395;
+  --koi: #175395;
+  --koi-d: #143f73;
+  --teal: #326d62;
+  --teal-d: #28564e;
+  --line: rgba(35, 55, 48, .18);
+  --bd: rgba(35, 55, 48, .3);
+  --surface: #f7efdd;
+  --disp: var(--font-fraunces), Georgia, serif;
+  --sans: var(--font-jost), system-ui, sans-serif;
+  --sw-on-bg: #fff2d5;
+  --sw-on-fg: #173b61;
+  --paisaje: url('/temas/ventana.webp');
+  --marco: #174b89;
+}
+html[data-theme="rio"] {
+  --acc: #2b6c5e; --koi: #2b6c5e; --koi-d: #205147;
+  --marco: #285e52; --paisaje: url('/temas/rio.webp');
+}
+html[data-theme="bahia"] {
+  --acc: #176778; --koi: #176778; --koi-d: #104e5c;
+  --marco: #185c69; --paisaje: url('/temas/bahia.webp');
+}
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) body {
+  background: linear-gradient(rgba(20, 43, 53, .32), rgba(20, 43, 53, .48)), var(--paisaje) center center / cover fixed no-repeat;
+  min-height: 100vh;
+}
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .pond,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .court,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .harbor,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .park { display: none; }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) header { background: var(--marco); border-bottom: 1px solid #e9d9b1; }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .logo span { color: #ffe1a4; }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .hero,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .mtile,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .panel,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .card,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .stats,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .tbl,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .fxbox,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .banner,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .modal,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .move,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .series,
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .stat {
+  --tx: #273d38; --mut: #53665e; --sand: #273d38; --gold: var(--koi-d);
+  background: #f7efdd; color: #273d38; border-color: #c7b998;
+}
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .btn { background: var(--marco); color: #fffaf0; }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .btn.out { background: #fff9ed; color: var(--marco); border: 1px solid var(--marco); }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .tbl th { background: var(--marco); color: #fff9ed; }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) input { background: #fffaf0; color: #273d38; }
+html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .themesw { flex-wrap: wrap; }
+.themesw .sw-ventana .dots i:first-child { background: #174b89; }
+.themesw .sw-ventana .dots i:last-child { background: #f7efdd; }
+.themesw .sw-rio .dots i:first-child { background: #285e52; }
+.themesw .sw-rio .dots i:last-child { background: #bca3ca; }
+.themesw .sw-bahia .dots i:first-child { background: #185c69; }
+.themesw .sw-bahia .dots i:last-child { background: #e3b478; }

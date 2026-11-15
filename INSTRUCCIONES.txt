@@ -1,0 +1,20 @@
+TEMAS PINTADOS — INSTALACIÓN
+
+1. Descarga y descomprime este ZIP en tu ordenador.
+2. Haz una copia de seguridad o crea una rama nueva.
+3. Copia la carpeta web del ZIP sobre la carpeta web del repositorio, conservando la estructura y aceptando reemplazar únicamente los dos archivos que se indican abajo. No elimines los demás archivos.
+4. Revisa los cambios, haz commit y súbelos a GitHub. Si Vercel está conectado, espera al despliegue y comprueba el resultado.
+5. En el selector de estilos encontrarás Ventana, Río y Bahía. Los cuatro estilos anteriores siguen disponibles.
+
+ARCHIVOS REEMPLAZADOS
+web/app/layout.tsx
+web/components/ThemeSwitch.tsx
+
+ARCHIVOS NUEVOS
+web/app/pintados.css
+web/public/temas/ventana.webp
+web/public/temas/rio.webp
+web/public/temas/bahia.webp
+
+El ZIP se ha preparado sobre la copia pública del repositorio consultada el 15/11/2026, commit 24e00b8. Si los archivos a reemplazar han cambiado desde entonces, integra sus diferencias antes de sobrescribirlos para conservar vuestro trabajo.
+GitHub no descomprime automáticamente un ZIP subido a través de su página. Sube los archivos descomprimidos a sus carpetas correspondientes, o copia la carpeta web en tu clon local y haz commit.
