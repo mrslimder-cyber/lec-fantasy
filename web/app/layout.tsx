@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces, Syne, Manrope } from "next/font/google";
+import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces, Syne, Manrope, Kaisei_Decol, Zen_Maru_Gothic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./themes.css";
@@ -7,6 +7,7 @@ import "./extra.css";
 import "./pintados.css";
 import "./ventana.css";
 import "./pradera.css";
+import "./koi.css";
 import { Nav } from "@/components/Nav";
 import { Pond } from "@/components/Pond";
 import { Court } from "@/components/Court";
@@ -29,6 +30,10 @@ const fraunces = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], var
 const syne = Syne({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-syne", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-manrope", display: "swap" });
 
+// Koi (Ghibli): Kaisei Decol (títulos de cuento) + Zen Maru Gothic (texto redondeado)
+const kaisei = Kaisei_Decol({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-kaisei", display: "swap" });
+const zenmaru = Zen_Maru_Gothic({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-zenmaru", display: "swap" });
+
 export const metadata = { title: "LEC Fantasy" };
 
 // Pone el estilo guardado antes de pintar (evita el parpadeo). Añade aquí los ids de estilos nuevos.
@@ -37,7 +42,7 @@ const THEME_SCRIPT = `try{var t=localStorage.getItem("lec-theme");if(["koi","cla
 export default function Root({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" data-theme="koi" suppressHydrationWarning
-      className={`${outfit.variable} ${cormorant.variable} ${jost.variable} ${playfair.variable} ${fraunces.variable} ${syne.variable} ${manrope.variable}`}>
+      className={`${outfit.variable} ${cormorant.variable} ${jost.variable} ${playfair.variable} ${fraunces.variable} ${syne.variable} ${manrope.variable} ${kaisei.variable} ${zenmaru.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

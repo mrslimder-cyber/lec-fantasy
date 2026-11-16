@@ -1,0 +1,10 @@
+TEMA KOI GHIBLI - INSTALACIÓN
+1) Descomprime este zip en la RAÍZ del repo, aceptando sobrescribir.
+2) Sube a GitHub; Vercel redespliega solo.
+
+ARCHIVOS
+  web/components/Pond.tsx   (reemplaza) estanque pintado: nubes reflejadas, nenúfares, lotos, carpas, pétalos, lucecitas, rocas con bolitas de polvo
+  web/app/koi.css           (NUEVO) estilos del tema Koi; solo afecta a data-theme="koi"
+  web/app/layout.tsx        (reemplaza) añade Kaisei Decol y Zen Maru Gothic e importa koi.css el último
+                            (incluye también los cambios de Pradera; si lo has tocado, integra solo las líneas nuevas)
+Se mantienen pradera.css y Pradera.tsx del zip anterior.
