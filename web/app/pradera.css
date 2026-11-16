@@ -1,0 +1,223 @@
+/* ============================================================
+   pradera.css · tema PRADERA
+   Ilustración de nubes enormes sobre una pradera: color plano (cel-shading), contorno de tinta azul
+   pizarra, gris azulado de nube, verde de hierba y un parche de cielo.
+   Interfaz: paneles de nube con contorno de tinta y sombra dura desplazada, botones de hierba
+   con borde de tinta, rótulos con trazo de tinta. Fondo en components/Pradera.tsx.
+   Importar DESPUÉS de pintados.css y ventana.css.
+   ============================================================ */
+
+/* ---------- Fondo ---------- */
+.pradera{display:none;position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#5a93d0}
+html[data-theme="pradera"] .pradera{display:block}
+html[data-theme="pradera"] .pond,
+html[data-theme="pradera"] .court,
+html[data-theme="pradera"] .harbor{display:none}
+.pradera-stage{position:absolute;left:50%;top:50%;width:max(100vw,160vh);aspect-ratio:1.6;transform:translate(-50%,-50%)}
+.pradera-fill{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* Cada capa de nubes es el doble de ancha y avanza la mitad: al llegar al final vuelve al inicio sin salto */
+.pradera-lyr{position:absolute;left:0;top:0;width:200%;height:100%;will-change:transform;animation:prcl var(--d) linear infinite}
+.pradera-lyr svg{display:block;width:100%;height:100%}
+.pradera-lyr.l1{--d:520s}
+.pradera-lyr.l3{--d:240s}
+.pradera-lyr.l2{--d:340s}
+@keyframes prcl{to{transform:translateX(-50%)}}
+/* Sombra de las nubes cruzando la hierba */
+.pradera-cshade{position:absolute;left:0;top:62%;width:60%;height:40%;will-change:transform;
+  background:radial-gradient(ellipse at 50% 50%,rgba(22,70,40,.22),transparent 68%);animation:prsh 220s linear infinite}
+@keyframes prsh{from{transform:translateX(-70%)}to{transform:translateX(180%)}}
+.pradera-shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(30,45,62,.28) 100%)}
+@media(prefers-reduced-motion:reduce){
+  .pradera-lyr,.pradera-cshade{animation:none}
+}
+
+/* ---------- Variables ---------- */
+html[data-theme="pradera"]{
+  --navy:#2c3b4e;--cobalt:#4a86c8;--tile:#dfe8ee;
+  --paper:#e6ecee;--paper2:#cfd9de;--paper3:#f4f7f8;
+  --ink:#2c3b4e;--ink-mut:#566779;
+  --koi:#3f8f3a;--koi-d:#2d7430;--coral:#c8553d;
+  --teal:#3f8f3a;--teal-d:#2d7430;
+  --tx:#26364a;--mut:#3b4d62;--sand:#26364a;--gold:#2d6e2a;--acc:#3f8f3a;
+  --line:rgba(44,59,78,.25);--bd:rgba(44,59,78,.55);--deep:#2c3b4e;
+  --inkline:#34465a;--halo:rgba(236,241,243,.95);
+  --disp:var(--font-barlowc),"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --sans:var(--font-barlow),"Barlow",system-ui,sans-serif;
+  --surface:linear-gradient(180deg,#eff3f5,#dde5e9);
+  --sw-on-bg:#2c3b4e;--sw-on-fg:#eef3f4;
+  background:#5a93d0;
+}
+html[data-theme="pradera"] body{background:transparent;font-size:17px}
+html[data-theme="pradera"] ::selection{background:#3f8f3a;color:#fff}
+
+/* ---------- Texto directamente sobre el paisaje: tinta oscura con halo de nube ---------- */
+html[data-theme="pradera"] h1,
+html[data-theme="pradera"] h3,
+html[data-theme="pradera"] .grp,
+html[data-theme="pradera"] .sub,
+html[data-theme="pradera"] .hint{text-shadow:0 0 14px var(--halo),0 0 3px var(--halo)}
+html[data-theme="pradera"] h1,
+html[data-theme="pradera"] h2,
+html[data-theme="pradera"] h3{font-weight:700;letter-spacing:0}
+html[data-theme="pradera"] h1{font-size:clamp(36px,4.6vw,58px);line-height:1}
+html[data-theme="pradera"] h3{font-size:28px}
+html[data-theme="pradera"] .sub,
+html[data-theme="pradera"] .hint{color:var(--mut)}
+html[data-theme="pradera"] .ok{color:#256a25;font-weight:600;text-shadow:0 0 10px var(--halo)}
+html[data-theme="pradera"] .err{color:#a8402c;font-weight:600;text-shadow:0 0 10px var(--halo)}
+html[data-theme="pradera"] .panel .ok,html[data-theme="pradera"] .modal .ok,html[data-theme="pradera"] .card .ok{color:#256a25;text-shadow:none}
+html[data-theme="pradera"] .panel .err,html[data-theme="pradera"] .modal .err,html[data-theme="pradera"] .card .err{color:#a8402c;text-shadow:none}
+html[data-theme="pradera"] .card .sub,html[data-theme="pradera"] .panel .sub,html[data-theme="pradera"] .modal .sub,
+html[data-theme="pradera"] .stats .sub,html[data-theme="pradera"] .fxbox .sub,html[data-theme="pradera"] .banner .sub,
+html[data-theme="pradera"] .hero .sub,html[data-theme="pradera"] .card .hint,html[data-theme="pradera"] .modal .hint,
+html[data-theme="pradera"] .fxbox .hint,html[data-theme="pradera"] .panel .hint,html[data-theme="pradera"] .modal h3,
+html[data-theme="pradera"] .panel h2{text-shadow:none}
+html[data-theme="pradera"] .back{color:var(--mut);text-shadow:0 0 10px var(--halo)}
+html[data-theme="pradera"] .back:hover{color:#256a25}
+
+/* ---------- Cabecera ---------- */
+html[data-theme="pradera"] header{background:rgba(232,238,241,.92);border-bottom:2px solid var(--inkline)}
+html[data-theme="pradera"] .logo{font-size:30px;font-weight:700;letter-spacing:0;color:var(--ink)}
+html[data-theme="pradera"] .logo::before{
+  content:"";display:block;width:42px;height:27px;margin-right:10px;border-radius:0;background-color:transparent;font-size:0;
+  background-repeat:no-repeat;background-position:center;background-size:contain;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 26'%3E%3Cpath d='M8 22C2 22 1 14 7 13C7 6 16 4 19 9C22 2 33 5 31 12C38 12 38 22 31 22Z' fill='%23f4f7f8' stroke='%232c3b4e' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+html[data-theme="pradera"] .logo span{color:#2d7430;font-weight:600}
+html[data-theme="pradera"] .themesw{background:rgba(244,247,248,.75);border:2px solid var(--inkline);flex-wrap:wrap}
+html[data-theme="pradera"] .themesw button{color:var(--ink)}
+html[data-theme="pradera"] .themesw button:hover{background:rgba(44,59,78,.1)}
+html[data-theme="pradera"] .themesw button[aria-pressed="true"]{background:#2c3b4e;color:#eef3f4}
+.themesw .sw-pradera .dots i:nth-child(1){background:#5a93d0}
+.themesw .sw-pradera .dots i:nth-child(2){background:#4ea83a}
+
+/* ---------- Botones, chips y campos: borde de tinta y sombra dura ---------- */
+html[data-theme="pradera"] .btn{
+  background:#3f8f3a;color:#f6faf1;border:2px solid var(--inkline);border-radius:10px 6px 10px 6px;
+  font-weight:600;letter-spacing:.02em;box-shadow:0 3px 0 var(--inkline);transition:transform .08s,box-shadow .08s,filter .15s}
+html[data-theme="pradera"] .btn:hover{background:#3f8f3a;filter:brightness(1.1)}
+html[data-theme="pradera"] .btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--inkline)}
+html[data-theme="pradera"] .btn.out,
+html[data-theme="pradera"] .card .btn.out:hover,html[data-theme="pradera"] .panel .btn.out:hover,
+html[data-theme="pradera"] .modal .btn.out:hover,html[data-theme="pradera"] .fxbox .btn.out:hover{background:#eef2f4;color:var(--ink);border-color:var(--inkline)}
+html[data-theme="pradera"] .btn.out:hover{background:#fff}
+html[data-theme="pradera"] header .btn{background:#3f8f3a;color:#f6faf1}
+html[data-theme="pradera"] header .btn.out{background:#eef2f4;color:var(--ink);border:2px solid var(--inkline)}
+html[data-theme="pradera"] .chip{background:#eef2f4;border:2px solid var(--inkline);color:var(--ink);border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 2px 0 var(--inkline)}
+html[data-theme="pradera"] .chip:hover{background:#fff;color:var(--ink)}
+html[data-theme="pradera"] .chip.on{background:#4f8fd2;border-color:var(--inkline);color:#fff}
+html[data-theme="pradera"] .modal .chip,html[data-theme="pradera"] .fxbox .chip{background:transparent;border-color:var(--line);color:var(--ink-mut);box-shadow:none}
+html[data-theme="pradera"] .modal .chip:hover{background:rgba(44,59,78,.07);color:var(--ink)}
+html[data-theme="pradera"] .modal .chip.on{background:#4f8fd2;border-color:var(--inkline);color:#fff}
+html[data-theme="pradera"] input{background:#f6f9fa;color:var(--ink);border:2px solid rgba(44,59,78,.45);border-radius:8px}
+html[data-theme="pradera"] input::placeholder{color:#7a8896}
+html[data-theme="pradera"] input:focus{border-color:#3f8f3a}
+html[data-theme="pradera"] .card input,html[data-theme="pradera"] .panel input,html[data-theme="pradera"] .modal input,html[data-theme="pradera"] .banner input{border-color:rgba(44,59,78,.45)}
+
+/* ---------- Superficies de nube: contorno de tinta + sombra dura ---------- */
+html[data-theme="pradera"] .mtile,
+html[data-theme="pradera"] .card,
+html[data-theme="pradera"] .stats,
+html[data-theme="pradera"] .tbl,
+html[data-theme="pradera"] .fxbox,
+html[data-theme="pradera"] .banner,
+html[data-theme="pradera"] .modal,
+html[data-theme="pradera"] .move,
+html[data-theme="pradera"] .panel,
+html[data-theme="pradera"] .tabs{
+  box-shadow:0 0 0 2px var(--inkline),5px 6px 0 rgba(44,59,78,.3);
+}
+html[data-theme="pradera"] .card,html[data-theme="pradera"] .fxbox,html[data-theme="pradera"] .banner,html[data-theme="pradera"] .move{border-radius:12px 7px 12px 7px}
+html[data-theme="pradera"] .stats,html[data-theme="pradera"] .tbl{border-radius:10px}
+html[data-theme="pradera"] .series{border:2px solid rgba(44,59,78,.3);border-radius:8px}
+html[data-theme="pradera"] .stat{border:1.5px solid rgba(44,59,78,.25);border-radius:6px}
+html[data-theme="pradera"] .clickable:hover{background:var(--paper3);box-shadow:0 0 0 2px var(--inkline),7px 8px 0 rgba(44,59,78,.3)}
+html[data-theme="pradera"] .stats b{color:var(--ink);font-weight:700}
+html[data-theme="pradera"] .info b{font-size:18px;font-weight:700}
+html[data-theme="pradera"] .av{background:#c3cfd8}
+html[data-theme="pradera"] .nums strong{color:#2d7430;font-size:17px}
+html[data-theme="pradera"] .rk{background:#d0603f;color:#fff}
+html[data-theme="pradera"] .imp{background:#4a86c8;color:#fff}
+
+/* Posiciones */
+html[data-theme="pradera"] .card[data-role=top],html[data-theme="pradera"] .node[data-role=top]{--c:#d0603f}
+html[data-theme="pradera"] .card[data-role=jng],html[data-theme="pradera"] .node[data-role=jng]{--c:#3f8f3a}
+html[data-theme="pradera"] .card[data-role=mid],html[data-theme="pradera"] .node[data-role=mid]{--c:#4a86c8}
+html[data-theme="pradera"] .card[data-role=adc],html[data-theme="pradera"] .node[data-role=adc]{--c:#d8a83a}
+html[data-theme="pradera"] .card[data-role=sup],html[data-theme="pradera"] .node[data-role=sup]{--c:#7d6aa8}
+html[data-theme="pradera"] .node b{background:rgba(44,59,78,.8)}
+html[data-theme="pradera"] .lolmap{border:6px solid #eef2f4;border-radius:10px;box-shadow:0 0 0 2px var(--inkline),6px 8px 0 rgba(44,59,78,.3)}
+html[data-theme="pradera"] .prect.sel{box-shadow:0 0 0 3px #4f8fd2,5px 6px 0 rgba(44,59,78,.3)}
+html[data-theme="pradera"] .fpick.sel{box-shadow:0 0 0 3px #4f8fd2}
+
+/* Banners y movimientos: el verde es "bien" y el rojo "cerrado/venta" */
+html[data-theme="pradera"] .banner.open{--c:#3f8f3a}
+html[data-theme="pradera"] .banner.open b{color:#2d7430}
+html[data-theme="pradera"] .banner.closed{--c:#c8553d}
+html[data-theme="pradera"] .banner.closed b{color:#a8402c}
+html[data-theme="pradera"] .move.buy{--c:#3f8f3a}
+html[data-theme="pradera"] .move.sell{--c:#c8553d}
+html[data-theme="pradera"] .move.clause{--c:#4a86c8}
+
+/* Pestañas de la liga */
+html[data-theme="pradera"] .tabs{background:#eef2f4;border:0;border-radius:12px;backdrop-filter:none;-webkit-backdrop-filter:none}
+html[data-theme="pradera"] .tab{color:var(--ink);font-size:15px;font-weight:600;letter-spacing:.05em;border-radius:8px}
+html[data-theme="pradera"] .tab:hover{background:rgba(44,59,78,.09);color:var(--ink)}
+html[data-theme="pradera"] .tab.on{background:#2c3b4e;color:#eef3f4}
+
+/* Clasificación */
+html[data-theme="pradera"] .tbl th{background:#2c3b4e;color:#e6ecee;font-weight:600;letter-spacing:.06em}
+html[data-theme="pradera"] .tbl td{color:var(--ink)}
+html[data-theme="pradera"] .tbl tr.click:hover td{background:#d9e2e7}
+html[data-theme="pradera"] .tbl tbody tr:first-child td:first-child{color:#2d7430}
+
+/* ---------- Inicio ---------- */
+html[data-theme="pradera"] .hero{
+  background:none;box-shadow:none;border-radius:0;overflow:visible;min-height:430px;padding:50px 0 110px;color:var(--ink);
+  --ink:#2c3b4e;
+}
+html[data-theme="pradera"] .hero::before,
+html[data-theme="pradera"] .hero::after{content:none;display:none}
+html[data-theme="pradera"] .hero .eyebrow{font-size:16px;font-weight:700;letter-spacing:.14em;color:var(--ink);text-shadow:0 0 12px var(--halo),0 0 3px var(--halo)}
+/* Rótulo con trazo de tinta y sombra dura, como letras pegadas sobre el paisaje */
+html[data-theme="pradera"] .hero h1{
+  font-size:clamp(70px,12vw,168px);line-height:.86;font-weight:700;letter-spacing:-.005em;margin:10px 0 18px;
+  color:#f4f8f9;-webkit-text-stroke:9px #2c3b4e;paint-order:stroke fill;text-shadow:7px 8px 0 rgba(44,59,78,.35);
+}
+html[data-theme="pradera"] .hero p{font-size:20px;max-width:40ch;color:var(--ink);text-shadow:0 0 12px var(--halo)}
+
+html[data-theme="pradera"] .mtile{border-top:0;border-radius:14px 8px 16px 8px;background:var(--surface)}
+html[data-theme="pradera"] .mtile::after{content:none}
+html[data-theme="pradera"] .mtile:hover{transform:translate(-2px,-3px);box-shadow:0 0 0 2px var(--inkline),8px 10px 0 rgba(44,59,78,.3)}
+html[data-theme="pradera"] .mtile b{font-size:30px;color:var(--ink)}
+html[data-theme="pradera"] .mtile small{font-size:16px}
+html[data-theme="pradera"] .mtile .go{letter-spacing:.1em}
+html[data-theme="pradera"] .mtile[data-k=crear]{--g:#2d7430}
+html[data-theme="pradera"] .mtile[data-k=unirse]{--g:#2f6fb0}
+html[data-theme="pradera"] .mtile[data-k=ligas]{--g:#b0562d}
+html[data-theme="pradera"] .mtile[data-k=unirse] .go{color:#2f6fb0}
+html[data-theme="pradera"] .lgitem b{font-size:26px}
+html[data-theme="pradera"] .badge{background:#cfd9de;color:var(--ink-mut)}
+html[data-theme="pradera"] .badge.live{background:rgba(63,143,58,.2);color:#256a25}
+
+/* Formularios: tira de cielo con nubes asomando por arriba */
+html[data-theme="pradera"] .panel{border-radius:14px 8px 16px 8px;padding:56px 38px 34px;background:var(--surface)}
+html[data-theme="pradera"] .panel::before{
+  height:30px;border-radius:12px 6px 0 0;
+  background-color:#5a93d0;
+  background-image:radial-gradient(circle at 50% 100%,#eff3f5 0 14px,transparent 14.5px),radial-gradient(circle at 50% 100%,#dde5e9 0 20px,transparent 20.5px);
+  background-size:34px 30px,58px 30px;background-position:0 100%,12px 100%;background-repeat:repeat-x;
+  border-bottom:2px solid var(--inkline);
+}
+html[data-theme="pradera"] .panel h2{font-size:38px;color:var(--ink)}
+html[data-theme="pradera"] .fld span{font-weight:600;letter-spacing:.03em}
+
+/* Ficha de jugador */
+html[data-theme="pradera"] .modal-bg{background:rgba(30,44,62,.62)}
+html[data-theme="pradera"] .modal{border-radius:14px 8px 16px 8px}
+
+@media(max-width:560px){
+  html[data-theme="pradera"] .hero{padding:36px 0 90px}
+  html[data-theme="pradera"] .hero h1{-webkit-text-stroke:6px #2c3b4e}
+  html[data-theme="pradera"] .panel{padding:52px 20px 26px}
+}

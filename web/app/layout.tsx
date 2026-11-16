@@ -1,17 +1,19 @@
 import Link from "next/link";
-import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces } from "next/font/google";
+import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces, Barlow, Barlow_Condensed } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./themes.css";
 import "./extra.css";
 import "./pintados.css";
 import "./ventana.css";
+import "./pradera.css";
 import { Nav } from "@/components/Nav";
 import { Pond } from "@/components/Pond";
 import { Court } from "@/components/Court";
 import { Harbor } from "@/components/Harbor";
 import { Park } from "@/components/Park";
 import { Ventana } from "@/components/Ventana";
+import { Pradera } from "@/components/Pradera";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
 // Montecarlo
@@ -23,15 +25,19 @@ const playfair = Playfair_Display({ subsets: ["latin"], style: ["normal", "itali
 // Otoño
 const fraunces = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-fraunces", display: "swap" });
 
+// Pradera
+const barlow = Barlow({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-barlow", display: "swap" });
+const barlowc = Barlow_Condensed({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-barlowc", display: "swap" });
+
 export const metadata = { title: "LEC Fantasy" };
 
 // Pone el estilo guardado antes de pintar (evita el parpadeo). Añade aquí los ids de estilos nuevos.
-const THEME_SCRIPT = `try{var t=localStorage.getItem("lec-theme");if(["koi","clay","riviera","park","ventana","rio","bahia"].indexOf(t)>-1)document.documentElement.dataset.theme=t}catch(e){}`;
+const THEME_SCRIPT = `try{var t=localStorage.getItem("lec-theme");if(["koi","clay","riviera","park","ventana","rio","bahia","pradera"].indexOf(t)>-1)document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function Root({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" data-theme="koi" suppressHydrationWarning
-      className={`${outfit.variable} ${cormorant.variable} ${jost.variable} ${playfair.variable} ${fraunces.variable}`}>
+      className={`${outfit.variable} ${cormorant.variable} ${jost.variable} ${playfair.variable} ${fraunces.variable} ${barlow.variable} ${barlowc.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
@@ -41,6 +47,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <Harbor />
         <Park />
         <Ventana />
+        <Pradera />
         <header><div className="wrap">
           <Link href="/" className="logo">LEC <span>Fantasy</span></Link>
           <Nav />

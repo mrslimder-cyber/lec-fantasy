@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-// Para añadir un estilo nuevo: súmalo aquí, crea su bloque html[data-theme="id"] en themes.css
+// Para añadir un estilo nuevo: súmalo aquí, crea su bloque html[data-theme="id"] en su css
 // y añade su id en el script de layout.tsx.
 export const THEMES = [
   { id: "koi", label: "Koi" },
@@ -11,6 +11,7 @@ export const THEMES = [
   { id: "ventana", label: "Ventana" },
   { id: "rio", label: "Río" },
   { id: "bahia", label: "Bahía" },
+  { id: "pradera", label: "Pradera" },
 ] as const;
 type ThemeId = (typeof THEMES)[number]["id"];
 
