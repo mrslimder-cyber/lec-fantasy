@@ -5,11 +5,13 @@ import "./globals.css";
 import "./themes.css";
 import "./extra.css";
 import "./pintados.css";
+import "./ventana.css";
 import { Nav } from "@/components/Nav";
 import { Pond } from "@/components/Pond";
 import { Court } from "@/components/Court";
 import { Harbor } from "@/components/Harbor";
 import { Park } from "@/components/Park";
+import { Ventana } from "@/components/Ventana";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
 // Montecarlo
@@ -38,6 +40,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <Court />
         <Harbor />
         <Park />
+        <Ventana />
         <header><div className="wrap">
           <Link href="/" className="logo">LEC <span>Fantasy</span></Link>
           <Nav />

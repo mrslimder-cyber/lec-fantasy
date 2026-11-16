@@ -1,0 +1,30 @@
+/* ventana.css · fondo del tema Ventana.
+   Se importa DESPUÉS de pintados.css en layout.tsx. Sustituye a la foto de fondo
+   (ventana-wide.webp / ventana-m.webp), que daba un fondo azul liso cuando faltaba el archivo. */
+
+html[data-theme="ventana"]{background:#1456a6}
+html[data-theme="ventana"] body{background:transparent}
+
+.ventana{display:none;position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  background:var(--grain-b),#1456a6}
+html[data-theme="ventana"] .ventana{display:block}
+.ventana-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ventana-shade{position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(6,26,66,.35) 100%)}
+
+/* El viento, las cortinas y los pétalos de la portada se sustituyen por esta escena */
+html[data-theme="ventana"] .sc-v{display:none}
+
+/* Nubes que cruzan el hueco, gaviotas que planean y maceta que se mece */
+.vcl{animation:vcl var(--d) linear infinite;animation-delay:var(--dl)}
+@keyframes vcl{from{transform:translateX(-560px)}to{transform:translateX(560px)}}
+.vgl{animation:vgl var(--d) linear infinite;animation-delay:var(--dl)}
+@keyframes vgl{from{transform:translateX(-520px)}to{transform:translateX(520px)}}
+.vbob{animation:vbob var(--bd) ease-in-out infinite alternate}
+@keyframes vbob{from{transform:translateY(-9px)}to{transform:translateY(9px)}}
+.vsway{transform-origin:500px 640px;animation:vsway 7s ease-in-out infinite alternate}
+@keyframes vsway{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
+
+@media(prefers-reduced-motion:reduce){
+  .vcl,.vgl,.vbob,.vsway{animation:none}
+}
