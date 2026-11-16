@@ -14,24 +14,47 @@ html[data-theme="pradera"] .court,
 html[data-theme="pradera"] .harbor{display:none}
 .pradera-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-/* Hebras de hierba: el contenedor se mece (barato), el hijo lleva el filtro y se pinta una vez */
+/* Cielo: azul arriba, bruma clara en el horizonte (el horizonte cae entre el 33 % y el 40 % de la pantalla) */
+.pradera-sky{position:absolute;left:0;right:0;top:0;height:58%;
+  background:linear-gradient(180deg,#245ea6 0%,#4c8ccb 20%,#8dbbe0 40%,#c8dfec 60%,#e1edef 80%,#e1edef 100%)}
+/* Nubes: dos capas de dos mosaicos; la capa avanza la mitad de su ancho y vuelve al inicio sin salto */
+.pradera-clouds{position:absolute;left:0;right:0;top:0;height:58%;overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 45%,rgba(0,0,0,.4) 78%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0,#000 45%,rgba(0,0,0,.4) 78%,transparent 100%)}
+.pradera-cl{position:absolute;top:0;left:0;height:100%;width:200%;display:flex;will-change:transform;
+  animation:prcl var(--d) linear infinite}
+.pradera-cl.l1{--d:480s;opacity:.65}
+.pradera-cl.l2{--d:240s;opacity:.95}
+.pc-tile{flex:0 0 50%;height:100%}
+.pradera-cl.l1 .pc-tile{filter:url(#prCloudFar)}
+.pradera-cl.l2 .pc-tile{filter:url(#prCloudNear)}
+@keyframes prcl{to{transform:translateX(-50%)}}
+
+/* Hierba: la máscara es estática; el movimiento va dentro */
+.pradera-grass{position:absolute;inset:0;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 36%,#000 54%);
+  mask-image:linear-gradient(180deg,transparent 0,transparent 36%,#000 54%)}
 .pradera-wind{position:absolute;inset:0;will-change:transform;animation:prwind 11s ease-in-out infinite alternate}
 .pradera-blades{position:absolute;inset:-30%;filter:url(#prGrass);transform:rotate(-23deg);opacity:.6}
 @keyframes prwind{from{transform:translate3d(-1.4%,.5%,0)}to{transform:translate3d(1.4%,-.5%,0)}}
 
 /* Ráfagas: bandas de luz que cruzan la hierba */
 .pradera-gust{position:absolute;top:-10%;bottom:-10%;left:-70%;width:70%;will-change:transform;
-  background:linear-gradient(100deg,transparent 0,rgba(196,255,150,.11) 45%,rgba(196,255,150,.16) 55%,transparent 100%);
-  mix-blend-mode:screen;animation:prgust 19s linear infinite}
+  background:linear-gradient(100deg,transparent 0,rgba(196,255,150,.12) 45%,rgba(196,255,150,.18) 55%,transparent 100%);
+  animation:prgust 19s linear infinite}
 .pradera-gust.b{width:45%;animation-duration:29s;animation-delay:-11s;opacity:.7}
 @keyframes prgust{from{transform:translateX(0) skewX(-14deg)}to{transform:translateX(320%) skewX(-14deg)}}
+/* Sombra de las nubes cruzando la pradera */
+.pradera-cshade{position:absolute;left:0;top:45%;width:55%;height:60%;will-change:transform;
+  background:radial-gradient(ellipse at 50% 50%,rgba(1,18,6,.4),transparent 68%);animation:prsh 160s linear infinite}
+@keyframes prsh{from{transform:translateX(-80%)}to{transform:translateX(200%)}}
 
 .pradera-grain{position:absolute;inset:0;background:var(--grain-b);opacity:.55;mix-blend-mode:overlay}
 .pradera-shade{position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 55%,transparent 38%,rgba(1,14,5,.6) 100%),
-    linear-gradient(rgba(1,14,5,.38),transparent 30%)}
+  background:radial-gradient(ellipse at 50% 60%,transparent 45%,rgba(1,14,5,.5) 100%),
+    linear-gradient(rgba(4,22,52,.3),transparent 34%)}
 @media(prefers-reduced-motion:reduce){
-  .pradera-wind,.pradera-gust{animation:none}
+  .pradera-wind,.pradera-gust,.pradera-cl,.pradera-cshade{animation:none}
 }
 
 /* ---------- Variables ---------- */
@@ -198,7 +221,8 @@ html[data-theme="pradera"] .hero .eyebrow{
   font-size:15px;font-weight:500;letter-spacing:.04em;color:var(--mut);text-shadow:0 1px 12px rgba(0,18,6,.8)}
 html[data-theme="pradera"] .hero h1{
   font-size:clamp(34px,8vw,116px);line-height:1;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-  margin:14px 0 0;color:#f2f8ec;text-shadow:0 4px 40px rgba(0,16,5,.85)}
+  margin:14px 0 0;color:#f2f8ec;
+  text-shadow:0 2px 0 rgba(12,36,70,.45),0 6px 30px rgba(8,28,60,.8),0 0 70px rgba(8,28,60,.55)}
 html[data-theme="pradera"] .hero p{font-size:19px;max-width:44ch;color:var(--ink)}
 
 html[data-theme="pradera"] .menu3{margin-top:24px}
