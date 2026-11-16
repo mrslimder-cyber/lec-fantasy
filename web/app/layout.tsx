@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces, Barlow, Barlow_Condensed } from "next/font/google";
+import { Outfit, Cormorant_Garamond, Jost, Playfair_Display, Fraunces, Syne, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./themes.css";
@@ -25,9 +25,9 @@ const playfair = Playfair_Display({ subsets: ["latin"], style: ["normal", "itali
 // Otoño
 const fraunces = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-fraunces", display: "swap" });
 
-// Pradera
-const barlow = Barlow({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-barlow", display: "swap" });
-const barlowc = Barlow_Condensed({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-barlowc", display: "swap" });
+// Pradera: Syne (títulos, ancha y con carácter) + Manrope (texto)
+const syne = Syne({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-syne", display: "swap" });
+const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-manrope", display: "swap" });
 
 export const metadata = { title: "LEC Fantasy" };
 
@@ -37,7 +37,7 @@ const THEME_SCRIPT = `try{var t=localStorage.getItem("lec-theme");if(["koi","cla
 export default function Root({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" data-theme="koi" suppressHydrationWarning
-      className={`${outfit.variable} ${cormorant.variable} ${jost.variable} ${playfair.variable} ${fraunces.variable} ${barlow.variable} ${barlowc.variable}`}>
+      className={`${outfit.variable} ${cormorant.variable} ${jost.variable} ${playfair.variable} ${fraunces.variable} ${syne.variable} ${manrope.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
