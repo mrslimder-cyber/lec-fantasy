@@ -21,7 +21,7 @@ html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]){
 }
 html[data-theme="ventana"]{
   --acc:#175395;--koi:#175395;--koi-d:#143f73;--marco:#174b89;--r:6px;
-  --disp:var(--font-fraunces),Georgia,serif;--paisaje:url('/temas/ventana.webp');
+  --disp:var(--font-fraunces),Georgia,serif;--paisaje:url('/temas/ventana-wide.webp');
 }
 html[data-theme="rio"]{
   --acc:#2b6c5e;--koi:#2b6c5e;--koi-d:#205147;--marco:#285e52;--r:20px;--lil:#bca3ca;
@@ -36,6 +36,17 @@ html[data-theme="bahia"]{
 html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) body{
   background:linear-gradient(rgba(20,43,53,.26),rgba(20,43,53,.46)),var(--paisaje) center center/cover fixed no-repeat;
   min-height:100vh;
+}
+/* Ventana: la pintura va centrada y abajo; el azul de la pared se extiende por los lados */
+html[data-theme="ventana"] body{
+  background:radial-gradient(ellipse at 50% 45%,transparent 60%,rgba(6,26,66,.32) 100%),
+    var(--paisaje) center bottom/cover fixed no-repeat,#1456a6;
+}
+@media(max-aspect-ratio:4/5){
+  html[data-theme="ventana"] body{
+    background:radial-gradient(ellipse at 50% 45%,transparent 60%,rgba(6,26,66,.32) 100%),
+      url('/temas/ventana-m.webp') center bottom/cover fixed no-repeat,#1456a6;
+  }
 }
 html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .pond,html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .court,html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) .harbor{display:none}
 html:is([data-theme="ventana"],[data-theme="rio"],[data-theme="bahia"]) header{background:var(--marco);border-bottom:1px solid #e9d9b1}
@@ -125,11 +136,11 @@ html[data-theme="ventana"] .mtile[data-k=unirse]{--g:#3f7f6b}
 html[data-theme="ventana"] .mtile[data-k=ligas]{--g:#175395}
 html[data-theme="ventana"] .hero{
   --tx:#1f3550;--mut:#4d5f70;--sand:#1f3550;--gold:#143f73;--ink:#1f3550;
-  text-align:center;min-height:440px;padding:104px 56px 84px;
-  border:9px solid var(--marco);border-radius:260px 260px 10px 10px;
-  background:linear-gradient(180deg,rgba(255,249,237,.82),rgba(255,249,237,.6));
+  text-align:center;min-height:420px;padding:112px 56px 70px;
+  border:8px solid var(--marco);border-radius:50% 50% 0 0 / 250px 250px 0 0;
+  background:linear-gradient(180deg,rgba(255,249,237,.88),rgba(255,249,237,.74));
   -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
-  box-shadow:0 0 0 4px #f7efdd,0 0 0 7px var(--marco),0 34px 60px -28px rgba(5,15,30,.95);
+  box-shadow:inset 0 0 0 3px rgba(247,239,221,.85);
 }
 html[data-theme="ventana"] .hero::before{
   content:"";position:absolute;inset:0;right:0;top:0;font-size:0;opacity:.2;
@@ -142,19 +153,23 @@ html[data-theme="ventana"] .hero .eyebrow{color:#175395;font-weight:600;letter-s
 html[data-theme="ventana"] .hero h1{color:var(--marco);font-style:italic;font-weight:600;font-size:clamp(46px,8vw,104px);letter-spacing:-.03em}
 html[data-theme="ventana"] .hero p{margin:0 auto;color:#2c4156}
 html[data-theme="ventana"] .mtile{
-  align-items:center;text-align:center;min-height:300px;padding:84px 26px 30px;
-  border:7px solid var(--marco);border-radius:170px 170px 10px 10px;
-  background:linear-gradient(180deg,rgba(255,249,237,.92),rgba(247,239,221,.88));
+  align-items:center;text-align:center;min-height:300px;padding:36px 26px 34px;
+  border:8px solid var(--marco);border-radius:10px;
+  background:linear-gradient(180deg,rgba(255,249,237,.9),rgba(247,239,221,.88));
   -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
-  box-shadow:0 0 0 3px #f7efdd,0 0 0 5px var(--marco),0 26px 44px -22px rgba(5,15,30,.9);
+  box-shadow:inset 0 0 0 3px rgba(247,239,221,.85);
 }
-html[data-theme="ventana"] .mtile::before{
-  content:"";position:absolute;inset:0;opacity:.16;pointer-events:none;
-  background:
-    linear-gradient(var(--marco),var(--marco)) 50% 0/4px 100% no-repeat,
-    linear-gradient(var(--marco),var(--marco)) 0 26%/100% 4px no-repeat;
+html[data-theme="ventana"] .mtile::before{content:none}
+html[data-theme="ventana"] .mtile:hover{transform:none;filter:brightness(1.06)}
+/* Las tres hojas del menú cuelgan del título y cierran el óvalo por abajo */
+html[data-theme="ventana"] .menu3{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:-8px;align-items:stretch}
+html[data-theme="ventana"] .menu3 .mtile{
+  min-height:340px;padding:40px 44px 100px;border-radius:0;
+  box-shadow:inset 0 0 0 3px rgba(247,239,221,.85),0 30px 40px -30px rgba(5,15,30,.9);
 }
-html[data-theme="ventana"] .mtile:hover{transform:translateY(-6px)}
+html[data-theme="ventana"] .menu3 .mtile+.mtile{margin-left:-8px}
+html[data-theme="ventana"] .menu3 .mtile:first-child{border-bottom-left-radius:100% 46%}
+html[data-theme="ventana"] .menu3 .mtile:last-child{border-bottom-right-radius:100% 46%}
 html[data-theme="ventana"] .lgitem{
   align-items:center;text-align:left;flex-direction:row;padding:22px 30px;border-radius:12px;
 }
@@ -310,7 +325,12 @@ html[data-theme="bahia"] .panel h2{color:var(--marco);font-style:italic}
 @keyframes bahia-needle{from{transform:rotate(-22deg)}to{transform:rotate(38deg)}}
 
 @media(max-width:860px){
-  html[data-theme="ventana"] .hero{border-radius:160px 160px 10px 10px;padding:80px 28px 64px}
+  html[data-theme="ventana"] .hero{border-radius:50% 50% 0 0 / 160px 160px 0 0;padding:84px 28px 60px}
+  html[data-theme="ventana"] .menu3{grid-template-columns:1fr}
+  html[data-theme="ventana"] .menu3 .mtile{min-height:0;padding:30px 30px 34px}
+  html[data-theme="ventana"] .menu3 .mtile+.mtile{margin-left:0;margin-top:-8px}
+  html[data-theme="ventana"] .menu3 .mtile:first-child{border-bottom-left-radius:0}
+  html[data-theme="ventana"] .menu3 .mtile:last-child{border-bottom-left-radius:50% 110px;border-bottom-right-radius:50% 110px;padding-bottom:120px}
   html[data-theme="rio"] .mtile:nth-child(n){margin-top:0;min-height:0;padding:40px 36px 36px}
   html[data-theme="bahia"] .hero{padding:50px 30px 60px}
   html[data-theme="bahia"] .hero::before,html[data-theme="bahia"] .hero::after{display:none}
@@ -319,7 +339,6 @@ html[data-theme="bahia"] .panel h2{color:var(--marco);font-style:italic}
   html[data-theme="rio"] .hero{padding:50px 26px 70px;border-radius:64px 22px 64px 22px}
   html[data-theme="rio"] .hero::after{display:none}
   html[data-theme="bahia"] .mtile,html[data-theme="bahia"] .lgitem{padding-right:98px}
-  html[data-theme="ventana"] .mtile{border-radius:120px 120px 10px 10px}
 }
 
 /* ============================================================

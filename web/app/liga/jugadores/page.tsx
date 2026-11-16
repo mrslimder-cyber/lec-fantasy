@@ -8,15 +8,14 @@ import type { Player } from "@/lib/game";
 const SORTS: [string, string][] = [["pts", "PUNTOS"], ["avg", "MEDIA"], ["price", "PRECIO"]];
 
 export default function Jugadores() {
-  const { players, ros, teams, me } = useLeague();
+  const { players, ros, me } = useLeague();
   const [role, setRole] = useState("all");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState("pts");
   const [open, setOpen] = useState<Player | null>(null);
 
-  // Copias infinitas: un jugador puede estar en varias plantillas a la vez.
-  const owners = new Map<number, Set<number>>();
-  ros.forEach((r) => owners.set(r.player_id, (owners.get(r.player_id) ?? new Set()).add(r.league_team_id)));
+  // Las plantillas de los demás son secretas: solo se sabe quién está en la tuya.
+  const mineIds = new Set(ros.filter((r) => r.league_team_id === me?.id).map((r) => r.player_id));
   const list = players
     .filter((p) => (role === "all" || p.role === role) && p.name.toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => {
@@ -38,12 +37,10 @@ export default function Jugadores() {
       </div>
       <div className="grid wide">
         {list.map((p) => {
-          const o = owners.get(p.id);
-          const mineP = !!me && !!o?.has(me.id);
-          const who = mineP ? "En tu plantilla" : o ? `En ${o.size} de ${teams.length} plantillas` : "Sin fichar";
+          const mineP = mineIds.has(p.id);
           return (
             <PlayerCard key={p.id} p={p} onOpen={() => setOpen(p)}
-              action={<div className="who"><small>Media {p.avg} · {p.series} series</small><small className={mineP ? "mine" : ""}>{who}</small></div>} />
+              action={<div className="who"><small>Media {p.avg} · {p.series} series</small>{mineP && <small className="mine">En tu plantilla</small>}</div>} />
           );
         })}
         {list.length === 0 && <p className="sub">No hay jugadores con ese filtro.</p>}

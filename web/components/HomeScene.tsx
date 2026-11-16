@@ -41,11 +41,8 @@ function Ventana() {
               d={`M-100 ${g.y} C 300 ${g.y - 70}, 600 ${g.y + 80}, 900 ${g.y - 10} S 1400 ${g.y + 60}, 1700 ${g.y - 40}`} />
           ))}
         </svg>
-        {petals.filter((_, i) => i % 2 === 0).map(petal)}
-      </div>
-      {/* Unos cuantos pétalos pasan por delante de las tarjetas */}
-      <div className="sc sc-v front" aria-hidden="true">
-        {petals.filter((_, i) => i % 2 === 1).map(petal)}
+        {/* Todo va por detrás de los recuadros */}
+        {petals.map(petal)}
       </div>
     </>
   );

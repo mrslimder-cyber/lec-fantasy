@@ -12,7 +12,6 @@ const TABS: [string, string][] = [
   ["/liga/mercado", "MERCADO"],
   ["/liga", "CLASIFICACIÓN"],
   ["/liga/jugadores", "JUGADORES"],
-  ["/liga/movimientos", "MOVIMIENTOS"],
 ];
 
 function Header() {
